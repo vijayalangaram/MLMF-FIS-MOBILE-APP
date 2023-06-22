@@ -1,0 +1,102 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.mlmf.driver"
+  xmlns:tools="http://schemas.android.com/tools"
+  >
+
+  
+   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+        <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
+    <queries>
+    <intent>
+        <action android:name="android.media.action.IMAGE_CAPTURE" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.GET_CONTENT" />
+        <data android:mimeType="image/*" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.PICK" />
+        <data android:mimeType="image/*" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.CHOOSER" />
+     </intent>
+</queries>
+    <application
+      android:name="com.mlmf.driver.MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:roundIcon="@mipmap/ic_launcher"
+      android:allowBackup="true"
+       android:supportsRtl="true"
+       android:usesCleartextTraffic="true"
+          android:windowSoftInputMode="adjustPan"
+          android:requestLegacyExternalStorage="true"
+      android:theme="@style/AppTheme">
+
+
+          <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDGloG6w-mcnKSQmZaXXGa13ToYvGPJXLg" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+              <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/ic_stat_name" />
+
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/primary"
+        tools:replace="android:resource" />
+
+      <activity
+        android:name="com.mlmf.driver.MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+         android:screenOrientation="portrait"
+        android:launchMode="singleTop"
+        android:exported="true"
+           android:theme="@style/AppTheme.Launcher"
+        android:windowSoftInputMode="adjustPan">
+        
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+         <intent-filter android:label="filter_react_native">
+                      <action android:name="android.intent.action.VIEW" />
+                      <category android:name="android.intent.category.DEFAULT" />
+                      <category android:name="android.intent.category.BROWSABLE" />
+                      <data android:scheme="eatancedelivery" />
+                  </intent-filter>
+      </activity>
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+ <service android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask" />
+    </application>
+
+</manifest>

@@ -1,0 +1,31 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '12.0'
+
+target 'MLMFDriver' do
+  config = use_native_modules!
+
+  use_react_native!(:path => config["reactNativePath"])
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
+  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+
+  pod 'Firebase/Crashlytics'
+
+  # Recommended: Add the Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
+end
+
+target 'MLMFDriver-tvOS' do
+  # Pods for MLMFDriver-tvOS
+
+  target 'MLMFDriver-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+end
