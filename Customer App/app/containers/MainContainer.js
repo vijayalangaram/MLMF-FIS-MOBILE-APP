@@ -1301,7 +1301,6 @@ class MainContainer extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         {/* POPULAR RESTAURANT LIST */}
-
         {this.arrayRestaurants != undefined &&
         this.arrayRestaurants != null &&
         this.arrayRestaurants.length > 0 ? (

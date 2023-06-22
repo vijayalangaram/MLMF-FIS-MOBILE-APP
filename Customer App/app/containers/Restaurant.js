@@ -1154,6 +1154,10 @@ export class Restaurant extends React.Component {
     * @param { Success Response Object } onSuccess
     */
     onSuccessResMenuData = (onSuccess) => {
+          debugLog(  "onSuccessResMenuData  ::::::::::::::::::::::::  111111111111",
+                          onSuccess.popular_item.items
+                        );
+
         if (onSuccess.error != undefined) {
             showValidationAlert(
                 onSuccess.error.message != undefined
@@ -1172,21 +1176,20 @@ export class Restaurant extends React.Component {
             ) {
                 let item = []
                 onSuccess.popular_item.map(data => {
+                    debugLog(
+                        "  onSuccess.popular_item  ::::::::::::::::::::::::  111111111111",
+                        data
+                      );
                     item = item.concat(data.items)
                 })
                 popularItems = item
-
-
             }
 
             if (onSuccess.assigned_food_types !== undefined &&
                 onSuccess.assigned_food_types !== null &&
                 onSuccess.assigned_food_types.length !== 0
             ) {
-
                 this.assigned_food_types = onSuccess.assigned_food_types
-
-
             }
 
 
@@ -1194,7 +1197,8 @@ export class Restaurant extends React.Component {
                 this.menuArray = onSuccess.menu_item
 
                 if (popularItems.length > 0)
-                    this.menuArray.splice(0, 0, { category_id: -1, category_name: strings("popularItems"), items: popularItems })
+                    this.menuArray.splice(0, 0, { category_id: -1, category_name: "Subscription Items", 
+                    items: popularItems })
                 this.menuArray.map(data => {
                     this.sectionData.push(
                         { category_id: data.category_id, title: data.category_name, data: data.items }

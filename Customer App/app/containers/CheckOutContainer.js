@@ -949,18 +949,18 @@ export class CheckOutContainer extends React.PureComponent {
                         fontFamily: EDFonts.semiBold,
                       },
                     ]}
-                    // title={strings("priceDetail")}
-                    title="Price Detail"
+                    title={strings("priceDetail")}
+                    // title="Price Detail"
                   />
                   <View style={style.divider} />
                   {this.cartResponse.price != undefined ? (
                     this.cartResponse.price
                       .filter((data) => data.label_key !== undefined)
                       .map((item, index) => {
-                        debugLog(
-                          "item.label_key::::::::::::::::::::::::",
-                          item.label_key
-                        );
+                        // debugLog(
+                        //   "item.label_key::::::::::::::::::::::::",
+                        //   item.label_key
+                        // );
                         return (
                           <PriceDetail
                             key={item.label}
@@ -2356,8 +2356,11 @@ export class CheckOutContainer extends React.PureComponent {
         let deliveryJson = onSuccess;
         if (deliveryJson) {
           let deliveryPrice = deliveryJson.price;
-          debugLog("deliveryPrice ////////////////////////////", deliveryPrice);
-          let price = deliveryPrice.filter((item) => {
+          // debugLog(
+          //   "deliveryPrice //////////////////////////////////////////  111111111111",
+          //   deliveryPrice
+          // );
+          let price_delivery_charge = deliveryPrice.filter((item) => {
             return item.label_key == "Delivery Charge";
           });
           let total = deliveryPrice.filter((item) => {
@@ -2369,12 +2372,39 @@ export class CheckOutContainer extends React.PureComponent {
           let ServiceTaxtotal = deliveryPrice.filter((item) => {
             return item.label_key == "Service Tax";
           });
-          // let newmenuaray =  [...new Set(deliveryJson.items. )];
-          price[0].value = 150;
+          // debugLog(
+          //   "deliveryPrice //////////////////////////////////////////  111111111111",
+          //   deliveryJson.
+          // );
+
+          let menuAvailabilityArray = [
+            ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
+          ];
+
+          debugLog(
+            "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
+            menuAvailabilityArray.length
+          );
+
+          debugLog(
+            "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
+            price_delivery_charge[0].value
+          );
+
+          price_delivery_charge[0].value =
+            menuAvailabilityArray.length > 0
+              ? price_delivery_charge[0].value * menuAvailabilityArray.length
+              : price_delivery_charge[0].value;
+
           total[0].value =
-            subtotal[0].value + ServiceTaxtotal[0].value + price[0].value;
+            subtotal[0].value +
+            ServiceTaxtotal[0].value +
+            price_delivery_charge[0].value;
           deliveryJson.total = total[0].value;
-          debugLog("deliveryJson ////////////////////////////", deliveryJson);
+          // debugLog(
+          //   "deliveryJson ///////////////////////////////////////   3333333333",
+          //   deliveryJson
+          // );
           this.updateUI(deliveryJson);
         }
       } else if (onSuccess.status !== COUPON_ERROR) {
