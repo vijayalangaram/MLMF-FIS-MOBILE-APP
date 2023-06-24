@@ -1154,10 +1154,6 @@ export class Restaurant extends React.Component {
     * @param { Success Response Object } onSuccess
     */
     onSuccessResMenuData = (onSuccess) => {
-          debugLog(  "onSuccessResMenuData  ::::::::::::::::::::::::  111111111111",
-                          onSuccess.popular_item.items
-                        );
-
         if (onSuccess.error != undefined) {
             showValidationAlert(
                 onSuccess.error.message != undefined
@@ -1176,11 +1172,7 @@ export class Restaurant extends React.Component {
             ) {
                 let item = []
                 onSuccess.popular_item.map(data => {
-                    debugLog(
-                        "  onSuccess.popular_item  ::::::::::::::::::::::::  111111111111",
-                        data
-                      );
-                    item = item.concat(data.items)
+                                   item = item.concat(data.items)
                 })
                 popularItems = item
             }
