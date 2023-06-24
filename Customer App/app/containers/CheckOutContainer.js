@@ -2381,15 +2381,28 @@ export class CheckOutContainer extends React.PureComponent {
             ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
           ];
 
-          debugLog(
-            "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
-            menuAvailabilityArray.length
-          );
 
-          debugLog(
-            "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
-            price_delivery_charge[0].value
-          );
+
+
+          // debugLog(
+          //   "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
+          //   menuAvailabilityArray.length
+          // );
+
+          // debugLog(
+          //   "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
+          //   price_delivery_charge[0].value
+          // );
+
+
+             // array string to object
+          // let menuAvailabilityArrayObj = menuAvailabilityArray.map((name) => ({
+          //   label: `Delivery Charge for ${name}`,
+          //   label_key: `Delivery Charge for ${name}`,
+          //   value: price_delivery_charge[0].value,
+          // }));
+          // deliveryPrice.push(...menuAvailabilityArrayObj);
+
 
           price_delivery_charge[0].value =
             menuAvailabilityArray.length > 0
