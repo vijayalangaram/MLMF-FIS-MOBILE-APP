@@ -188,7 +188,8 @@ class MyWalletContainer extends React.Component {
           <View style={style.walletIconView}>
             <EDRTLView style={style.cashIconView}>
               <Text style={[style.currentIconStyle]} numberOfLines={1}>
-                {"$"}
+                {/* {"$"} */}
+                {"₹"}                
               </Text>
               <Icon
                 style={style.cashIconStyle}
