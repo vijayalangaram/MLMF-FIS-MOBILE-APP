@@ -412,7 +412,7 @@ export class AddressListContainer extends React.PureComponent {
 						{/* IF SELECT ADDRESS */}
 						{this.state.isSelectAddress && this.state.availableOrderModes !== undefined && this.state.availableOrderModes !== null && this.state.availableOrderModes.length !== 0
 							? <View>
-								{this.allowPreOrder ?
+								{/* {this.allowPreOrder ?
 									<EDRTLView style={{ flex: 1, marginTop: 10, marginHorizontal: 10, padding: 10 }}>
 										<EDRTLText
 											onPress={this.isScheduleMandatory ? null : this.togglePreOrder}
@@ -428,7 +428,7 @@ export class AddressListContainer extends React.PureComponent {
 										}
 
 									</EDRTLView>
-									: null}
+									: null} */}
 								{this.allowPreOrder && (this.isScheduleMandatory || this.state.isPreOrder) ?
 									<EDRTLView style={{ alignItems: 'center', justifyContent: "space-between", flex: 1 }}>
 										<View style={style.dateView}>
