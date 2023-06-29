@@ -79,6 +79,7 @@ import {
   addToCart,
   checkCardPayment,
   createPaymentMethod,
+  getWalletHistoryAPI,
 } from "../utils/ServiceManager";
 import BaseContainer from "./BaseContainer";
 import * as RNLocalize from "react-native-localize";
@@ -191,14 +192,11 @@ export class CheckOutContainer extends React.PureComponent {
     showInfoModal: false,
     descriptionVisible: true,
     url: undefined,
+    loggedInUserwalletBalance: "",
   };
 
   componentDidMount() {
-    debugLog(
-      "*********************************** 1111111111111111111111111111111 ",
-      this.props
-    );
-
+    this.getWalletHistoryAPIREQ();
     this.backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackPress
@@ -220,9 +218,32 @@ export class CheckOutContainer extends React.PureComponent {
     }
     this.getcartDataList();
   }
+
   componentWillUnmount() {
     this.backHandler.remove();
   }
+
+  getWalletHistoryAPIREQ = () => {
+    let param = {
+      language_slug: this.props.lan,
+      user_id: parseInt(this.props.userID) || 0,
+      count: 10,
+      page_no: 1,
+    };
+    getWalletHistoryAPI(
+      param,
+      this.onSuccessFetchWallet,
+      this.onFailureFetchWallet,
+      this.props,
+      true
+    );
+  };
+
+  onSuccessFetchWallet = (onSuccess) => {
+    this.setState({ loggedInUserwalletBalance: onSuccess.wallet_money });
+  };
+
+  onFailureFetchWallet = (onFailure) => {};
 
   onDidFocus = () => {
     debugLog("IS REFRESH :::::", this.isRefresh);
@@ -232,6 +253,7 @@ export class CheckOutContainer extends React.PureComponent {
   /**
    * Toggle wallet
    */
+
   toggleWallet = () => {
     if (!this.state.walletApplied) {
       if (parseInt(this.max_used_QR) > parseInt(this.wallet_money)) {
@@ -249,6 +271,9 @@ export class CheckOutContainer extends React.PureComponent {
             this.minimum_subtotal
         );
       } else {
+        debugLog(
+          "****************************** Vijay ****************************** 4444"
+        );
         this.getcartDataList();
         this.setState({ walletApplied: true });
       }
@@ -2374,25 +2399,10 @@ export class CheckOutContainer extends React.PureComponent {
           let ServiceTaxtotal = deliveryPrice.filter((item) => {
             return item.label_key == "Service Tax";
           });
-          // debugLog(
-          //   "deliveryPrice //////////////////////////////////////////  111111111111",
-          //   deliveryJson.
-          // );
 
           let menuAvailabilityArray = [
             ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
           ];
-
-          // debugLog(
-          //   "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
-          //   menuAvailabilityArray.length
-          // );
-
-          // debugLog(
-          //   "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
-          //   price_delivery_charge[0].value
-          // );
-
           // array string to object
           // let menuAvailabilityArrayObj = menuAvailabilityArray.map((name) => ({
           //   label: `Delivery Charge for ${name}`,
@@ -2411,10 +2421,21 @@ export class CheckOutContainer extends React.PureComponent {
             ServiceTaxtotal[0].value +
             price_delivery_charge[0].value;
           deliveryJson.total = total[0].value;
-          // debugLog(
-          //   "deliveryJson ///////////////////////////////////////   3333333333",
-          //   deliveryJson
-          // );
+
+          if (
+            parseInt(total[0].value) <
+            parseInt(this.state.loggedInUserwalletBalance)
+          ) {
+            deliveryJson.total = 0;
+            // this.getcartDataList();
+            this.setState({ walletApplied: true });
+          } else if (
+            parseInt(total[0].value) >
+            parseInt(this.state.loggedInUserwalletBalance)
+          ) {
+            deliveryJson.total = total[0].value;
+            this.setState({ walletApplied: false });
+          }
           this.updateUI(deliveryJson);
         }
       } else if (onSuccess.status !== COUPON_ERROR) {
@@ -2535,12 +2556,7 @@ export class CheckOutContainer extends React.PureComponent {
           objAddToCart.slot_close_time =
             this.props.navigation.state.params.slot_close_time;
         }
-
         this.addToCartData = objAddToCart;
-
-        // debugLog("Vijaythis.props  ::::::::::::: 111111111", objAddToCart);
-        // debugLog("Vijaythis.props  ::::::::::::: 222222222", this.props);
-
         addToCart(
           objAddToCart,
           this.onSuccessAddCart,
