@@ -194,6 +194,11 @@ export class CheckOutContainer extends React.PureComponent {
   };
 
   componentDidMount() {
+    debugLog(
+      "*********************************** 1111111111111111111111111111111 ",
+      this.props
+    );
+
     this.backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackPress
@@ -2319,9 +2324,6 @@ export class CheckOutContainer extends React.PureComponent {
       );
     } else {
       if (onSuccess.status == RESPONSE_SUCCESS) {
-        debugLog("Vijay ::::::::::::::: onSuccess :: 00", onSuccess.status);
-        debugLog("Vijay ::::::::::::::: onSuccess :: 11", onSuccess);
-
         this.props.saveCartPrice(onSuccess.subtotal);
         this.setTipArray(
           onSuccess.tip_percent_val,
@@ -2381,9 +2383,6 @@ export class CheckOutContainer extends React.PureComponent {
             ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
           ];
 
-
-
-
           // debugLog(
           //   "menuAvailabilityArray //////////////////////////////////////////  22222222222222",
           //   menuAvailabilityArray.length
@@ -2394,15 +2393,13 @@ export class CheckOutContainer extends React.PureComponent {
           //   price_delivery_charge[0].value
           // );
 
-
-             // array string to object
+          // array string to object
           // let menuAvailabilityArrayObj = menuAvailabilityArray.map((name) => ({
           //   label: `Delivery Charge for ${name}`,
           //   label_key: `Delivery Charge for ${name}`,
           //   value: price_delivery_charge[0].value,
           // }));
           // deliveryPrice.push(...menuAvailabilityArrayObj);
-
 
           price_delivery_charge[0].value =
             menuAvailabilityArray.length > 0
