@@ -1878,12 +1878,32 @@ export class CheckOutContainer extends React.PureComponent {
         ) {
           this.comment = this.props.navigation.state.params.comment;
 
-          if (this.props.navigation.state.params.payment_option == "cod")
+          // if (this.props.navigation.state.params.payment_option == "cod")
+          //   this.placeOrder();
+          // else
+          //   this.navigateToPaymentGateway(
+          //     this.props.navigation.state.params.payment_option
+          //   );
+       
+          if (this.state.walletApplied === true) {
             this.placeOrder();
-          else
+          } else {
+
+            // debugLog(
+            //   "****************************** Vijay ****************************** is_wallet_applied  0000",
+            //   this.state.walletApplied
+            // );
+
+            // debugLog(
+            //   "****************************** Vijay ****************************** is_wallet_applied  0000",
+            //   this.props.navigation.state.params.payment_option
+            // );
+
             this.navigateToPaymentGateway(
-              this.props.navigation.state.params.payment_option
+              // this.props.navigation.state.params.payment_option
+              "razorpay"
             );
+          }
         } else
           this.props.navigation.navigate("PaymentContainer", {
             currency_code: this.currency_code,
@@ -1998,12 +2018,32 @@ export class CheckOutContainer extends React.PureComponent {
         this.props.navigation.state.params.payment_option !== undefined
       ) {
         this.comment = this.props.navigation.state.params.comment;
-        if (this.props.navigation.state.params.payment_option == "cod")
+      
+
+        if (this.state.walletApplied === true) {
           this.placeOrder();
-        else
+        } else {      
+          // debugLog(
+          //   "****************************** Vijay ****************************** is_wallet_applied  1111",
+          //   this.state.walletApplied
+          // );
+
+          // debugLog(
+          //   "****************************** Vijay ****************************** is_wallet_applied  11111",
+          //   this.props.navigation.state.params.payment_option
+          // );
           this.navigateToPaymentGateway(
-            this.props.navigation.state.params.payment_option
+            // this.props.navigation.state.params.payment_option
+            "razorpay"
           );
+        }
+
+        // if (this.props.navigation.state.params.payment_option == "cod")
+        //   this.placeOrder();
+        // else
+        //   this.navigateToPaymentGateway(
+        //     this.props.navigation.state.params.payment_option
+        //   );
       } else
         this.props.navigation.navigate("PaymentContainer", {
           currency_code: this.currency_code,
@@ -2336,8 +2376,13 @@ export class CheckOutContainer extends React.PureComponent {
     this.setState({ isLoading: false });
   };
 
-  navigateToPaymentGateway = () => {
-    if (this.payment_option == "stripe") {
+
+  navigateToPaymentGateway = (valueFromPaymetnOption) => {
+
+    // debugLog(" this.payment_option ***********************************************  valueFromPaymetnOption11",  this.payment_option);
+    // debugLog(" this.payment_option ***********************************************  valueFromPaymetnOption22",  valueFromPaymetnOption);
+ 
+    if (valueFromPaymetnOption == "stripe") {
       // if (this.props.userID !== undefined && this.props.userID !== null && this.props.userID !== "")
       //     this.props.navigation.navigate("savedCards", {
       //         "currency_code": this.currency_code,
@@ -2361,9 +2406,9 @@ export class CheckOutContainer extends React.PureComponent {
       //         isForSelection: true
       //     })
       this.startStripePayment();
-    } else if (this.payment_option == "razorpay") {
+    } else if (valueFromPaymetnOption == "razorpay") {
       this.startRazorPayment();
-    } else if (this.payment_option == "paypal")
+    } else if (valueFromPaymetnOption == "paypal")
       this.props.navigation.navigate("PaymentGatewayContainer", {
         currency_code: this.currency_code,
         isPendingAdded: false,
@@ -2586,16 +2631,12 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Item to be added to Cart } items
    */
   getCartData = (items, forCartFetch = false) => {
-
     // debugLog(
     //   "***************************************  this.state.walletApplied",
     //   this.state.walletApplied
     // );
 
-    // debugLog(
-    //   "*************************************** items",
-    //   items
-    // );
+    // debugLog("*************************************** items", items);
 
     // return false;
 
@@ -2660,15 +2701,20 @@ export class CheckOutContainer extends React.PureComponent {
             this.props.navigation.state.params.slot_close_time;
         }
         this.addToCartData = objAddToCart;
-       
+
         // debugLog(
         //   "***************************************  11111111111111  this.addToCartData",
         //   this.addToCartData
         // );
 
         // debugLog(
+        //   "***************************************  4444444444444444444  objAddToCart",
+        //   objAddToCart
+        // );
+
+        // debugLog(
         //   "***************************************  00000000000000000 is_wallet_applied",
-        //  this.state.walletApplied 
+        //   this.state.walletApplied
         // );
 
         // return false;
