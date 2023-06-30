@@ -890,6 +890,7 @@ export class CheckOutContainer extends React.PureComponent {
                   </View>
                 ) : null}
                 {/* WALLET BALANCE  */}
+
                 {this.unpaid_orders_status &&
                 this.wallet_money !== undefined &&
                 this.wallet_money !== null &&
@@ -919,19 +920,28 @@ export class CheckOutContainer extends React.PureComponent {
                           size={getProportionalFontSize(22)}
                           // onPress={this.toggleWallet}
                         />
-                        <EDRTLText
-                          style={style.walletText}
-                          title={
-                            strings("applyWallet") +
-                            "(" +
-                            this.props.currency +
-                            " " +
-                            this.wallet_money +
-                            ")"
-                          }
-                        />
-                      </EDRTLView>
 
+                        {parseInt(this.cartResponse.total) <
+                        parseInt(this.state.loggedInUserwalletBalance) ? (
+                          <EDRTLText
+                            style={style.walletText}
+                            title={
+                              strings("applyWallet") +
+                              "(" +
+                              this.props.currency +
+                              " " +
+                              this.wallet_money +
+                              ")"
+                            }
+                          />
+                        ) : (
+                          <EDRTLText
+                            style={style.walletText}
+                            title={`Low Wallet Balance: ${this.wallet_money}`}
+                            color="orange"
+                          />
+                        )}
+                      </EDRTLView>
                       {/* <Icon name={this.state.walletApplied ? "check-box" : "check-box-outline-blank"} color={EDColors.primary} size={25} onPress={this.toggleWallet} /> */}
                     </EDRTLView>
                   </TouchableOpacity>
@@ -1744,10 +1754,10 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** Vijay ****************************** onCheckOutEventHandler",
     //   parseFloat(this.wallet_discount)
     // );
-    // debugLog(
-    //   "****************************** Vijay ****************************** this.cartResponse.subtotal",
-    //   this.cartResponse
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** this.cartResponse.subtotal",
+      this.cartResponse
+    );
     let walletDiscounttotal = this.cartResponse.price.filter((item) => {
       return item.label_key == "Total" && item.value;
     });
@@ -1896,10 +1906,6 @@ export class CheckOutContainer extends React.PureComponent {
         );
       }
     } else {
-      debugLog(
-        "****************************** Vijay ****************************** else this.is_unpaid"
-      );
-
       var checkoutData = {
         address_id:
           this.props.navigation.state.params !== undefined
@@ -2500,10 +2506,10 @@ export class CheckOutContainer extends React.PureComponent {
             ServiceTaxtotal[0].value +
             price_delivery_charge[0].value;
 
-            if(WalletDiscounttotal.length > 0) {
-              WalletDiscounttotal[0].value = total[0].value;
-            }
-           
+          if (WalletDiscounttotal.length > 0) {
+            WalletDiscounttotal[0].value = total[0].value;
+          }
+
           // debugLog(
           //   "****************************** Vijay ****************************** onSuccess.price",
           //   WalletDiscounttotal
@@ -2514,7 +2520,8 @@ export class CheckOutContainer extends React.PureComponent {
             parseInt(total[0].value) <
             parseInt(this.state.loggedInUserwalletBalance)
           ) {
-            deliveryJson.total = 0;
+            deliveryJson.total = total[0].value;
+            // deliveryJson.total = 0;
             // this.getcartDataList();
             this.setState({ walletApplied: true });
           } else if (
@@ -2579,10 +2586,17 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Item to be added to Cart } items
    */
   getCartData = (items, forCartFetch = false) => {
+
     debugLog(
-      "***************************************  0000000000000000000",
+      "***************************************  this.state.walletApplied",
+      this.state.walletApplied
+    );
+
+    debugLog(
+      "*************************************** items",
       items
     );
+
     netStatus((status) => {
       if (status) {
         this.forCartFetch = forCartFetch;
@@ -2644,12 +2658,21 @@ export class CheckOutContainer extends React.PureComponent {
             this.props.navigation.state.params.slot_close_time;
         }
         this.addToCartData = objAddToCart;
-
+       
         debugLog(
-          "***************************************  11111111111111",
-          objAddToCart
+          "***************************************  11111111111111  this.addToCartData",
+          this.addToCartData
         );
 
+        debugLog(
+          "***************************************  00000000000000000 is_wallet_applied",
+          is_wallet_applied
+        );
+
+      
+        
+
+        // return false;
         addToCart(
           objAddToCart,
           this.onSuccessAddCart,

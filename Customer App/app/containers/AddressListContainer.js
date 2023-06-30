@@ -137,6 +137,14 @@ export class AddressListContainer extends React.PureComponent {
   }
 
   componentDidMount() {
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props",
+    //   this.props
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.cartItems",
+    //   this.state.cartItems
+    // );
     this.getWalletHistoryAPIREQ();
   }
 
@@ -1896,7 +1904,6 @@ export class AddressListContainer extends React.PureComponent {
   onWillFocus = () => {
     if (this.state.cartItems.map((data) => data.in_stock).includes("0"))
       this.isScheduleMandatory = true;
-
     if (
       this.props.countryArray !== undefined &&
       this.props.countryArray !== null &&
@@ -2042,12 +2049,19 @@ export class AddressListContainer extends React.PureComponent {
       onSuccess.Payment_method !== null &&
       onSuccess.Payment_method.length !== 0
     ) {
-      debugLog(
-        "****************************** Vijay ******************************",
-        onSuccess.Payment_method
-      );
 
-      if (parseInt(this.state.loggedInUserwalletBalance) > 0) {
+      let currentPriceTotal =
+        this.state.cartItems &&
+        this.state.cartItems.reduce(function (accumulator, currentValue) {
+          return accumulator + parseInt(currentValue.price);
+        }, 0);
+
+        // debugLog("**************************this.state.cartItems **************************",  this.state.cartItems);
+      
+      if (
+        parseInt(this.state.loggedInUserwalletBalance) >
+        parseInt(currentPriceTotal)
+      ) {
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2055,7 +2069,10 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
-      } else {
+      } else if (
+        parseInt(this.state.loggedInUserwalletBalance) <
+        parseInt(currentPriceTotal)
+      ) {
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(

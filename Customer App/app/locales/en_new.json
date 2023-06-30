@@ -99,6 +99,7 @@
     "promoPlaceholder": "Enter promo Code",
     "deleteFromCart": "Are you sure you want to delete this item?",
     "applyWallet": "Apply wallet balance \nAvailable balance : ",
+    "lowapplyWallet": "Low Wallet balance \nAvailable balance : ",
     "priceDetail": "Price Details",
     "haveAPromo": "Have a Promo code?",
     "promoApplied": "Applied",
