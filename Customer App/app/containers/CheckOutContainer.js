@@ -1762,33 +1762,34 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** Vijay ****************************** onCheckOutEventHandler",
     //   parseFloat(this.wallet_discount)
     // );
-    debugLog(
-      "****************************** Vijay ******************************  this.cartResponse.price",
-      this.cartResponse.price 
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.cartResponse.price",
+    //   this.cartResponse.price
+    // );
 
-    debugLog(
-      "****************************** Vijay ******************************  this.state.walletApplied",
-      this.state.walletApplied
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.state.walletApplied",
+    //   this.state.walletApplied
+    // );
 
     // let walletDiscounttotal = this.cartResponse.price.filter((item) => {
     //   return item.label_key == "Total" && item.value;
     // });
-    
-    let walletDiscounttotal = this.cartResponse.price.length > 0 && this.cartResponse.price.filter((item) => {
-      return item.label_key == "Wallet Discount" ? item.value : 0;
-    });
-  
-    debugLog(
-      "****************************** Vijay ******************************  walletDiscounttotal",
-      walletDiscounttotal
-    );
-  //    debugLog(
-  //     "****************************** Vijay ****************************** walletDiscounttotal",
-  //     walletDiscounttotal[0].value
-  //   );   
-  //  return false;
+
+    let walletDiscounttotal =
+      this.cartResponse.price.length > 0 &&
+      this.cartResponse.price.filter((item) => {
+        return item.label_key == "Wallet Discount" ? item.value : 0;
+      });
+
+    // debugLog(
+    //   "****************************** Vijay ******************************  walletDiscounttotal",
+    //   walletDiscounttotal
+    // );
+    //    debugLog(
+    //     "****************************** Vijay ****************************** walletDiscounttotal",
+    //     walletDiscounttotal[0].value
+    //   );
 
     if (
       this.props.userID !== undefined &&
@@ -1855,8 +1856,12 @@ export class CheckOutContainer extends React.PureComponent {
           // debited_amount: this.wallet_discount,
           wallet_balance:
             parseFloat(this.wallet_money) -
-            parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
-          debited_amount:  parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
+            parseFloat(
+              walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0
+            ),
+          debited_amount: parseFloat(
+            walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0
+          ),
           is_parcel_order: this.state.isParcel ? "1" : "0",
           driver_tip: this.cartResponse.driver_tip,
           tip_percent_val: this.cartResponse.tip_percent_val,
@@ -1906,23 +1911,22 @@ export class CheckOutContainer extends React.PureComponent {
           //   );
 
           if (this.state.walletApplied === true) {
-            this.placeOrder();
+            if (this.wallet_money < this.cartResponse.total) {
+              this.placeOrder();          
+            } else {
+              this.placeOrder();
+              this.navigateToPaymentGateway(
+                // this.props.navigation.state.params.payment_option
+                "razorpay"
+              );
+            }
           } else {
-            // debugLog(
-            //   "****************************** Vijay ****************************** is_wallet_applied  0000",
-            //   this.state.walletApplied
-            // );
-
-            // debugLog(
-            //   "****************************** Vijay ****************************** is_wallet_applied  0000",
-            //   this.props.navigation.state.params.payment_option
-            // );
-
             this.navigateToPaymentGateway(
               // this.props.navigation.state.params.payment_option
               "razorpay"
             );
           }
+
         } else
           this.props.navigation.navigate("PaymentContainer", {
             currency_code: this.currency_code,
@@ -1945,10 +1949,12 @@ export class CheckOutContainer extends React.PureComponent {
         );
       }
     } else {
-      debugLog(
-        "****************************** Vijay ****************************** else part wallet_balance ",
-        parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
-      );
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part wallet_balance ",
+      //   parseFloat(
+      //     walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0
+      //   )
+      // );
       var checkoutData = {
         address_id:
           this.props.navigation.state.params !== undefined
@@ -1993,8 +1999,12 @@ export class CheckOutContainer extends React.PureComponent {
         // debited_amount: this.wallet_discount,
         wallet_balance:
           parseFloat(this.wallet_money) -
-          parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
-        debited_amount:   parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
+          parseFloat(
+            walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0
+          ),
+        debited_amount: parseFloat(
+          walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0
+        ),
         is_parcel_order: this.state.isParcel ? "1" : "0",
         driver_tip: this.cartResponse.driver_tip,
         tip_percent_val: this.cartResponse.tip_percent_val,
@@ -2041,22 +2051,21 @@ export class CheckOutContainer extends React.PureComponent {
         this.comment = this.props.navigation.state.params.comment;
 
         if (this.state.walletApplied === true) {
-          this.placeOrder();
+          if (this.wallet_money < this.cartResponse.total) {
+            this.placeOrder();          
+          } else {
+            this.placeOrder();
+            this.navigateToPaymentGateway(
+              // this.props.navigation.state.params.payment_option
+              "razorpay"
+            );
+          }
         } else {
-          debugLog(
-            "****************************** Vijay ****************************** is_wallet_applied  1111",
-            this.state.walletApplied
-          );
-          debugLog(
-            "****************************** Vijay ****************************** is_wallet_applied  11111",
-            this.props.navigation.state.params.payment_option
-          );
           this.navigateToPaymentGateway(
             // this.props.navigation.state.params.payment_option
             "razorpay"
           );
         }
-
         // if (this.props.navigation.state.params.payment_option == "cod")
         //   this.placeOrder();
         // else
