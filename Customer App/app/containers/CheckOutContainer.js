@@ -909,32 +909,40 @@ export class CheckOutContainer extends React.PureComponent {
                         }}
                       >
                         {/* <Icon name="account-balance-wallet" size={25} /> */}
-                        <Icon
-                          name={
-                            this.state.walletApplied
-                              ? "checkbox-outline"
-                              : "square-outline"
-                          }
-                          type={"ionicon"}
-                          color={EDColors.primary}
-                          size={getProportionalFontSize(22)}
-                          // onPress={this.toggleWallet}
-                        />
-
-                        {parseInt(this.cartResponse.total) <
-                        parseInt(this.state.loggedInUserwalletBalance) ? (
-                          <EDRTLText
-                            style={style.walletText}
-                            title={
-                              strings("applyWallet") +
-                              "(" +
-                              this.props.currency +
-                              " " +
-                              this.wallet_money +
-                              ")"
+                        {100 <
+                          parseInt(this.state.loggedInUserwalletBalance) && (
+                          <Icon
+                            name={
+                              this.state.walletApplied
+                                ? "checkbox-outline"
+                                : "square-outline"
                             }
+                            type={"ionicon"}
+                            color={EDColors.primary}
+                            size={getProportionalFontSize(22)}
+                            // onPress={this.toggleWallet}
                           />
-                        ) : (
+                        )}
+
+                        {
+                          // parseInt(this.cartResponse.total)
+                          100 <
+                            parseInt(this.state.loggedInUserwalletBalance) && (
+                            <EDRTLText
+                              style={style.walletText}
+                              title={
+                                strings("applyWallet") +
+                                "(" +
+                                this.props.currency +
+                                " " +
+                                this.wallet_money +
+                                ")"
+                              }
+                            />
+                          )
+                        }
+                        {100 >
+                          parseInt(this.state.loggedInUserwalletBalance) && (
                           <EDRTLText
                             style={style.walletText}
                             title={`Low Wallet Balance: ${this.wallet_money}`}
@@ -1754,18 +1762,33 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** Vijay ****************************** onCheckOutEventHandler",
     //   parseFloat(this.wallet_discount)
     // );
-    // debugLog(
-    //   "****************************** Vijay ****************************** this.cartResponse.subtotal",
-    //   this.cartResponse
-    // );
-    let walletDiscounttotal = this.cartResponse.price.filter((item) => {
-      return item.label_key == "Total" && item.value;
+    debugLog(
+      "****************************** Vijay ******************************  this.cartResponse.price",
+      this.cartResponse.price 
+    );
+
+    debugLog(
+      "****************************** Vijay ******************************  this.state.walletApplied",
+      this.state.walletApplied
+    );
+
+    // let walletDiscounttotal = this.cartResponse.price.filter((item) => {
+    //   return item.label_key == "Total" && item.value;
+    // });
+    
+    let walletDiscounttotal = this.cartResponse.price.length > 0 && this.cartResponse.price.filter((item) => {
+      return item.label_key == "Wallet Discount" ? item.value : 0;
     });
-    // debugLog(
-    //   "****************************** Vijay ****************************** walletDiscounttotal",
-    //   walletDiscounttotal[0].value
-    // );
-    // return false;
+  
+    debugLog(
+      "****************************** Vijay ******************************  walletDiscounttotal",
+      walletDiscounttotal
+    );
+  //    debugLog(
+  //     "****************************** Vijay ****************************** walletDiscounttotal",
+  //     walletDiscounttotal[0].value
+  //   );   
+  //  return false;
 
     if (
       this.props.userID !== undefined &&
@@ -1827,16 +1850,13 @@ export class CheckOutContainer extends React.PureComponent {
               ? this.props.navigation.state.params.comment
               : "",
           is_wallet_applied: this.state.walletApplied ? 1 : 0,
-
           // wallet_balance:
           //   parseFloat(this.wallet_money) - parseFloat(this.wallet_discount),
           // debited_amount: this.wallet_discount,
-
           wallet_balance:
             parseFloat(this.wallet_money) -
-            parseFloat(walletDiscounttotal[0].value),
-          debited_amount: parseFloat(walletDiscounttotal[0].value),
-
+            parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
+          debited_amount:  parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
           is_parcel_order: this.state.isParcel ? "1" : "0",
           driver_tip: this.cartResponse.driver_tip,
           tip_percent_val: this.cartResponse.tip_percent_val,
@@ -1884,11 +1904,10 @@ export class CheckOutContainer extends React.PureComponent {
           //   this.navigateToPaymentGateway(
           //     this.props.navigation.state.params.payment_option
           //   );
-       
+
           if (this.state.walletApplied === true) {
             this.placeOrder();
           } else {
-
             // debugLog(
             //   "****************************** Vijay ****************************** is_wallet_applied  0000",
             //   this.state.walletApplied
@@ -1926,6 +1945,10 @@ export class CheckOutContainer extends React.PureComponent {
         );
       }
     } else {
+      debugLog(
+        "****************************** Vijay ****************************** else part wallet_balance ",
+        parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
+      );
       var checkoutData = {
         address_id:
           this.props.navigation.state.params !== undefined
@@ -1968,12 +1991,10 @@ export class CheckOutContainer extends React.PureComponent {
         // wallet_balance:
         //   parseFloat(this.wallet_money) - parseFloat(this.wallet_discount),
         // debited_amount: this.wallet_discount,
-
         wallet_balance:
           parseFloat(this.wallet_money) -
-          parseFloat(walletDiscounttotal[0].value),
-        debited_amount: parseFloat(walletDiscounttotal[0].value),
-
+          parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
+        debited_amount:   parseFloat(walletDiscounttotal.length > 0 ? walletDiscounttotal[0].value : 0),
         is_parcel_order: this.state.isParcel ? "1" : "0",
         driver_tip: this.cartResponse.driver_tip,
         tip_percent_val: this.cartResponse.tip_percent_val,
@@ -2018,20 +2039,18 @@ export class CheckOutContainer extends React.PureComponent {
         this.props.navigation.state.params.payment_option !== undefined
       ) {
         this.comment = this.props.navigation.state.params.comment;
-      
 
         if (this.state.walletApplied === true) {
           this.placeOrder();
-        } else {      
-          // debugLog(
-          //   "****************************** Vijay ****************************** is_wallet_applied  1111",
-          //   this.state.walletApplied
-          // );
-
-          // debugLog(
-          //   "****************************** Vijay ****************************** is_wallet_applied  11111",
-          //   this.props.navigation.state.params.payment_option
-          // );
+        } else {
+          debugLog(
+            "****************************** Vijay ****************************** is_wallet_applied  1111",
+            this.state.walletApplied
+          );
+          debugLog(
+            "****************************** Vijay ****************************** is_wallet_applied  11111",
+            this.props.navigation.state.params.payment_option
+          );
           this.navigateToPaymentGateway(
             // this.props.navigation.state.params.payment_option
             "razorpay"
@@ -2376,12 +2395,10 @@ export class CheckOutContainer extends React.PureComponent {
     this.setState({ isLoading: false });
   };
 
-
   navigateToPaymentGateway = (valueFromPaymetnOption) => {
-
     // debugLog(" this.payment_option ***********************************************  valueFromPaymetnOption11",  this.payment_option);
     // debugLog(" this.payment_option ***********************************************  valueFromPaymetnOption22",  valueFromPaymetnOption);
- 
+
     if (valueFromPaymetnOption == "stripe") {
       // if (this.props.userID !== undefined && this.props.userID !== null && this.props.userID !== "")
       //     this.props.navigation.navigate("savedCards", {
@@ -2526,9 +2543,11 @@ export class CheckOutContainer extends React.PureComponent {
             return item.label_key == "Service Tax";
           });
 
-          let WalletDiscounttotal = deliveryPrice.filter((item) => {
-            return item.label_key == "Wallet Discount";
-          });
+          let WalletDiscounttotal =
+            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            deliveryPrice.filter((item) => {
+              return item.label_key == "Wallet Discount";
+            });
 
           let menuAvailabilityArray = [
             ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
@@ -2546,13 +2565,63 @@ export class CheckOutContainer extends React.PureComponent {
               ? price_delivery_charge[0].value * menuAvailabilityArray.length
               : price_delivery_charge[0].value;
 
-          total[0].value =
+          // total[0].value =
+          //   subtotal[0].value +
+          //   ServiceTaxtotal[0].value +
+          //   price_delivery_charge[0].value;
+
+          let intialTotalCountvalue =
             subtotal[0].value +
             ServiceTaxtotal[0].value +
             price_delivery_charge[0].value;
 
+          if (
+            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(intialTotalCountvalue)
+          ) {
+            total[0].value = 0;
+          } else if (
+            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            parseInt(this.state.loggedInUserwalletBalance) <
+              parseInt(intialTotalCountvalue)
+          ) {
+            let loggedInUserwalletBalanceint =
+              parseInt(intialTotalCountvalue) -
+              parseInt(this.state.loggedInUserwalletBalance);
+            total[0].value = parseInt(loggedInUserwalletBalanceint);
+          } else {
+            total[0].value = parseInt(intialTotalCountvalue);
+          }
+
           if (WalletDiscounttotal.length > 0) {
-            WalletDiscounttotal[0].value = total[0].value;
+            let walletvaluebasedonActualTotal =
+              subtotal[0].value +
+              ServiceTaxtotal[0].value +
+              price_delivery_charge[0].value;
+            if (
+              parseInt(this.state.loggedInUserwalletBalance) <
+              parseInt(walletvaluebasedonActualTotal)
+            ) {
+              WalletDiscounttotal[0].value = parseInt(
+                this.state.loggedInUserwalletBalance
+              );
+            } else {
+              WalletDiscounttotal[0].value = parseInt(
+                walletvaluebasedonActualTotal
+              );
+            }
+
+            // let loggedInUserwalletBalanceint = parseInt(
+            //   this.state.loggedInUserwalletBalance
+            // );
+            // let totaintialvalue = parseInt(
+            //   subtotal[0].value +
+            //     ServiceTaxtotal[0].value +
+            //     price_delivery_charge[0].value
+            // );
+            // WalletDiscounttotal[0].value =
+            //   loggedInUserwalletBalanceint - totaintialvalue;
           }
 
           // debugLog(
@@ -2562,16 +2631,17 @@ export class CheckOutContainer extends React.PureComponent {
 
           // deliveryJson.total = total[0].value;
           if (
-            parseInt(total[0].value) <
-            parseInt(this.state.loggedInUserwalletBalance)
+            // parseInt(total[0].value)
+            100 < parseInt(this.state.loggedInUserwalletBalance)
           ) {
             deliveryJson.total = total[0].value;
             // deliveryJson.total = 0;
             // this.getcartDataList();
             this.setState({ walletApplied: true });
           } else if (
-            parseInt(total[0].value) >
-            parseInt(this.state.loggedInUserwalletBalance)
+            // parseInt(total[0].value) >
+            // parseInt(this.state.loggedInUserwalletBalance)
+            100 > parseInt(this.state.loggedInUserwalletBalance)
           ) {
             deliveryJson.total = total[0].value;
             this.setState({ walletApplied: false });
