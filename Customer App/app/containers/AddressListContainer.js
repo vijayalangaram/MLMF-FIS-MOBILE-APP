@@ -138,13 +138,20 @@ export class AddressListContainer extends React.PureComponent {
 
   componentDidMount() {
     // debugLog(
-    //   "****************************** Vijay ******************************  this.props",
-    //   this.props
+    //   "****************************** Vijay ******************************   this.props.navigation.state",
+    //   this.props.navigation.state
     // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.navigation.state.params.cartItems",
+    //   this.props.navigation.state.params.cartItems
+    // );
+
     // debugLog(
     //   "****************************** Vijay ******************************  this.props.cartItems",
     //   this.state.cartItems
     // );
+
     this.getWalletHistoryAPIREQ();
   }
 
@@ -2049,19 +2056,27 @@ export class AddressListContainer extends React.PureComponent {
       onSuccess.Payment_method !== null &&
       onSuccess.Payment_method.length !== 0
     ) {
-
       let currentPriceTotal =
         this.state.cartItems &&
         this.state.cartItems.reduce(function (accumulator, currentValue) {
-          return accumulator + parseInt(currentValue.price);
+          return (
+            accumulator +
+            parseInt(currentValue.price) * parseInt(currentValue.quantity)
+          );
         }, 0);
-
-        // debugLog("**************************this.state.cartItems **************************",  this.state.cartItems);
-      
+      // debugLog(
+      //   "*****************************************  this.state.loggedInUserwalletBalance",
+      //   parseInt(this.state.loggedInUserwalletBalance)
+      // );
+      // debugLog(
+      //   "*****************************************   parseInt(currentPriceTotal)",
+      //   parseInt(currentPriceTotal)
+      // );
       if (
         parseInt(this.state.loggedInUserwalletBalance) >
         parseInt(currentPriceTotal)
       ) {
+        // debugLog("*****************************************    if log");
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2073,6 +2088,7 @@ export class AddressListContainer extends React.PureComponent {
         parseInt(this.state.loggedInUserwalletBalance) <
         parseInt(currentPriceTotal)
       ) {
+        // debugLog("*****************************************    else if ");
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
