@@ -897,13 +897,11 @@ export class CheckOutContainer extends React.PureComponent {
                 this.wallet_money !== "0.00" &&
                 this.props.userID != undefined &&
                 this.props.userID != "" ? (
-<>
-                
-
-                  <TouchableOpacity
-                  // onPress={this.toggleWallet}
-                  >
-                    {/* <View style={style.priceContainer}>
+                  <>
+                    <TouchableOpacity
+                    // onPress={this.toggleWallet}
+                    >
+                      {/* <View style={style.priceContainer}>
                   <EDRTLText
                     style={[
                       style.title,
@@ -917,16 +915,16 @@ export class CheckOutContainer extends React.PureComponent {
                   />
                   </View> */}
 
-                    <EDRTLView style={style.walletContainer}>    
-                      <EDRTLView
-                        style={{
-                          alignItems: "center",
-                          marginHorizontal: 15,
-                          marginVertical: 10,
-                        }}
-                      >
-                        {/* <Icon name="account-balance-wallet" size={25} /> */}
-                        {/* {100 <
+                      <EDRTLView style={style.walletContainer}>
+                        <EDRTLView
+                          style={{
+                            alignItems: "center",
+                            marginHorizontal: 15,
+                            marginVertical: 10,
+                          }}
+                        >
+                          {/* <Icon name="account-balance-wallet" size={25} /> */}
+                          {/* {100 <
                           parseInt(this.state.loggedInUserwalletBalance) && (
                           <Icon
                             name={
@@ -941,36 +939,39 @@ export class CheckOutContainer extends React.PureComponent {
                           />
                         )} */}
 
-                        {
-                          // parseInt(this.cartResponse.total)
-                          100 <
+                          {
+                            // parseInt(this.cartResponse.total)
+                            Number(this.props.minOrderAmount) <
+                              parseInt(
+                                this.state.loggedInUserwalletBalance
+                              ) && (
+                              <EDRTLText
+                                style={style.walletText}
+                                title={
+                                  strings("applyWallet") +
+                                  "(" +
+                                  this.props.currency +
+                                  " " +
+                                  this.wallet_money +
+                                  ")"
+                                }
+                              />
+                            )
+                          }
+                          {Number(this.props.minOrderAmount) >
                             parseInt(this.state.loggedInUserwalletBalance) && (
                             <EDRTLText
                               style={style.walletText}
-                              title={
-                                strings("applyWallet") +
-                                "(" +
-                                this.props.currency +
-                                " " +
-                                this.wallet_money +
-                                ")"
-                              }
+                              title={`Low Wallet Balance: ${this.wallet_money}`}
+                              color="orange"
                             />
-                          )
-                        }
-                        {100 >
-                          parseInt(this.state.loggedInUserwalletBalance) && (
-                          <EDRTLText
-                            style={style.walletText}
-                            title={`Low Wallet Balance: ${this.wallet_money}`}
-                            color="orange"
-                          />
-                        )}
+                          )}
+                        </EDRTLView>
+                        {/* <Icon name={this.state.walletApplied ? "check-box" : "check-box-outline-blank"} color={EDColors.primary} size={25} onPress={this.toggleWallet} /> */}
                       </EDRTLView>
-                      {/* <Icon name={this.state.walletApplied ? "check-box" : "check-box-outline-blank"} color={EDColors.primary} size={25} onPress={this.toggleWallet} /> */}
-                    </EDRTLView>
-                  </TouchableOpacity>
-                  </>  ) : null}
+                    </TouchableOpacity>
+                  </>
+                ) : null}
 
                 {this.props.navigation.state.params == undefined ||
                 (this.props.navigation.state.params !== undefined &&
@@ -2569,7 +2570,7 @@ export class CheckOutContainer extends React.PureComponent {
           });
 
           let WalletDiscounttotal =
-            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            parseInt(this.state.loggedInUserwalletBalance) > Number(this.props.minOrderAmount) &&
             deliveryPrice.filter((item) => {
               return item.label_key == "Wallet Discount";
             });
@@ -2601,13 +2602,13 @@ export class CheckOutContainer extends React.PureComponent {
             price_delivery_charge[0].value;
 
           if (
-            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            parseInt(this.state.loggedInUserwalletBalance) > Number(this.props.minOrderAmount) &&
             parseInt(this.state.loggedInUserwalletBalance) >
               parseInt(intialTotalCountvalue)
           ) {
-            total[0].value =  parseInt(intialTotalCountvalue);
+            total[0].value = parseInt(intialTotalCountvalue);
           } else if (
-            parseInt(this.state.loggedInUserwalletBalance) > 100 &&
+            parseInt(this.state.loggedInUserwalletBalance) > Number(this.props.minOrderAmount) &&
             parseInt(this.state.loggedInUserwalletBalance) <
               parseInt(intialTotalCountvalue)
           ) {
@@ -2657,7 +2658,7 @@ export class CheckOutContainer extends React.PureComponent {
           // deliveryJson.total = total[0].value;
           if (
             // parseInt(total[0].value)
-            100 < parseInt(this.state.loggedInUserwalletBalance)
+            Number(this.props.minOrderAmount) < parseInt(this.state.loggedInUserwalletBalance)
           ) {
             deliveryJson.total = total[0].value;
             // deliveryJson.total = 0;
@@ -2666,7 +2667,7 @@ export class CheckOutContainer extends React.PureComponent {
           } else if (
             // parseInt(total[0].value) >
             // parseInt(this.state.loggedInUserwalletBalance)
-            100 > parseInt(this.state.loggedInUserwalletBalance)
+            Number(this.props.minOrderAmount) > parseInt(this.state.loggedInUserwalletBalance)
           ) {
             deliveryJson.total = total[0].value;
             this.setState({ walletApplied: false });
