@@ -144,18 +144,24 @@ class MyWalletContainer extends React.Component {
   onSuccessFetchWallet = (onSuccess) => {
     if (this.state.arrayTransactions == undefined)
       this.state.arrayTransactions = [];
-    debugLog("getWalletHistory :::::::: Success", this.state.arrayTransactions);
-
     if (onSuccess != undefined && onSuccess.status == RESPONSE_SUCCESS) {
+      let filteredwallet_history =
+        onSuccess.wallet_history &&
+        onSuccess.wallet_history.filter((item) => {
+          return Math.round(item.amount) != 0;
+        });
+
       let totalTransactions = onSuccess.total_transactions || 0;
-      let arr = onSuccess.wallet_history;
+      let arr = filteredwallet_history
+        ? filteredwallet_history
+        : onSuccess.wallet_history;
       this.shouldLoadMore =
         this.state.arrayTransactions.length + arr.length < totalTransactions;
       this.current_balance = onSuccess.wallet_money;
       this.props.saveWalletMoney(onSuccess.wallet_money);
       this.total_credited = onSuccess.total_money_credited;
-      this.currency_symbol = onSuccess.currency
-    //   this.currency_symbol = "₹";
+      this.currency_symbol = onSuccess.currency;
+      //   this.currency_symbol = "₹";
       this.currency_code = onSuccess.currency_code;
       this.setState({
         arrayTransactions: [...this.state.arrayTransactions, ...arr],
@@ -189,7 +195,7 @@ class MyWalletContainer extends React.Component {
             <EDRTLView style={style.cashIconView}>
               <Text style={[style.currentIconStyle]} numberOfLines={1}>
                 {/* {"$"} */}
-                {"₹"}                
+                {"₹"}
               </Text>
               <Icon
                 style={style.cashIconStyle}
