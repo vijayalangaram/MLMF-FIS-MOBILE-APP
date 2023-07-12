@@ -205,7 +205,7 @@ export class PaymentContainer extends React.PureComponent {
 
 
             //FETCH SAVED CARDS IN STRIPE PAYMENT IF SUPPORTED
-            if (this.props.userID !== undefined && this.props.userID !== null && this.paymentOptions.map(data =>
+            if (this.props.userID !== undefined && this.props.userID !== null &&  this.paymentOptions && this.paymentOptions.map(data =>
                 data.payment_gateway_slug
             ).includes("stripe"))
                 this.fetchCards()
