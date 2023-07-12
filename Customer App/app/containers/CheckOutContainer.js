@@ -558,7 +558,7 @@ export class CheckOutContainer extends React.PureComponent {
               showsVerticalScrollIndicator={false}
             >
               {/* DISPLAY CART CARD LIST */}
-              <FlatList
+              {/* <FlatList
                 data={
                   this.cartResponse != undefined ? this.cartResponse.items : []
                 }
@@ -606,7 +606,7 @@ export class CheckOutContainer extends React.PureComponent {
                     />
                   );
                 }}
-              />
+              /> */}
 
               {/* FEATUED ITEMS */}
               {this.featured_items !== undefined &&
@@ -897,10 +897,27 @@ export class CheckOutContainer extends React.PureComponent {
                 this.wallet_money !== "0.00" &&
                 this.props.userID != undefined &&
                 this.props.userID != "" ? (
+<>
+                
+
                   <TouchableOpacity
                   // onPress={this.toggleWallet}
                   >
-                    <EDRTLView style={style.walletContainer}>
+                    {/* <View style={style.priceContainer}>
+                  <EDRTLText
+                    style={[
+                      style.title,
+                      {
+                        marginVertical: 5,
+                        marginHorizontal: 20,
+                        fontFamily: EDFonts.semiBold,
+                      },
+                    ]}
+                    title="Wallet Detail"
+                  />
+                  </View> */}
+
+                    <EDRTLView style={style.walletContainer}>    
                       <EDRTLView
                         style={{
                           alignItems: "center",
@@ -909,7 +926,7 @@ export class CheckOutContainer extends React.PureComponent {
                         }}
                       >
                         {/* <Icon name="account-balance-wallet" size={25} /> */}
-                        {100 <
+                        {/* {100 <
                           parseInt(this.state.loggedInUserwalletBalance) && (
                           <Icon
                             name={
@@ -922,7 +939,7 @@ export class CheckOutContainer extends React.PureComponent {
                             size={getProportionalFontSize(22)}
                             // onPress={this.toggleWallet}
                           />
-                        )}
+                        )} */}
 
                         {
                           // parseInt(this.cartResponse.total)
@@ -953,7 +970,7 @@ export class CheckOutContainer extends React.PureComponent {
                       {/* <Icon name={this.state.walletApplied ? "check-box" : "check-box-outline-blank"} color={EDColors.primary} size={25} onPress={this.toggleWallet} /> */}
                     </EDRTLView>
                   </TouchableOpacity>
-                ) : null}
+                  </>  ) : null}
 
                 {this.props.navigation.state.params == undefined ||
                 (this.props.navigation.state.params !== undefined &&
@@ -1135,7 +1152,7 @@ export class CheckOutContainer extends React.PureComponent {
                       </>
                     ) : (
                       <EDRTLView style={{ alignItems: "center" }}>
-                        {/* <Icon name={"local-offer"} size={16} color={EDColors.blackSecondary} style={style.discountIcon} /> */}
+                        {/* <Icon name={"local-offer"} size={16} color={EDColors.blackSecondary} style={style.discountIcon} />
                         <SvgXml
                           xml={discount_icon}
                           style={{ marginHorizontal: 5 }}
@@ -1145,7 +1162,7 @@ export class CheckOutContainer extends React.PureComponent {
                           onPress={this.navigateToPromoCode}
                         >
                           {strings("haveAPromo")}
-                        </Text>
+                        </Text> */}
                       </EDRTLView>
                     )}
                   </View>
@@ -1912,7 +1929,7 @@ export class CheckOutContainer extends React.PureComponent {
 
           if (this.state.walletApplied === true) {
             if (this.wallet_money < this.cartResponse.total) {
-              this.placeOrder();          
+              this.placeOrder();
             } else {
               this.placeOrder();
               this.navigateToPaymentGateway(
@@ -1926,7 +1943,6 @@ export class CheckOutContainer extends React.PureComponent {
               "razorpay"
             );
           }
-
         } else
           this.props.navigation.navigate("PaymentContainer", {
             currency_code: this.currency_code,
@@ -2052,7 +2068,7 @@ export class CheckOutContainer extends React.PureComponent {
 
         if (this.state.walletApplied === true) {
           if (this.wallet_money < this.cartResponse.total) {
-            this.placeOrder();          
+            this.placeOrder();
           } else {
             this.placeOrder();
             this.navigateToPaymentGateway(
@@ -2589,7 +2605,7 @@ export class CheckOutContainer extends React.PureComponent {
             parseInt(this.state.loggedInUserwalletBalance) >
               parseInt(intialTotalCountvalue)
           ) {
-            total[0].value = 0;
+            total[0].value =  parseInt(intialTotalCountvalue);
           } else if (
             parseInt(this.state.loggedInUserwalletBalance) > 100 &&
             parseInt(this.state.loggedInUserwalletBalance) <

@@ -101,6 +101,7 @@
     "applyWallet": "Apply wallet balance \nAvailable balance : ",
     "lowapplyWallet": "Low Wallet balance \nAvailable balance : ",
     "priceDetail": "Price Details",
+    "walletDetail": "Wallet Details",
     "haveAPromo": "Have a Promo code?",
     "promoApplied": "Applied",
     "doCheckout": "Checkout",
