@@ -1939,12 +1939,33 @@ export class CheckOutContainer extends React.PureComponent {
         ) {
           this.comment = this.props.navigation.state.params.comment;
 
-          if (this.props.navigation.state.params.payment_option == "cod")
+          // if (this.props.navigation.state.params.payment_option == "cod")
+          //   this.placeOrder();
+          // else
+          //   this.navigateToPaymentGateway(
+          //     this.props.navigation.state.params.payment_option
+          //   );
+
+          if (
+            parseInt(this.state.loggedInUserwalletBalance) >
+              Number(this.props.minOrderAmount) &&
+            parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(this.cartResponse.total)
+          ) {
             this.placeOrder();
-          else
-            this.navigateToPaymentGateway(
-              this.props.navigation.state.params.payment_option
-            );
+          } else if (
+            parseInt(this.state.loggedInUserwalletBalance) >
+              Number(this.props.minOrderAmount) &&
+            parseInt(this.state.loggedInUserwalletBalance) <
+              parseInt(this.cartResponse.total)
+          ) {
+            this.placeOrder();
+            this.payment_option == "razorpay";
+            this.navigateToPaymentGateway("razorpay");
+          } else {
+            this.payment_option == "razorpay";
+            this.navigateToPaymentGateway("razorpay");
+          }
         } else
           this.props.navigation.navigate("PaymentContainer", {
             currency_code: this.currency_code,
@@ -1966,10 +1987,28 @@ export class CheckOutContainer extends React.PureComponent {
           this.navigatetoPending
         );
       }
-    } else {
+    } else {    
       debugLog(
-        "****************************** Vijay ****************************** else part wallet_balance "
+        "****************************** Vijay ****************************** else part this.cartResponse",
+        this.cartResponse
       );
+
+      debugLog(
+        "****************************** Vijay ****************************** else part this.cartResponse.subtotal + ",
+        this.cartResponse
+      );
+
+            debugLog(
+        "****************************** Vijay ****************************** else part resultvalue",
+        parseInt (this.cartResponse.price[0].value ) +  parseInt (this.cartResponse.price[1].value )  +
+        parseInt (this.cartResponse.price[3].value ) 
+      );
+
+      let actualTotalsubtotalTaxes =  parseInt (this.cartResponse.price[0].value ) +  parseInt (this.cartResponse.price[1].value )  +
+      parseInt (this.cartResponse.price[3].value ) ;
+
+      // return false;
+
       var checkoutData = {
         address_id:
           this.props.navigation.state.params !== undefined
@@ -2064,13 +2103,57 @@ export class CheckOutContainer extends React.PureComponent {
         this.props.navigation.state.params.payment_option !== undefined
       ) {
         this.comment = this.props.navigation.state.params.comment;
-
-        if (this.props.navigation.state.params.payment_option == "cod")
-          this.placeOrder();
-        else
-          this.navigateToPaymentGateway(
-            this.props.navigation.state.params.payment_option
+        // if (this.props.navigation.state.params.payment_option == "cod")
+        //   this.placeOrder();
+        // else
+        //   this.navigateToPaymentGateway(
+        //     this.props.navigation.state.params.payment_option
+        //   );
+        debugLog(
+          "********************************************************* else part this.payment_option",
+          this.payment_option
+        );
+        // debugLog(
+        //   "********************************************************* else part B0000000000 ",
+        //   parseInt(this.state.loggedInUserwalletBalance)
+        // );
+        // debugLog(
+        //   "********************************************************* else part B11111111111",
+        //   Number(this.props.minOrderAmount)
+        // );
+        // debugLog(
+        //   "********************************************************* else part B22222222222",
+        //   parseInt(this.cartResponse.total)
+        // );
+        if (
+          parseInt(this.state.loggedInUserwalletBalance) >
+            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) >
+            parseInt(actualTotalsubtotalTaxes)
+        ) {
+          debugLog(
+            "***************************************************** else part 00000"
           );
+          this.placeOrder();         
+        } else if (
+          parseInt(this.state.loggedInUserwalletBalance) >
+            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) <
+            parseInt(actualTotalsubtotalTaxes)
+        ) {
+          debugLog(
+            "****************************** Vijay ****************************** else part 111111"
+          );
+          // this.placeOrder();
+          this.payment_option == "razorpay";
+          this.navigateToPaymentGateway("razorpay");
+        } else {
+          debugLog(
+            "****************************** Vijay ****************************** else part 22222"
+          );
+          this.payment_option == "razorpay";
+          this.navigateToPaymentGateway("razorpay");
+        }
       } else
         this.props.navigation.navigate("PaymentContainer", {
           currency_code: this.currency_code,
@@ -2234,6 +2317,11 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment = () => {
+    debugLog(
+      "****************************** Vijay ****************************** this.razorpayDetails 6666",
+      this.razorpayDetails
+    );
+
     this.merchant_order_id = Date.now();
     var options = {
       description: "Paying MLMF",
@@ -2403,8 +2491,14 @@ export class CheckOutContainer extends React.PureComponent {
     this.setState({ isLoading: false });
   };
 
-  navigateToPaymentGateway = () => {
-    if (this.payment_option == "stripe") {
+  navigateToPaymentGateway = (valuefromDynamicPricde) => {
+    debugLog(
+      "****************************** Vijay ****************************** this.payment_option 55555",
+      valuefromDynamicPricde
+    );
+
+    // if (this.payment_option == "stripe") {
+      if (valuefromDynamicPricde == "stripe") {      
       // if (this.props.userID !== undefined && this.props.userID !== null && this.props.userID !== "")
       //     this.props.navigation.navigate("savedCards", {
       //         "currency_code": this.currency_code,
@@ -2428,9 +2522,16 @@ export class CheckOutContainer extends React.PureComponent {
       //         isForSelection: true
       //     })
       this.startStripePayment();
-    } else if (this.payment_option == "razorpay") {
+    // } else if (this.payment_option == "razorpay") {
+    } else if (valuefromDynamicPricde== "razorpay") {
+      debugLog(
+        "****************************** Vijay ****************************** this.payment_option 444",
+        this.payment_option
+      );
+
       this.startRazorPayment();
-    } else if (this.payment_option == "paypal")
+    // } else if (this.payment_option == "paypal")
+  } else if (valuefromDynamicPricde == "paypal")
       this.props.navigation.navigate("PaymentGatewayContainer", {
         currency_code: this.currency_code,
         isPendingAdded: false,

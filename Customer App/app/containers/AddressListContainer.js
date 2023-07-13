@@ -2141,7 +2141,8 @@ export class AddressListContainer extends React.PureComponent {
 
   onFailurePaymentList = (onFailure) => {
     console.log("::::::::::: PAYMENT FALURE", onFailure);
-    showValidationAlert(onFailure.message);
+    // showValidationAlert(onFailure.message);
+    showValidationAlert("Payment Method Error");
     this.setState({ isPaymentLoading: false });
   };
 
