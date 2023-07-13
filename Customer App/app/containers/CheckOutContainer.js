@@ -1792,7 +1792,7 @@ export class CheckOutContainer extends React.PureComponent {
     let tempArray =
       this.cartResponse.price &&
       this.cartResponse.price.filter((data) => {
-        return data.label_key != "Wallet Deduction";
+        return data.label_key != "Wallet Discount";
       });
 
     debugLog(
@@ -1815,7 +1815,7 @@ export class CheckOutContainer extends React.PureComponent {
     let walletDiscounttotal =
       this.cartResponse.price.length > 0 &&
       this.cartResponse.price.filter((item) => {
-        return item.label_key == "Wallet Deduction" ? item.value : 0;
+        return item.label_key == "Wallet Discount" ? item.value : 0;
       });
 
     // debugLog(
@@ -2500,7 +2500,7 @@ export class CheckOutContainer extends React.PureComponent {
         this.minimum_subtotal = onSuccess.minimum_subtotal;
 
         let tempArray = onSuccess.price.filter((data) => {
-          return data.label_key == "Wallet Deduction";
+          return data.label_key == "Wallet Discount";
         });
 
         let walletDiscounttotal = onSuccess.price.filter((item) => {
@@ -2570,32 +2570,25 @@ export class CheckOutContainer extends React.PureComponent {
             ServiceTaxtotal[0].value +
             price_delivery_charge[0].value;
 
-          if (tempArray.length == 0) {
-            debugLog(
-              "****************************** Vijay ****************************** tempArray.length",
-              tempArray.length
-            );
-
-            if (
-              parseInt(this.state.loggedInUserwalletBalance) >
-                Number(this.props.minOrderAmount) &&
-              parseInt(this.state.loggedInUserwalletBalance) >
-                parseInt(intialTotalCountvalue)
-            ) {
-              total[0].value = parseInt(intialTotalCountvalue);
-            } else if (
-              parseInt(this.state.loggedInUserwalletBalance) >
-                Number(this.props.minOrderAmount) &&
-              parseInt(this.state.loggedInUserwalletBalance) <
-                parseInt(intialTotalCountvalue)
-            ) {
-              let loggedInUserwalletBalanceint =
-                parseInt(intialTotalCountvalue) -
-                parseInt(this.state.loggedInUserwalletBalance);
-              total[0].value = parseInt(loggedInUserwalletBalanceint);
-            } else {
-              total[0].value = parseInt(intialTotalCountvalue);
-            }
+          if (
+            parseInt(this.state.loggedInUserwalletBalance) >
+              Number(this.props.minOrderAmount) &&
+            parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(intialTotalCountvalue)
+          ) {
+            total[0].value = parseInt(intialTotalCountvalue);
+          } else if (
+            parseInt(this.state.loggedInUserwalletBalance) >
+              Number(this.props.minOrderAmount) &&
+            parseInt(this.state.loggedInUserwalletBalance) <
+              parseInt(intialTotalCountvalue)
+          ) {
+            let loggedInUserwalletBalanceint =
+              parseInt(intialTotalCountvalue) -
+              parseInt(this.state.loggedInUserwalletBalance);
+            total[0].value = parseInt(loggedInUserwalletBalanceint);
+          } else {
+            total[0].value = parseInt(intialTotalCountvalue);
           }
 
           // gather if  label_key Wallet Discount available in array
@@ -2603,7 +2596,7 @@ export class CheckOutContainer extends React.PureComponent {
           // let WalletDiscounttotal =
           // parseInt(this.state.loggedInUserwalletBalance) > Number(this.props.minOrderAmount) &&
           // deliveryPrice.filter((item) => {
-          //   return item.label_key == "Wallet Deduction";
+          //   return item.label_key == "Wallet Discount";
           // });
           // if (WalletDiscounttotal.length > 0) {
           //   let walletvaluebasedonActualTotal =
@@ -2637,51 +2630,57 @@ export class CheckOutContainer extends React.PureComponent {
 
           // push Wallet Discount to price array
 
-          if (
-            parseInt(this.state.loggedInUserwalletBalance) >
-              Number(this.props.minOrderAmount) &&
-            parseInt(this.state.loggedInUserwalletBalance) >
-              parseInt(intialTotalCountvalue)
-          ) {
-            const pushtoPriceForwallet = {
-              label: "Wallet Deduction",
-              label_key: "Wallet Deduction",
-              value: parseInt(intialTotalCountvalue),
-            };
-            onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
-            this.wallet_discount = parseInt(intialTotalCountvalue);
-            this.setState({ walletApplied: true });
-            onSuccess.is_redeem == true;
-          } else if (
-            parseInt(this.state.loggedInUserwalletBalance) >
-              Number(this.props.minOrderAmount) &&
-            parseInt(this.state.loggedInUserwalletBalance) <
-              parseInt(intialTotalCountvalue)
-          ) {
-            const pushtoPriceForwallet = {
-              label: "Wallet Deduction",
-              label_key: "Wallet Deduction",
-              value: parseInt(this.state.loggedInUserwalletBalance),
-            };
-            onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
-            this.wallet_discount = parseInt(
-              this.state.loggedInUserwalletBalance
+          if (tempArray.length == 0) {
+            debugLog(
+              "****************************** Vijay ****************************** tempArray.length",
+              tempArray.length
             );
-            this.setState({ walletApplied: true });
-            onSuccess.is_redeem == true;
-          } else {
-            this.setState({ walletApplied: false });
-            onSuccess.is_redeem == false;
-            let tempArray = onSuccess.price.filter((data) => {
-              return data.label_key != "Wallet Deduction";
-            });
-            onSuccess.price = tempArray;
-            // const pushtoPriceForwallet = {
-            //   label: "Wallet Deduction",
-            //   label_key: "Wallet Deduction",
-            //   value: 0,
-            // };
-            // onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
+            if (
+              parseInt(this.state.loggedInUserwalletBalance) >
+                Number(this.props.minOrderAmount) &&
+              parseInt(this.state.loggedInUserwalletBalance) >
+                parseInt(intialTotalCountvalue)
+            ) {
+              const pushtoPriceForwallet = {
+                label: "Wallet Discount",
+                label_key: "Wallet Discount",
+                value: parseInt(intialTotalCountvalue),
+              };
+              onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
+              this.wallet_discount = parseInt(intialTotalCountvalue);
+              this.setState({ walletApplied: true });
+              onSuccess.is_redeem == true;
+            } else if (
+              parseInt(this.state.loggedInUserwalletBalance) >
+                Number(this.props.minOrderAmount) &&
+              parseInt(this.state.loggedInUserwalletBalance) <
+                parseInt(intialTotalCountvalue)
+            ) {
+              const pushtoPriceForwallet = {
+                label: "Wallet Discount",
+                label_key: "Wallet Discount",
+                value: parseInt(this.state.loggedInUserwalletBalance),
+              };
+              onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
+              this.wallet_discount = parseInt(
+                this.state.loggedInUserwalletBalance
+              );
+              this.setState({ walletApplied: true });
+              onSuccess.is_redeem == true;
+            } else {
+              this.setState({ walletApplied: false });
+              onSuccess.is_redeem == false;
+              let tempArray = onSuccess.price.filter((data) => {
+                return data.label_key != "Wallet Discount";
+              });
+              onSuccess.price = tempArray;
+              // const pushtoPriceForwallet = {
+              //   label: "Wallet Discount",
+              //   label_key: "Wallet Discount",
+              //   value: 0,
+              // };
+              // onSuccess.price && onSuccess.price.push(pushtoPriceForwallet);
+            }
           }
 
           // debugLog(
@@ -2834,7 +2833,7 @@ export class CheckOutContainer extends React.PureComponent {
         let tempArray =
           objAddToCart.price &&
           objAddToCart.price.filter((data) => {
-            return data.label_key != "Wallet Deduction";
+            return data.label_key != "Wallet Discount";
           });
 
         // objAddToCart.price = tempArray;

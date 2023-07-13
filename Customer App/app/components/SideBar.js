@@ -180,7 +180,7 @@ class SideBar extends React.PureComponent {
                             <Image source={Assets.logo} style={{ height: 24, width: 24 }} resizeMode={'contain'} />
                             {/* <Icon name="versions" type="octicon" size={getProportionalFontSize(18)}/> */}                            
                             {/* <Text style={style.iconText} >{strings("version") + " " + deviceInfoModule.getVersion()}</Text> */}
-                            <Text style={style.iconText} >{'V.1.1 12.7.23'}</Text>
+                            <Text style={style.iconText} >{'V.1.1 13.7.23'}</Text>
                         </EDRTLView>
                         {this.arrSocialApps !== undefined && this.arrSocialApps !== null && this.arrSocialApps.length > 0 ?
                             <EDRTLView style={style.socialIconView}>
