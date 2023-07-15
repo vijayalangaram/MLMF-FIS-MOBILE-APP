@@ -37,7 +37,7 @@ export default class AddressComponent extends React.PureComponent {
               containerStyle={{ marginRight: 20 }}
             />
             <View style={{ flex: 1 }}>
-              <EDRTLText
+              {/* <EDRTLText
                 title={
                   this.props.data.address_label !== undefined &&
                   this.props.data.address_label !== null &&
@@ -46,7 +46,7 @@ export default class AddressComponent extends React.PureComponent {
                     : this.props.data.address.split(",")[0]
                 }
                 style={style.currentLocationText}
-              />
+              /> */}
               <EDRTLText
                 title={
                   this.props.data.address_label !== null &&
@@ -67,14 +67,17 @@ export default class AddressComponent extends React.PureComponent {
                   }}
                 >
                   {/* <Icon name="info" color={EDColors.primary} size={16} /> */}
+
                   <EDRTLText
                     style={[style.defaultText]}
-                    title={strings("default")}
+                    // title={strings("default")}
+                    title={"Default Address"}
                   />
                 </EDRTLView>
               ) : null}
             </View>
           </EDRTLView>
+
           {!this.props.isSelectedAddress ? (
             <EDRTLView>
               <Icon
@@ -132,7 +135,12 @@ export default class AddressComponent extends React.PureComponent {
   };
 
   selectAddressHandler = () => {
+    // console.log(
+    //   "INDEX OF ADDRESS ````~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    //   this.props.index
+    // );
     this.props.onPress(this.props.index);
+    // this.props.dunzoApiCall();
   };
 }
 
