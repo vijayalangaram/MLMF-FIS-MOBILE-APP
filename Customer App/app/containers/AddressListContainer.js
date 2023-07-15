@@ -63,12 +63,15 @@ import {
   deleteAddress,
   getAddress,
   getAddressListAPI,
+  getDunzoDeliveryAmountAPI,
   getPaymentList,
   getSavedCardsAPI,
   getWalletHistoryAPI,
 } from "../utils/ServiceManager";
 import Validations from "../utils/Validations";
 import BaseContainer from "./BaseContainer";
+import axios from "axios";
+import BASE_URL_FIS_IP from "../../app/utils/EDConstants";
 
 export class AddressListContainer extends React.PureComponent {
   //#region LIFE CYCLE METHODS
@@ -131,6 +134,7 @@ export class AddressListContainer extends React.PureComponent {
       noDefaultCard: false,
       selectedAddress: undefined,
       loggedInUserwalletBalance: "",
+      defaultIntialAddress: "",
       // isGuestVerified: true
     };
     this.checkoutData = this.props.checkoutDetail;
@@ -138,21 +142,64 @@ export class AddressListContainer extends React.PureComponent {
 
   componentDidMount() {
     // debugLog(
-    //   "****************************** Vijay ******************************   this.props.navigation.state",
-    //   this.props.navigation.state
+    //   "****************************** Vijay ******************************  this.props.minOrderAmount",
+    //   this.props.minOrderAmount
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.navigation.state.params.cartItems",
+    //   this.props.navigation
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************     this.state.addressId",
+    //   this.state.address_id
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.userID",
+    //   this.props.userID
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.state.isSelectAddress",
+    //   this.state.isSelectAddress
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************    this.state.selectedAddress",
+    //   this.state.selectedAddress
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.checkoutDetail",
+    //   this.props.checkoutDetail
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************    this.checkoutData ",
+    //   this.checkoutData
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.checkoutData.minOrderAmount ",
+    //   this.checkoutData.minOrderAmount
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.state.loggedInUserwalletBalance",
+    //   this.state.loggedInUserwalletBalance
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.navigation.state.params.isSelectAddress",
+    //   this.props.navigation.state.params.isSelectAddress
     // );
 
     // debugLog(
     //   "****************************** Vijay ******************************   this.props.navigation.state.params.cartItems",
     //   this.props.navigation.state.params.cartItems
     // );
-
-    // debugLog(
-    //   "****************************** Vijay ******************************  this.props.cartItems",
-    //   this.state.cartItems
-    // );
-
     this.getWalletHistoryAPIREQ();
+    this.getAddressList();
   }
 
   getWalletHistoryAPIREQ = () => {
@@ -184,7 +231,7 @@ export class AddressListContainer extends React.PureComponent {
   onStripeCountrySelect = (country) => {
     this.isCountryError = false;
     this.selectedCountry = country;
-    debugLog("COUNTRY :::::", country);
+    // debugLog("COUNTRY :::::", country);
     this.setState({ cardError: "", countryCode: undefined });
   };
 
@@ -641,10 +688,47 @@ export class AddressListContainer extends React.PureComponent {
                     </View>
                   </EDRTLView>
                 ) : null}
-                <EDRTLText
+
+                <EDRTLView style={style.walletContainer}>
+                  {/* <Icon
+                    name={"directions-bike"}
+                    size={getProportionalFontSize(20)}
+                    style={style.headerIconStyle}
+                  /> */}
+                  <EDRTLView
+                    style={{
+                      alignItems: "center",
+                      marginHorizontal: 15,
+                      marginVertical: 10,
+                    }}
+                  >
+                    <EDRTLText
+                      style={style.walletText}
+                      title={`Available Wallet Balance  ₹ ${this.state.loggedInUserwalletBalance} `}
+                    />
+                    {/* {Number(this.checkoutData.minOrderAmount) <
+                      parseInt(this.state.loggedInUserwalletBalance) && (
+                      <EDRTLText
+                        style={style.walletText}
+                        title={`Available balance  ₹. ${this.state.loggedInUserwalletBalance} `}
+                      />
+                    )}
+                    {Number(this.checkoutData.minOrderAmount) >
+                      parseInt(this.state.loggedInUserwalletBalance) && (
+                      <EDRTLText
+                        style={style.walletText}
+                        title={`Low Wallet Balance: ${parseInt(
+                          this.state.loggedInUserwalletBalance
+                        )}`}
+                      />
+                    )} */}
+                  </EDRTLView>
+                </EDRTLView>
+
+                {/* <EDRTLText
                   style={style.orderView}
                   title={strings("orderType")}
-                />
+                /> */}
 
                 <View style={style.deliveryOptionView}>
                   {this.state.availableOrderModes.includes("Delivery") ? (
@@ -1506,7 +1590,7 @@ export class AddressListContainer extends React.PureComponent {
           this.state.selectedOption == "stripe" &&
           (this.state.defaultCard == undefined || this.state.showCardInput)
         ) {
-          debugLog("VALIDATE CARD :::::", this.validateCard());
+          // debugLog("VALIDATE CARD :::::", this.validateCard());
           if (this.validateCard() !== "") return;
         }
         if (
@@ -1736,7 +1820,7 @@ export class AddressListContainer extends React.PureComponent {
    * @param { Success Response Object } onSuccess
    */
   onSucessSchdeule = (onSuccess) => {
-    debugLog("CHECK SCHEDULING SUCCESS ::::::: ", onSuccess);
+    // debugLog("CHECK SCHEDULING SUCCESS ::::::: ", onSuccess);
     this.setState({ isLoading: false });
     if (onSuccess.status === RESPONSE_SUCCESS) {
       this.proceedToCheckout();
@@ -1784,7 +1868,7 @@ export class AddressListContainer extends React.PureComponent {
    * @param { Success Response Object } onSuccess
    */
   onSuccessLoadAddress = (onSuccess) => {
-    console.log("[]][][][]]]][][][][ LOAD ADDRESS SUCCCESS", onSuccess);
+    console.log("LOAD ADDRESS SUCCCESS", onSuccess);
     this.strOnScreenMessage = "";
 
     if (onSuccess != undefined) {
@@ -1802,12 +1886,13 @@ export class AddressListContainer extends React.PureComponent {
                 this.setState({ countryCode: success[0].short_name });
             },
             (failure) => {
-              debugLog("COUNTRY CODE FAILURE :::::", failure);
+              // debugLog("COUNTRY CODE FAILURE :::::", failure);
             },
             this.props.googleMapKey || GOOGLE_API_KEY
           );
           this.forceUpdate();
-          console.log("Address Array[][][][]", this.arrayAddress);
+          // console.log("Address Array[][][][]", this.arrayAddress);
+          this.dunzoApiCall();
         } else {
           this.strOnScreenMessage = strings("noDataFound");
         }
@@ -1837,6 +1922,79 @@ export class AddressListContainer extends React.PureComponent {
     this.setState({ isLoading: false });
     // showValidationAlert(strings("noInternet"));
   };
+
+  dunzoApiCall = async () => {
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.navigation.state.params",
+    //   this.props.navigation.state.params
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.navigation.state.params",
+    //   this.props.navigation.state.params.resId
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************     this.state.addressId",
+    //   this.state.address_id
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.userID",
+    //   this.props.userID
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.state.isSelectAddress",
+    //   this.state.isSelectAddress
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************    this.state.selectedAddress",
+    //   this.state.selectedAddress.address_id
+    // );
+    let data = {
+      restuarant_id: this.props.navigation.state.params.resId,
+      customer_id: this.props.userID || 0,
+      address_id: this.state.selectedAddress.address_id,
+    };
+
+    // getDunzoDeliveryAmountAPI(
+    //   param,
+    //   this.onSuccessgetDunzoDeliveryAmountAPI,
+    //   this.onFailuregetDunzoDeliveryAmountAPI,
+    //   this.props
+    // );
+
+    debugLog(
+      " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   getDeliveryChargeAPICall.statusdata",
+      data
+    );
+
+    let getDeliveryChargeAPICall = await axios.post(
+      // `${BASE_URL_FIS_IP}/api/auth/getDeliveryCharge`,
+      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    debugLog(
+      " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  getDeliveryChargeAPICall $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+      getDeliveryChargeAPICall.data
+    );
+
+    debugLog(
+      " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   getDeliveryChargeAPICall.status$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+      getDeliveryChargeAPICall.status
+    );
+  };
+
+  // onSuccessgetDunzoDeliveryAmountAPI = (onSuccess) => {};
+
+  // onFailuregetDunzoDeliveryAmountAPI = (onFailure) => {
+  //   console.log("[]][][][]]]][][][][ LOAD ADDRESS FAILURE", onFailure);
+  //   this.setState({ isLoading: false });
+  //   showValidationAlert("Unable to process, Delivery Charge ");
+  // };
 
   fetchCards = () => {
     this.state.defaultCard = undefined;
@@ -1897,7 +2055,7 @@ export class AddressListContainer extends React.PureComponent {
             : undefined,
       });
     } else {
-      debugLog("NO CARDS ::::::");
+      // debugLog("NO CARDS ::::::");
       this.noCards = true;
     }
 
@@ -2064,14 +2222,27 @@ export class AddressListContainer extends React.PureComponent {
             parseInt(currentValue.price) * parseInt(currentValue.quantity)
           );
         }, 0);
+
       // debugLog(
-      //   "*****************************************  this.state.loggedInUserwalletBalance",
+      //   "*****************************************  this.state.cartItems  ############## 000000",
+      //   this.state.cartItems
+      // );
+
+      // debugLog(
+      //   "*****************************************  this.state.loggedInUserwalletBalance  ############## 111111",
       //   parseInt(this.state.loggedInUserwalletBalance)
       // );
+
       // debugLog(
-      //   "*****************************************   parseInt(currentPriceTotal)",
+      //   "*****************************************   parseInt(currentPriceTotal)  ############## 122222222222",
       //   parseInt(currentPriceTotal)
       // );
+
+      // debugLog(
+      //   "*****************************************    parseInt(  this.checkoutData.minOrderAmount)  ############## 1333333333332",
+      //   this.checkoutData.minOrderAmount
+      // );
+
       if (
         parseInt(this.state.loggedInUserwalletBalance) >
         parseInt(currentPriceTotal)
@@ -2142,7 +2313,7 @@ export class AddressListContainer extends React.PureComponent {
   onFailurePaymentList = (onFailure) => {
     console.log("::::::::::: PAYMENT FALURE", onFailure);
     // showValidationAlert(onFailure.message);
-    showValidationAlert("Payment Method Error");
+    showValidationAlert("Payment Method Error, Try again later");
     this.setState({ isPaymentLoading: false });
   };
 
@@ -2274,6 +2445,33 @@ const style = StyleSheet.create({
     shadowRadius: 2,
   },
   childDeliveryOptionView: {},
+
+  walletText: {
+    fontFamily: EDFonts.medium,
+    color: "#000",
+    fontSize: getProportionalFontSize(14),
+    marginTop: 10,
+    marginHorizontal: 10,
+    marginBottom: 5,
+  },
+  walletContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    marginVertical: 15,
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 10,
+    paddingRight: 10,
+    shadowColor: "rgba(0, 0, 0, 0.05)",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+
   footerStyle: {
     marginTop: 20,
     marginHorizontal: 10,
@@ -2551,6 +2749,7 @@ export default connect(
       countryArray: state.userOperations.countryArray,
       currentLocation: state.userOperations.currentLocation || {},
       googleMapKey: state.userOperations.googleMapKey,
+      minOrderAmount: state.userOperations.minOrderAmount,
     };
   },
   (dispatch) => {

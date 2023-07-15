@@ -36,6 +36,7 @@ import {
   debugLog,
   DELETE_ACCOUNT,
   DELETE_ADDRESS,
+  DUNZO_DELIVERY_AMOUNTAPI,
   DELETE_CARD,
   DELETE_EVENT,
   DRIVER_TRACKING,
@@ -505,15 +506,15 @@ export function getRestaurantMenu(
   let restaurant_idvalue = resParams["restaurant_id"].toString();
   let userStrCon = propsFromContainer?.userID.toString();
   let restaurant_user = restaurant_idvalue.concat("-", userStrCon);
-//   debugLog(
-//     "vijaygetRestaurantMenu  ***************************************************************** 3333333333 ====>",
-//     restaurant_user
-//   );
-   resParams["restaurant_id"] = restaurant_user;
-//   debugLog(
-//     "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
-//     resParams
-//   );
+  //   debugLog(
+  //     "vijaygetRestaurantMenu  ***************************************************************** 3333333333 ====>",
+  //     restaurant_user
+  //   );
+  resParams["restaurant_id"] = restaurant_user;
+  //   debugLog(
+  //     "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
+  //     resParams
+  //   );
   callAPI(
     GET_RESTAURANT_MENU,
     resParams,
@@ -637,6 +638,40 @@ export function getAddressListAPI(
   callAPI(
     GET_ADDRESS,
     addressParams,
+    onSuccess,
+    onFailure,
+    RequestType.post,
+    getRequestHeader(propsFromContainer),
+    propsFromContainer
+  );
+}
+
+/**
+ *
+ * @param {The input parameters for address param } dunzoParam
+ * @param {Callback function for handling success response} onSuccess
+ * @param {Callback function for handling failure response} onFailure
+ * @param {Props of the screen from which the API is getting called} propsFromContainer
+ */
+export function getDunzoDeliveryAmountAPI(
+  dunzoParam,
+  onSuccess,
+  onFailure,
+  propsFromContainer
+) {
+  debugLog(
+    "****************************** Vijay ******************************    tdunzoParam",
+    dunzoParam
+  );
+
+  debugLog(
+    "****************************** Vijay ******************************    propsFromContainer",
+    propsFromContainer
+  );
+
+  callAPI(
+    DUNZO_DELIVERY_AMOUNTAPI,
+    dunzoParam,
     onSuccess,
     onFailure,
     RequestType.post,
@@ -1855,7 +1890,7 @@ export async function callAPI(
           headers: requestHeader,
         };
 
-  debugLog("===== URL =====", url);
+  debugLog("===== URL ===============================================", url);
   debugLog("===== Body =====", JSON.stringify(params));
 
   debugLog("request", JSON.stringify(body));
@@ -1868,7 +1903,11 @@ export async function callAPI(
         json = JSON.parse(base64.decode(encrypted_json.encryptedResponse));
       else json = encrypted_json;
 
-      debugLog("json respons call api:::", json, url);
+      debugLog(
+        "JSON API CALL  @@@@@@@@@@@@@@@@@@@@@@@@@@@@PPPPPPPPPPIIIIIIIIIIIII@@@@@@@@@@@11",
+        json,
+        url
+      );
       if (json.status === -1 || json.status === "-1") {
         if (
           !url.match(/login/) &&
@@ -1957,7 +1996,10 @@ export async function callSocialAPI(
           headers: requestHeader,
         };
 
-  debugLog("===== URL =====", url);
+  debugLog(
+    "===== URL ====================================================",
+    url
+  );
   debugLog("===== Body =====", JSON.stringify(params));
 
   debugLog("request", JSON.stringify(body));
@@ -1970,7 +2012,11 @@ export async function callSocialAPI(
         json = JSON.parse(base64.decode(encrypted_json.encryptedResponse));
       else json = encrypted_json;
 
-      debugLog("json respons call api:::", json, url);
+      debugLog(
+        "JSON API CALL  @@@@@@@@@@@@@@@@@@@@@@@@@@@@PPPPPPPPPPIIIIIIIIIIIII@@@@@@@@@@@22",
+        json,
+        url
+      );
       if (json.status === -1 || json.status === "-1") {
         if (
           !url.match(/login/) &&

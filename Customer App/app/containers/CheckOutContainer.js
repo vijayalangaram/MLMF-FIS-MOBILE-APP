@@ -1775,38 +1775,32 @@ export class CheckOutContainer extends React.PureComponent {
     debugLog(
       "****************************** Vijay ****************************** onCheckOutEventHandler "
     );
-    debugLog(
-      "****************************** Vijay ******************************   this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
-    debugLog(
-      "****************************** Vijay ****************************** this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
-
-    debugLog(
-      "****************************** Vijay ******************************  this.cartResponse.price",
-      this.cartResponse.price
-    );
-
-    let tempArray =
-      this.cartResponse.price &&
-      this.cartResponse.price.filter((data) => {
-        return data.label_key != "Wallet Discount";
-      });
-
-    debugLog(
-      "****************************** Vijay ******************************  tempArray",
-      tempArray
-    );
-
-    // this.cartResponse.price && this.cartResponse.price.push(tempArray);
-    // this.cartResponse.price = tempArray;
-
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.navigation.state.params.payment_option",
+    //   this.props.navigation.state.params.payment_option
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.cartResponse.price",
+    //   this.cartResponse.price
+    // );
     debugLog(
       "****************************** Vijay ******************************  this.state.walletApplied",
       this.state.walletApplied
     );
+
+    // let tempArray =
+    //   this.cartResponse.price &&
+    //   this.cartResponse.price.filter((data) => {
+    //     return data.label_key != "Wallet Discount";
+    //   });
+
+    // debugLog(
+    //   "****************************** Vijay ******************************  tempArray",
+    //   tempArray
+    // );
+
+    // this.cartResponse.price && this.cartResponse.price.push(tempArray);
+    // this.cartResponse.price = tempArray;
 
     // let walletDiscounttotal = this.cartResponse.price.filter((item) => {
     //   return item.label_key == "Total" && item.value;
@@ -1987,25 +1981,28 @@ export class CheckOutContainer extends React.PureComponent {
           this.navigatetoPending
         );
       }
-    } else {    
-      debugLog(
-        "****************************** Vijay ****************************** else part this.cartResponse",
-        this.cartResponse
-      );
+    } else {
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part this.cartResponse",
+      //   this.cartResponse
+      // );
+
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part this.cartResponse.subtotal + ",
+      //   this.cartResponse
+      // );
 
       debugLog(
-        "****************************** Vijay ****************************** else part this.cartResponse.subtotal + ",
-        this.cartResponse
-      );
-
-            debugLog(
         "****************************** Vijay ****************************** else part resultvalue",
-        parseInt (this.cartResponse.price[0].value ) +  parseInt (this.cartResponse.price[1].value )  +
-        parseInt (this.cartResponse.price[3].value ) 
+        parseInt(this.cartResponse.price[0].value) +
+          parseInt(this.cartResponse.price[1].value) +
+          parseInt(this.cartResponse.price[3].value)
       );
 
-      let actualTotalsubtotalTaxes =  parseInt (this.cartResponse.price[0].value ) +  parseInt (this.cartResponse.price[1].value )  +
-      parseInt (this.cartResponse.price[3].value ) ;
+      let actualTotalsubtotalTaxes =
+        parseInt(this.cartResponse.price[0].value) +
+        parseInt(this.cartResponse.price[1].value) +
+        parseInt(this.cartResponse.price[3].value);
 
       // return false;
 
@@ -2134,7 +2131,7 @@ export class CheckOutContainer extends React.PureComponent {
           debugLog(
             "***************************************************** else part 00000"
           );
-          this.placeOrder();         
+          this.placeOrder();
         } else if (
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&
@@ -2498,7 +2495,7 @@ export class CheckOutContainer extends React.PureComponent {
     );
 
     // if (this.payment_option == "stripe") {
-      if (valuefromDynamicPricde == "stripe") {      
+    if (valuefromDynamicPricde == "stripe") {
       // if (this.props.userID !== undefined && this.props.userID !== null && this.props.userID !== "")
       //     this.props.navigation.navigate("savedCards", {
       //         "currency_code": this.currency_code,
@@ -2522,16 +2519,16 @@ export class CheckOutContainer extends React.PureComponent {
       //         isForSelection: true
       //     })
       this.startStripePayment();
-    // } else if (this.payment_option == "razorpay") {
-    } else if (valuefromDynamicPricde== "razorpay") {
+      // } else if (this.payment_option == "razorpay") {
+    } else if (valuefromDynamicPricde == "razorpay") {
       debugLog(
         "****************************** Vijay ****************************** this.payment_option 444",
         this.payment_option
       );
 
       this.startRazorPayment();
-    // } else if (this.payment_option == "paypal")
-  } else if (valuefromDynamicPricde == "paypal")
+      // } else if (this.payment_option == "paypal")
+    } else if (valuefromDynamicPricde == "paypal")
       this.props.navigation.navigate("PaymentGatewayContainer", {
         currency_code: this.currency_code,
         isPendingAdded: false,
@@ -2560,24 +2557,19 @@ export class CheckOutContainer extends React.PureComponent {
    */
   onSuccessAddCart = (onSuccess) => {
     debugLog(
-      "********************************** onSuccess ********************************** 1111111111111111",
+      "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
       onSuccess
     );
 
     debugLog(
-      "********************************** onSuccess ********************************** 2222222222222",
+      "********************************** onSuccess ********************************** 2222222222222  onSuccessAddCart ",
       onSuccess.subtotal
     );
 
     debugLog(
-      "********************************** onSuccess **********************************",
+      "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
       onSuccess.total
     );
-
-    // debugLog(
-    //   "********************************** onSuccess **********************************",
-    //   parseInt(onSuccess.subtotal) + parseInt(onSuccess.total)
-    // );
 
     if (onSuccess.error != undefined) {
       showValidationAlert(
@@ -2608,15 +2600,20 @@ export class CheckOutContainer extends React.PureComponent {
           return item.label_key == "Total" && item.value;
         });
 
-        // debugLog(
-        //   "****************************** Vijay ****************************** Wallet Discount",
-        //   walletDiscounttotal[0].value
-        // );
-
         if (tempArray.length !== 0) {
+          debugLog(
+            "****************************** Vijay ****************************** tempArray.length ",
+            tempArray.length
+          );
+
           this.wallet_discount = tempArray[0].value;
           // this.wallet_discount =  walletDiscounttotal[0].value;
         } else {
+          debugLog(
+            "****************************** Vijay ****************************** tempArray.length ",
+            tempArray.length
+          );
+
           this.setState({ walletApplied: false });
           this.wallet_discount = 0;
         }
@@ -2946,10 +2943,10 @@ export class CheckOutContainer extends React.PureComponent {
         //   this.addToCartData
         // );
 
-        // debugLog(
-        //   "***************************************  4444444444444444444  objAddToCart",
-        //   objAddToCart
-        // );
+        debugLog(
+          "***************************************  4444444444444444444  objAddToCart",
+          objAddToCart
+        );
 
         // debugLog(
         //   "***************************************  00000000000000000 is_wallet_applied",

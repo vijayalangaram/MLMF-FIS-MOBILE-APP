@@ -335,14 +335,34 @@ export class CartContainer extends React.PureComponent {
   //#region
   // /** NEXT BUTTON EVENT  */ TO BE USED DURING GUEST CHECKOUT
   onNextEventHandler = () => {
+    // debugLog(
+    //   "***************************************** 0000000000",
+    //   this.state.cartData
+    // );
+
+    // debugLog(
+    //   "***************************************** 1111111111111",
+    //   this.props
+    // );
+
+    // debugLog(
+    //   "***************************************** 22222222222222222",
+    //   this.props.navigation.state.params
+    // );
+
+    // debugLog(
+    //   "*****************************************  3333333333333",
+    //   this.props.navigation.state
+    // );
+
     // if (this.props.userID != undefined && this.props.userID != '') {
     saveCartData(
       this.state.cartData,
-      (onSuccess) => { 
+      (onSuccess) => {
         this.props.navigation.navigate("AddressListContainer", {
           isSelectAddress: true,
           resId: this.res_id,
-          cartItems: this.state.cartData.items
+          cartItems: this.state.cartData.items,
         });
       },
       (onfalilure) => {}
