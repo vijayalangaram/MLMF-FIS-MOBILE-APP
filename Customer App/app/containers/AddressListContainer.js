@@ -2312,31 +2312,32 @@ export class AddressListContainer extends React.PureComponent {
           );
         }, 0);
 
-      // debugLog(
-      //   "*****************************************  this.state.cartItems  ############## 000000",
-      //   this.state.cartItems
-      // );
+      let PriceandTotalPrice =
+        parseInt(currentPriceTotal) +
+        parseInt(this.state.dunzo_Delivery_Point_Amount);
 
-      // debugLog(
-      //   "*****************************************  this.state.loggedInUserwalletBalance  ############## 111111",
-      //   parseInt(this.state.loggedInUserwalletBalance)
-      // );
-
-      // debugLog(
-      //   "*****************************************   parseInt(currentPriceTotal)  ############## 122222222222",
-      //   parseInt(currentPriceTotal)
-      // );
-
-      // debugLog(
-      //   "*****************************************    parseInt(  this.checkoutData.minOrderAmount)  ############## 1333333333332",
-      //   this.checkoutData.minOrderAmount
-      // );
+      debugLog(
+        "*****************************************  PriceandTotalPrice  ###################################################################### ",
+        PriceandTotalPrice
+      );
 
       if (
-        parseInt(this.state.loggedInUserwalletBalance) >
-        parseInt(currentPriceTotal)
+        parseInt(this.state.loggedInUserwalletBalance) <
+        Number(this.props.minOrderAmount)
       ) {
-        // debugLog("*****************************************    if log");
+        let filteredvalue =
+          onSuccess.Payment_method &&
+          onSuccess.Payment_method.filter(
+            (items) => items.payment_gateway_slug == "razorpay"
+          );
+        this.paymentOptions = filteredvalue;
+        this.onOptionSelection(filteredvalue[0]);
+      } else if (
+        parseInt(this.state.loggedInUserwalletBalance) >
+          Number(this.props.minOrderAmount) &&
+        parseInt(this.state.loggedInUserwalletBalance) >
+          parseInt(PriceandTotalPrice)
+      ) {
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2345,10 +2346,19 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else if (
+        parseInt(this.state.loggedInUserwalletBalance) >
+          Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) <
-        parseInt(currentPriceTotal)
+          parseInt(PriceandTotalPrice)
       ) {
-        // debugLog("*****************************************    else if ");
+        let filteredvalue =
+          onSuccess.Payment_method &&
+          onSuccess.Payment_method.filter(
+            (items) => items.payment_gateway_slug == "razorpay"
+          );
+        this.paymentOptions = filteredvalue;
+        this.onOptionSelection(filteredvalue[0]);
+      } else {
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2357,6 +2367,30 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       }
+
+      // if (
+      //   parseInt(this.state.loggedInUserwalletBalance) >
+      //   parseInt(PriceandTotalPrice)
+      // ) {
+      //   let filteredvalue =
+      //     onSuccess.Payment_method &&
+      //     onSuccess.Payment_method.filter(
+      //       (items) => items.payment_gateway_slug == "cod"
+      //     );
+      //   this.paymentOptions = filteredvalue;
+      //   this.onOptionSelection(filteredvalue[0]);
+      // } else if (
+      //   parseInt(this.state.loggedInUserwalletBalance) <
+      //   parseInt(currentPriceTotal)
+      // ) {
+      //   let filteredvalue =
+      //     onSuccess.Payment_method &&
+      //     onSuccess.Payment_method.filter(
+      //       (items) => items.payment_gateway_slug == "razorpay"
+      //     );
+      //   this.paymentOptions = filteredvalue;
+      //   this.onOptionSelection(filteredvalue[0]);
+      // }
 
       //FETCH SAVED CARDS IN STRIPE PAYMENT IF SUPPORTED
       if (
