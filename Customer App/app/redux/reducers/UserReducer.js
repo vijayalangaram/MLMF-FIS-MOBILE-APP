@@ -9,6 +9,7 @@ import {
   SAVE_ALERT_DATA,
   TYPE_SAVE_MIN_ORDER_AMOUNT,
   TYPE_DELIVERY_DUNZO__DETAILS,
+  TYPE_DELIVERY_DUNZO_AMOUNT,
   TYPE_SHOW_SOCIAL_BUTTON,
   TYPE_SOCIAL_LOGIN,
   TYPE_SAVE_LOGIN_FCM,
@@ -191,7 +192,13 @@ export function userOperations(state = initialStateUser, action) {
 
     case TYPE_DELIVERY_DUNZO__DETAILS: {
       return Object.assign({}, state, {
-        dunzo_Delivery_amt: action.value,
+        dunzo_Delivery_Details: action.value,
+      });
+    }
+
+    case TYPE_DELIVERY_DUNZO_AMOUNT: {
+      return Object.assign({}, state, {
+        dunzo_Delivery_Amount: action.value,
       });
     }
 

@@ -79,17 +79,7 @@ class AddressMapContainer extends React.Component {
     this.shouldHandleMapChange = true;
   }
 
-  componentDidMount() {
-    debugLog(
-      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~111111111111111111111111",
-      this.props.dunzo_Delivery_amt.directDelivery
-    );
-    debugLog(
-      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~22222222222222222222",
-      this.props
-    );
-  }
-
+  
   deleteAddressPress = () => {
     if (!this.isGuest && this.address_id !== "")
       showDialogue(
@@ -378,7 +368,7 @@ class AddressMapContainer extends React.Component {
                     <Text style={style.homeaddress}>
                       {/* {strings("setDefaultAddress")} */}
                       {`${strings("setDefaultAddress")}-${
-                        this.props.dunzo_Delivery_amt.directDelivery
+                        this.props.dunzo_Delivery_Details.directDelivery
                       }`}
                     </Text>
                   </EDRTLView>
@@ -881,7 +871,7 @@ export default connect(
       PhoneNumber: state.userOperations.phoneNumberInRedux,
       lan: state.userOperations.lan,
       googleMapsAPIKey: state.userOperations.googleMapKey || "",
-      dunzo_Delivery_amt: state.userOperations.dunzo_Delivery_amt,
+      dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };
   },
   (dispatch) => {

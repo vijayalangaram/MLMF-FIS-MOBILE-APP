@@ -80,6 +80,7 @@ import {
   saveMapKeyInRedux,
   saveMinOrderAmount,
   save_delivery_dunzo__details,
+  save_dunzodelivery_amount,
 } from "../../app/redux/actions/User";
 
 export class AddressListContainer extends React.PureComponent {
@@ -438,6 +439,11 @@ export class AddressListContainer extends React.PureComponent {
             ? this.state?.dunzoPointDelivery?.directPointDelivery?.price
             : this.state.dunzoPointDelivery?.directDelivery,
         });
+        this.props.save_dunzodelivery_amount(
+          dunzo_Point_DeliveryFlag
+            ? this.state?.dunzoPointDelivery?.directPointDelivery?.price
+            : this.state.dunzoPointDelivery?.directDelivery
+        );
       }
     );
   };
@@ -446,17 +452,6 @@ export class AddressListContainer extends React.PureComponent {
   /** RENDER METHOD */
   render() {
     let { dunzo_Point_DeliveryFlag, dunzo_Delivery_Point_Amount } = this.state;
-
-    debugLog(
-      this.state.dunzo_Point_DeliveryFlag,
-      "this.state.dunzo_Point_DeliveryFlag,, **********************************************************************"
-    );
-
-    debugLog(
-      this.state.dunzo_Delivery_Point_Amount,
-      "this.state.dunzo_Delivery_Point_Amount,, **********************************************************************"
-    );
-
     return (
       <BaseContainer
         title={
@@ -2065,7 +2060,12 @@ export class AddressListContainer extends React.PureComponent {
 
     if (getDeliveryChargeAPICall.status === 200) {
       let { dunzoPointDelivery } = this.state;
+
       this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
+      this.props.save_dunzodelivery_amount(
+        getDeliveryChargeAPICall.data.directDelivery
+      );
+
       this.setState({
         dunzoPointDelivery: getDeliveryChargeAPICall.data,
         dunzo_Delivery_Point_Amount:
@@ -2864,6 +2864,10 @@ export default connect(
       },
       save_delivery_dunzo__details: (data) => {
         dispatch(save_delivery_dunzo__details(data));
+      },
+
+      save_dunzodelivery_amount: (data) => {
+        dispatch(save_dunzodelivery_amount(data));
       },
     };
   }

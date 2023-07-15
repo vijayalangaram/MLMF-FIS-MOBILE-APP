@@ -468,11 +468,7 @@ class DetailedAddressListContainer extends React.PureComponent {
           //     onSuccess.address
           //   );
 
-          //   debugLog(
-          //     "****************************** Vijay ******************************   this.props.dunzo_Delivery_amt",
-          //     this.props.dunzo_Delivery_amt.directPointDelivery
-          //   );
-
+         
           this.arrayAddress = onSuccess.address;
           if (
             this.state.isSelectAddress &&
@@ -776,7 +772,7 @@ export default connect(
       cartCount: state.checkoutReducer.cartCount,
       checkoutDetail: state.checkoutReducer.checkoutDetail,
       lan: state.userOperations.lan,
-      dunzo_Delivery_amt: state.userOperations.dunzo_Delivery_amt,
+      dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };
   },
   (dispatch) => {

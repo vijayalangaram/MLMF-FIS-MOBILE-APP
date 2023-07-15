@@ -166,6 +166,14 @@ export function save_delivery_dunzo__details(details) {
   };
 }
 
+export const TYPE_DUNZO_DELIVERY_AMT = "TYPE_DUNZO_DELIVERY_AMT";
+export function save_dunzodelivery_amount(details) {
+  return {
+    type: TYPE_DUNZO_DELIVERY_AMT,
+    value: details,
+  };
+}
+
 export const TYPE_SAVE_TABLE_ID = "TYPE_SAVE_TABLE_ID";
 export function saveTableIDInRedux(details) {
   return {
