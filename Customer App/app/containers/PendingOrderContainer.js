@@ -783,8 +783,8 @@ class PendingOrderContainer extends React.Component {
                     restaurant_id: this.arrayUpcoming[0].restaurant_content_id
                 }
 
-                if (this.arrayUpcoming[0].price.map(data => data.label_key).includes("Wallet Discount")) {
-                    promoParams['wallet_amount'] = this.arrayUpcoming[0].price.filter(data => data.label_key === "Wallet Discount")[0].value
+                if (this.arrayUpcoming[0].price.map(data => data.label_key).includes("Wallet Deduction")) {
+                    promoParams['wallet_amount'] = this.arrayUpcoming[0].price.filter(data => data.label_key === "Wallet Deduction")[0].value
                 }
 
                 applyCouponAPI(promoParams, this.onSuccessApplyCoupon, this.onFailureApplyCoupon, this.props)
