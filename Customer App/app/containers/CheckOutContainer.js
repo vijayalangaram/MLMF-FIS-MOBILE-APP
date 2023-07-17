@@ -2010,12 +2010,12 @@ export class CheckOutContainer extends React.PureComponent {
         this.cartResponse.price
       );
 
-      debugLog(
-        "****************************** Vijay ****************************** else part resultvalue",
-        parseInt(this.cartResponse.price[0].value),
-        parseInt(this.cartResponse.price[1].value),
-        parseInt(this.cartResponse.price[4].value)
-      );
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part resultvalue",
+      //   parseInt(this.cartResponse.price[0].value),
+      //   parseInt(this.cartResponse.price[1].value),
+      //   parseInt(this.cartResponse.price[4].value)
+      // );
 
       let filterForactualTotalsubtotalTaxes = this.cartResponse.price.filter(
         (data) => {
