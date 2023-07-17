@@ -217,6 +217,15 @@ export class CheckOutContainer extends React.PureComponent {
       });
     }
     this.getcartDataList();
+
+    debugLog(
+      "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+      this.props.dunzo_Delivery_Amount
+    );
+    debugLog(
+      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
+      this.props.dunzo_Delivery_Details
+    );
   }
 
   componentWillUnmount() {
@@ -246,7 +255,7 @@ export class CheckOutContainer extends React.PureComponent {
   onFailureFetchWallet = (onFailure) => {};
 
   onDidFocus = () => {
-    debugLog("IS REFRESH :::::", this.isRefresh);
+    // debugLog("IS REFRESH :::::", this.isRefresh);
     if (this.isRefresh) this.getcartDataList();
   };
 
@@ -255,10 +264,6 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   toggleWallet = () => {
-    // debugLog(
-    //   "****************************** Vijay ****************************** 33333"
-    // );
-
     if (!this.state.walletApplied) {
       if (parseInt(this.max_used_QR) > parseInt(this.wallet_money)) {
         showValidationAlert(
@@ -430,13 +435,13 @@ export class CheckOutContainer extends React.PureComponent {
         );
         this.setState({ isLoading: false });
       } else if (onSuccess.stripe_response.status == "succeeded") {
-        debugLog("Payment Sucessful with 3d secure authentication ::::::");
+        // debugLog("Payment Sucessful with 3d secure authentication ::::::");
         this.setState({ isLoading: true });
         this.txn_id = onSuccess.stripe_response.id;
 
         this.placeOrder(onSuccess.stripe_response.id, "stripe");
       } else {
-        debugLog("PAYMENT FAILED ::::");
+        // debugLog("PAYMENT FAILED ::::");
         showValidationAlert(strings("paymentFail"));
         this.setState({ isLoading: false });
       }
@@ -449,7 +454,7 @@ export class CheckOutContainer extends React.PureComponent {
    * On check card payment failure
    */
   onCheckCardPaymentFailure = (onFailure) => {
-    debugLog("FAILURE :::::", onFailure);
+    // debugLog("FAILURE :::::", onFailure);
     showValidationAlert(
       strings("paymentFail") +
         "\n\n" +
@@ -1389,7 +1394,7 @@ export class CheckOutContainer extends React.PureComponent {
   };
   onFeaturedPress = (item) => {
     // // // OPEN THE MODAL FOR PRODUCTS DETAILS
-    debugLog("FEATURE PRESS ::::", item);
+    // debugLog("FEATURE PRESS ::::", item);
     this.selectedItem = item;
     this.setState({
       visible: true,
@@ -1524,7 +1529,7 @@ export class CheckOutContainer extends React.PureComponent {
     //demo changes
     getCartList(
       (success) => {
-        debugLog("SUCCESS ::::::", success);
+        // debugLog("SUCCESS ::::::", success);
         if (success != undefined) {
           cartArray = success.items;
           if (cartArray.length > 0) {
@@ -1617,7 +1622,7 @@ export class CheckOutContainer extends React.PureComponent {
       },
       (onCartNotFound) => {
         //first time insert data
-        debugLog("onCartNotFound", onCartNotFound);
+        // debugLog("onCartNotFound", onCartNotFound);
         data.quantity = 1;
         cartData = {
           resId: this.resId,
@@ -1639,7 +1644,7 @@ export class CheckOutContainer extends React.PureComponent {
         });
       },
       (error) => {
-        debugLog("onCartNotFound", error);
+        // debugLog("onCartNotFound", error);
       }
     );
     this.setState({ visible: false });
@@ -1648,7 +1653,7 @@ export class CheckOutContainer extends React.PureComponent {
   };
 
   saveData(data) {
-    debugLog("CALLED FROM CART DATA TO SAVE :::", data);
+    // debugLog("CALLED FROM CART DATA TO SAVE :::", data);
     saveCartData(
       data,
       (success) => {},
@@ -1783,10 +1788,10 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** Vijay ******************************  this.cartResponse.price",
     //   this.cartResponse.price
     // );
-    debugLog(
-      "****************************** Vijay ******************************  this.state.walletApplied",
-      this.state.walletApplied
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.state.walletApplied",
+    //   this.state.walletApplied
+    // );
 
     // let tempArray =
     //   this.cartResponse.price &&
@@ -1992,12 +1997,12 @@ export class CheckOutContainer extends React.PureComponent {
       //   this.cartResponse
       // );
 
-      debugLog(
-        "****************************** Vijay ****************************** else part resultvalue",
-        parseInt(this.cartResponse.price[0].value) +
-          parseInt(this.cartResponse.price[1].value) +
-          parseInt(this.cartResponse.price[3].value)
-      );
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part resultvalue",
+      //   parseInt(this.cartResponse.price[0].value) +
+      //     parseInt(this.cartResponse.price[1].value) +
+      //     parseInt(this.cartResponse.price[3].value)
+      // );
 
       let actualTotalsubtotalTaxes =
         parseInt(this.cartResponse.price[0].value) +
@@ -2090,11 +2095,11 @@ export class CheckOutContainer extends React.PureComponent {
       }
 
       this.props.saveCheckoutDetails(checkoutData);
-      debugLog(
-        "HERE  :::::",
-        this.props.navigation.state.params !== undefined &&
-          this.props.navigation.state.params.payment_option !== undefined
-      );
+      // debugLog(
+      //   "HERE  :::::",
+      //   this.props.navigation.state.params !== undefined &&
+      //     this.props.navigation.state.params.payment_option !== undefined
+      // );
       if (
         this.props.navigation.state.params !== undefined &&
         this.props.navigation.state.params.payment_option !== undefined
@@ -2106,10 +2111,10 @@ export class CheckOutContainer extends React.PureComponent {
         //   this.navigateToPaymentGateway(
         //     this.props.navigation.state.params.payment_option
         //   );
-        debugLog(
-          "********************************************************* else part this.payment_option",
-          this.payment_option
-        );
+        // debugLog(
+        //   "********************************************************* else part this.payment_option",
+        //   this.payment_option
+        // );
         // debugLog(
         //   "********************************************************* else part B0000000000 ",
         //   parseInt(this.state.loggedInUserwalletBalance)
@@ -2128,9 +2133,9 @@ export class CheckOutContainer extends React.PureComponent {
           parseInt(this.state.loggedInUserwalletBalance) >
             parseInt(actualTotalsubtotalTaxes)
         ) {
-          debugLog(
-            "***************************************************** else part 00000"
-          );
+          // debugLog(
+          //   "***************************************************** else part 00000"
+          // );
           this.placeOrder();
         } else if (
           parseInt(this.state.loggedInUserwalletBalance) >
@@ -2138,16 +2143,16 @@ export class CheckOutContainer extends React.PureComponent {
           parseInt(this.state.loggedInUserwalletBalance) <
             parseInt(actualTotalsubtotalTaxes)
         ) {
-          debugLog(
-            "****************************** Vijay ****************************** else part 111111"
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** else part 111111"
+          // );
           // this.placeOrder();
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
         } else {
-          debugLog(
-            "****************************** Vijay ****************************** else part 22222"
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** else part 22222"
+          // );
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
         }
@@ -2174,7 +2179,7 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Success Reponse Object } onSuccess
    */
   onSuccessAddOrder = (onSuccess) => {
-    debugLog("ORDER SUCCESS ::::::::::::: ", onSuccess);
+    // debugLog("ORDER SUCCESS ::::::::::::: ", onSuccess);
     if (onSuccess.error != undefined) {
       showValidationAlert(
         onSuccess.error.message != undefined
@@ -2314,10 +2319,10 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment = () => {
-    debugLog(
-      "****************************** Vijay ****************************** this.razorpayDetails 6666",
-      this.razorpayDetails
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** this.razorpayDetails 6666",
+    //   this.razorpayDetails
+    // );
 
     this.merchant_order_id = Date.now();
     var options = {
@@ -2362,7 +2367,7 @@ export class CheckOutContainer extends React.PureComponent {
     RazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        debugLog("Payment success ::::::", data);
+        // debugLog("Payment success ::::::", data);
         this.razorpay_payment_id = data.razorpay_payment_id;
         this.placeOrder(data.razorpay_payment_id, "razorpay");
       })
@@ -2375,10 +2380,10 @@ export class CheckOutContainer extends React.PureComponent {
           }, 500);
         }
         // alert(JSON.parse(error.description).error.description)
-        debugLog(
-          "Payment failure ::::::",
-          JSON.parse(error.description).error.description
-        );
+        // debugLog(
+        //   "Payment failure ::::::",
+        //   JSON.parse(error.description).error.description
+        // );
       });
   };
 
@@ -2443,7 +2448,7 @@ export class CheckOutContainer extends React.PureComponent {
    * On payment method success
    */
   onPaymentMethodSuccess = (onSuccess) => {
-    debugLog("ONSUCCESS::::::::", onSuccess);
+    // debugLog("ONSUCCESS::::::::", onSuccess);
     if (onSuccess.status == RESPONSE_SUCCESS) {
       if (onSuccess.stripe_response.error !== undefined) {
         showValidationAlert(
@@ -2455,14 +2460,14 @@ export class CheckOutContainer extends React.PureComponent {
         );
         this.setState({ isLoading: false });
       } else if (onSuccess.stripe_response.status == "succeeded") {
-        debugLog("Payment Sucessful without 3d secure authentication ::::::");
+        // debugLog("Payment Sucessful without 3d secure authentication ::::::");
         this.txn_id = onSuccess.stripe_response.id;
         this.placeOrder(onSuccess.stripe_response.id, "stripe");
         this.setState({ isLoading: false });
       } else if (
         onSuccess.stripe_response.next_action.redirect_to_url.url !== undefined
       ) {
-        debugLog("Redirecting for 3d secure authentication ::::::");
+        // debugLog("Redirecting for 3d secure authentication ::::::");
         this.txn_id = onSuccess.stripe_response.id;
         this.setState({
           url: onSuccess.stripe_response.next_action.redirect_to_url.url,
@@ -2478,7 +2483,7 @@ export class CheckOutContainer extends React.PureComponent {
    * On payment method failure
    */
   onPaymentMethodFailure = (onFailure) => {
-    debugLog("FAILURE :::::", onFailure);
+    // debugLog("FAILURE :::::", onFailure);
     showDialogue(strings("paymentFail"), [], "", () => {
       if (this.isWithSavedCard) {
         this.onYesClick();
@@ -2489,10 +2494,10 @@ export class CheckOutContainer extends React.PureComponent {
   };
 
   navigateToPaymentGateway = (valuefromDynamicPricde) => {
-    debugLog(
-      "****************************** Vijay ****************************** this.payment_option 55555",
-      valuefromDynamicPricde
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** this.payment_option 55555",
+    //   valuefromDynamicPricde
+    // );
 
     // if (this.payment_option == "stripe") {
     if (valuefromDynamicPricde == "stripe") {
@@ -2521,10 +2526,10 @@ export class CheckOutContainer extends React.PureComponent {
       this.startStripePayment();
       // } else if (this.payment_option == "razorpay") {
     } else if (valuefromDynamicPricde == "razorpay") {
-      debugLog(
-        "****************************** Vijay ****************************** this.payment_option 444",
-        this.payment_option
-      );
+      // debugLog(
+      //   "****************************** Vijay ****************************** this.payment_option 444",
+      //   this.payment_option
+      // );
 
       this.startRazorPayment();
       // } else if (this.payment_option == "paypal")
@@ -2556,20 +2561,20 @@ export class CheckOutContainer extends React.PureComponent {
    * @param {Success Response Object } onSuccess
    */
   onSuccessAddCart = (onSuccess) => {
-    debugLog(
-      "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
-      onSuccess
-    );
+    // debugLog(
+    //   "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
+    //   onSuccess
+    // );
 
-    debugLog(
-      "********************************** onSuccess ********************************** 2222222222222  onSuccessAddCart ",
-      onSuccess.subtotal
-    );
+    // debugLog(
+    //   "********************************** onSuccess ********************************** 2222222222222  onSuccessAddCart ",
+    //   onSuccess.subtotal
+    // );
 
-    debugLog(
-      "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
-      onSuccess.total
-    );
+    // debugLog(
+    //   "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
+    //   onSuccess.total
+    // );
 
     if (onSuccess.error != undefined) {
       showValidationAlert(
@@ -2601,18 +2606,18 @@ export class CheckOutContainer extends React.PureComponent {
         });
 
         if (tempArray.length !== 0) {
-          debugLog(
-            "****************************** Vijay ****************************** tempArray.length ",
-            tempArray.length
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** tempArray.length ",
+          //   tempArray.length
+          // );
 
           this.wallet_discount = tempArray[0].value;
           // this.wallet_discount =  walletDiscounttotal[0].value;
         } else {
-          debugLog(
-            "****************************** Vijay ****************************** tempArray.length ",
-            tempArray.length
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** tempArray.length ",
+          //   tempArray.length
+          // );
 
           this.setState({ walletApplied: false });
           this.wallet_discount = 0;
@@ -2729,10 +2734,10 @@ export class CheckOutContainer extends React.PureComponent {
           // push Wallet Discount to price array
 
           if (tempArray.length == 0) {
-            debugLog(
-              "****************************** Vijay ****************************** tempArray.length",
-              tempArray.length
-            );
+            // debugLog(
+            //   "****************************** Vijay ****************************** tempArray.length",
+            //   tempArray.length
+            // );
             if (
               parseInt(this.state.loggedInUserwalletBalance) >
                 Number(this.props.minOrderAmount) &&
@@ -2860,10 +2865,10 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Item to be added to Cart } items
    */
   getCartData = (items, forCartFetch = false) => {
-    debugLog(
-      "***************************************getCartData  items",
-      items
-    );
+    // debugLog(
+    //   "***************************************getCartData  items",
+    //   items
+    // );
 
     // return false;
 
@@ -2943,10 +2948,10 @@ export class CheckOutContainer extends React.PureComponent {
         //   this.addToCartData
         // );
 
-        debugLog(
-          "***************************************  4444444444444444444  objAddToCart",
-          objAddToCart
-        );
+        // debugLog(
+        //   "***************************************  4444444444444444444  objAddToCart",
+        //   objAddToCart
+        // );
 
         // debugLog(
         //   "***************************************  00000000000000000 is_wallet_applied",
@@ -3260,6 +3265,8 @@ export default connect(
       email: state.userOperations.email,
       phoneCode: state.userOperations.phoneCode,
       phoneNumber: state.userOperations.phoneNumberInRedux,
+      dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
+      dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };
   },
   (dispatch) => {

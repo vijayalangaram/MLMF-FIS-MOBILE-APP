@@ -79,7 +79,6 @@ class AddressMapContainer extends React.Component {
     this.shouldHandleMapChange = true;
   }
 
-  
   deleteAddressPress = () => {
     if (!this.isGuest && this.address_id !== "")
       showDialogue(
@@ -872,6 +871,7 @@ export default connect(
       lan: state.userOperations.lan,
       googleMapsAPIKey: state.userOperations.googleMapKey || "",
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
+      dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
     };
   },
   (dispatch) => {
