@@ -226,11 +226,10 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
     //   this.props.dunzo_Delivery_Details
     // );
-
-    debugLog(
-      "****************************** ******************  this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
+    // debugLog(
+    //   "****************************** ******************  this.props.navigation.state.params.payment_option",
+    //   this.props.navigation.state.params.payment_option
+    // );
   }
 
   componentWillUnmount() {
@@ -527,9 +526,9 @@ export class CheckOutContainer extends React.PureComponent {
     //   this.cartResponse
     // );
 
-    debugLog(
-      "****************************************************************************************************************************************"
-    );
+    // debugLog(
+    //   "************************************************************************************************"
+    // );
 
     if (
       (this.state.tip == 0 || this.state.tip == "") &&
@@ -1793,10 +1792,10 @@ export class CheckOutContainer extends React.PureComponent {
     debugLog(
       "****************************** Vijay ****************************** onCheckOutEventHandler "
     );
-    debugLog(
-      "****************************** Vijay ******************************   this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.navigation.state.params.payment_option",
+    //   this.props.navigation.state.params.payment_option
+    // );
     // debugLog(
     //   "****************************** Vijay ******************************  this.cartResponse.price",
     //   this.cartResponse.price
@@ -1830,10 +1829,10 @@ export class CheckOutContainer extends React.PureComponent {
         return item.label_key == "Wallet Deduction" ? item.value : 0;
       });
 
-    debugLog(
-      "****************************** Vijay ******************************  walletDiscounttotal",
-      walletDiscounttotal
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  walletDiscounttotal",
+    //   walletDiscounttotal
+    // );
     //    debugLog(
     //     "****************************** Vijay ****************************** walletDiscounttotal",
     //     walletDiscounttotal[0].value
@@ -2000,15 +1999,15 @@ export class CheckOutContainer extends React.PureComponent {
         );
       }
     } else {
-      // debugLog(
-      //   "****************************** Vijay ****************************** else part this.cartResponse",
-      //   this.cartResponse
-      // );
-
       debugLog(
-        "****************************** Vijay ****************************** else part this.cartResponse.subtotal + ",
-        this.cartResponse.price
+        "****************************** Vijay ****************************** else part this.cartResponse",
+        this.cartResponse
       );
+
+      // debugLog(
+      //   "****************************** Vijay ****************************** else part this.cartResponse.subtotal + ",
+      //   this.cartResponse.price
+      // );
 
       // debugLog(
       //   "****************************** Vijay ****************************** else part resultvalue",
@@ -2027,10 +2026,10 @@ export class CheckOutContainer extends React.PureComponent {
         }
       );
 
-      debugLog(
-        "*********************************************************  filterForactualTotalsubtotalTaxes *********************************************************",
-        filterForactualTotalsubtotalTaxes
-      );
+      // debugLog(
+      //   "*********************************************************  filterForactualTotalsubtotalTaxes *********************************************************",
+      //   filterForactualTotalsubtotalTaxes
+      // );
 
       let actualTotalsubtotalTaxes =
         filterForactualTotalsubtotalTaxes &&
@@ -2043,7 +2042,7 @@ export class CheckOutContainer extends React.PureComponent {
         0);
 
       debugLog(
-        "*********************************************************  parseInt(actualTotalsubtotalTaxes) *********************************************************",
+        "***********************************  parseInt(actualTotalsubtotalTaxes) *****************************************",
         parseInt(actualTotalsubtotalTaxes)
       );
 
@@ -2155,22 +2154,22 @@ export class CheckOutContainer extends React.PureComponent {
         //     this.props.navigation.state.params.payment_option
         //   );
 
-        debugLog(
-          "********************************************************* else part this.payment_option",
-          this.payment_option
-        );
-        debugLog(
-          "********************************************************* else part B0000000000 ",
-          parseInt(this.state.loggedInUserwalletBalance)
-        );
-        debugLog(
-          "********************************************************* else part B11111111111",
-          Number(this.props.minOrderAmount)
-        );
-        debugLog(
-          "********************************************************* else part B22222222222",
-          parseInt(this.cartResponse.total)
-        );
+        // debugLog(
+        //   "********************************************************* else part this.payment_option",
+        //   this.payment_option
+        // );
+        // debugLog(
+        //   "********************************************************* else part B0000000000 ",
+        //   parseInt(this.state.loggedInUserwalletBalance)
+        // );
+        // debugLog(
+        //   "********************************************************* else part B11111111111",
+        //   Number(this.props.minOrderAmount)
+        // );
+        // debugLog(
+        //   "********************************************************* else part B22222222222",
+        //   parseInt(this.cartResponse.total)
+        // );
         if (
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&

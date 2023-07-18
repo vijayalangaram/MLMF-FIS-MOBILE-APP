@@ -34,14 +34,44 @@ import {
 } from "../utils/AsyncStorageHelper";
 import { showDialogue } from "../utils/EDAlert";
 import { EDColors } from "../utils/EDColors";
-import {
-  debugLog,
-  getProportionalFontSize,
-  isRTLCheck,
-} from "../utils/EDConstants";
 import { EDFonts } from "../utils/EDFontConstants";
 import metrics from "../utils/metrics";
 import BaseContainer from "./BaseContainer";
+import {
+  CARD_BRANDS,
+  debugLog,
+  funGetDateStr,
+  funGetTime,
+  getProportionalFontSize,
+  GOOGLE_API_KEY,
+  isRTLCheck,
+  PAYMENT_TYPES,
+  RESPONSE_SUCCESS,
+  TextFieldTypes,
+} from "../utils/EDConstants";
+
+import {
+  saveCurrentLocation,
+  saveFoodType,
+  saveLanguageInRedux,
+  saveMapKeyInRedux,
+  saveMinOrderAmount,
+  save_delivery_dunzo__details,
+  save_dunzodelivery_amount,
+} from "../../app/redux/actions/User";
+
+import {
+  checkOrder,
+  checkScheduleDelivery,
+  deleteAddress,
+  getAddress,
+  getAddressListAPI,
+  getDunzoDeliveryAmountAPI,
+  getPaymentList,
+  getSavedCardsAPI,
+  getWalletHistoryAPI,
+} from "../utils/ServiceManager";
+import axios from "axios";
 
 export class CartContainer extends React.PureComponent {
   //#region  LIFE CYCLE EMTHODS
@@ -76,6 +106,18 @@ export class CartContainer extends React.PureComponent {
     showInfoModal: false,
   };
 
+  componentDidMount() {
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.props.lan",
+    //   this.props.lan
+    // );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.userID",
+    //   this.props.userID
+    // );
+    this.getAddressList();
+  }
+
   cartTotalPrice = (price) => {};
   navigateToRestaurant = () => {
     this.props.navigation.push("RestaurantContainer", {
@@ -83,6 +125,75 @@ export class CartContainer extends React.PureComponent {
       content_id: this.content_id,
     });
   };
+
+  /** GET ADDRESS API */
+  getAddressList = () => {
+    let param = {
+      language_slug: this.props.lan,
+      user_id: this.props.userID || 0,
+      showonly_main: 1,
+    };
+    getAddressListAPI(
+      param,
+      this.onSuccessLoadAddress,
+      this.onFailureLoadAddress,
+      this.props
+    );
+    // showValidationAlert(strings("noInternet"));
+  };
+
+  onSuccessLoadAddress = async (onSuccess) => {
+    if (onSuccess != undefined) {
+      if (onSuccess.status == RESPONSE_SUCCESS) {
+        if (onSuccess.address !== undefined && onSuccess.address.length > 0) {
+          let datas = {
+            restuarant_id: this.res_id,
+            customer_id: this.props.userID || 0,
+            address_id: onSuccess.address[0].address_id,
+          };
+
+          let getDeliveryChargeAPICall = await axios.post(
+            "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+            datas,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (getDeliveryChargeAPICall.status === 200) {
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
+            //   getDeliveryChargeAPICall.data
+            // );
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+            //   getDeliveryChargeAPICall.data.directDelivery
+            // );
+            this.props.save_delivery_dunzo__details(
+              getDeliveryChargeAPICall.data
+            );
+            this.props.save_dunzodelivery_amount(
+              getDeliveryChargeAPICall.data.directDelivery
+            );
+          } else {
+            showValidationAlert("Unable to process, Delivery Charge ");
+            this.props.save_delivery_dunzo__details();
+            this.props.save_dunzodelivery_amount();
+          }
+        } else {
+        }
+      } else {
+      }
+    } else {
+    }
+  };
+
+  onFailureLoadAddress = (onFailure) => {
+    showValidationAlert("Unable to Process Dunzo Delivery");
+  };
+
   // RENDER METHOD
   render() {
     return (
@@ -108,6 +219,7 @@ export class CartContainer extends React.PureComponent {
                 return (
                   <EDRTLText
                     title={strings("addMore")}
+                    // title={"asdfasdfasdf"}
                     style={style.addMoreText}
                     onPress={this.navigateToRestaurant}
                   />
@@ -408,7 +520,7 @@ export class CartContainer extends React.PureComponent {
         var cartArray = success;
         this.promoCode = success.coupon_name;
         this.promoArray = success.coupon_array;
-        debugLog("PROMO ARRAY :::::", this.promoArray);
+        // debugLog("PROMO ARRAY :::::", this.promoArray);
         this.res_id = success.resId;
         this.content_id = success.content_id;
         this.cart_id = success.cart_id;
@@ -594,6 +706,7 @@ export default connect(
       lan: state.userOperations.lan,
       currency: state.checkoutReducer.currency_symbol,
       cartPrice: state.checkoutReducer.cartPrice,
+      res_id: state.userOperations.res_id,
     };
   },
   (dispatch) => {
@@ -609,6 +722,13 @@ export default connect(
       },
       saveIsCheckoutScreen: (data) => {
         dispatch(saveIsCheckoutScreen(data));
+      },
+
+      save_delivery_dunzo__details: (data) => {
+        dispatch(save_delivery_dunzo__details(data));
+      },
+      save_dunzodelivery_amount: (data) => {
+        dispatch(save_dunzodelivery_amount(data));
       },
     };
   }
