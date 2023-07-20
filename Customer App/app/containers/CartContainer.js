@@ -153,7 +153,8 @@ export class CartContainer extends React.PureComponent {
           };
 
           let getDeliveryChargeAPICall = await axios.post(
-            "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+            // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+            "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
             datas,
             {
               headers: {
@@ -162,11 +163,12 @@ export class CartContainer extends React.PureComponent {
             }
           );
 
+          debugLog(
+            "getDeliveryChargeAPICall.status *************************** 00000000000000",
+            getDeliveryChargeAPICall.status
+          );
+
           if (getDeliveryChargeAPICall.status === 200) {
-            // debugLog(
-            //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
-            //   getDeliveryChargeAPICall.data
-            // );
             // debugLog(
             //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
             //   getDeliveryChargeAPICall.data.directDelivery
@@ -178,7 +180,7 @@ export class CartContainer extends React.PureComponent {
               getDeliveryChargeAPICall.data.directDelivery
             );
           } else {
-            showValidationAlert("Unable to process, Delivery Charge ");
+            showValidationAlert("Dunzo , Drop Location is not serviceable");
             this.props.save_delivery_dunzo__details();
             this.props.save_dunzodelivery_amount();
           }

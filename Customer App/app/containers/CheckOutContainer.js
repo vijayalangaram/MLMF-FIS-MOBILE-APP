@@ -85,6 +85,7 @@ import BaseContainer from "./BaseContainer";
 import * as RNLocalize from "react-native-localize";
 import RazorpayCheckout from "react-native-razorpay";
 import Assets from "../assets";
+import axios from "axios";
 
 export class CheckOutContainer extends React.PureComponent {
   //#region LIFE CYCLE METHODS
@@ -973,7 +974,7 @@ export class CheckOutContainer extends React.PureComponent {
                           ) : (
                             <EDRTLText
                               style={style.walletText}
-                              title={`Low Wallet Balance:₹. ${parseInt(
+                              title={`Low Wallet Balance:₹ ${parseInt(
                                 this.state.loggedInUserwalletBalance
                               )}`}
                               color="orange"
@@ -2221,8 +2222,9 @@ export class CheckOutContainer extends React.PureComponent {
   /**
    * @param { Success Reponse Object } onSuccess
    */
-  onSuccessAddOrder = (onSuccess) => {
+  onSuccessAddOrder = async (onSuccess) => {
     // debugLog("ORDER SUCCESS ::::::::::::: ", onSuccess);
+
     if (onSuccess.error != undefined) {
       showValidationAlert(
         onSuccess.error.message != undefined
@@ -2272,6 +2274,33 @@ export class CheckOutContainer extends React.PureComponent {
         showValidationAlert(onSuccess.message);
       }
     }
+
+    if (onSuccess.order_id != undefined) {
+      let base64 = require("base-64");
+      let username = "OMS_ORDER";
+      let password = "OMSORDER$&";
+
+      let getDeliveryChargeAPICall = await axios.post(
+        "http://52.77.35.146:8080/FIS/api/auth/saveOrder",
+        onSuccess.order_id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Basic " + base64.encode(username + ":" + password),
+          },
+        }
+      );
+
+      if (getDeliveryChargeAPICall.status === 200) {
+        debugLog(
+          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
+          getDeliveryChargeAPICall
+        );
+      } else {
+        
+      }
+    }
+
     this.setState({ isLoading: false });
   };
   //#endregion
