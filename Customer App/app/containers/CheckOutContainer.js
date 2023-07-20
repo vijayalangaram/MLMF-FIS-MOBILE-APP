@@ -2297,7 +2297,6 @@ export class CheckOutContainer extends React.PureComponent {
           getDeliveryChargeAPICall
         );
       } else {
-        
       }
     }
 
@@ -2715,7 +2714,9 @@ export class CheckOutContainer extends React.PureComponent {
             return item.label_key == "Service Tax";
           });
 
-          let price_delivery_charge = deliveryPrice.filter((item) => {
+          let price_delivery_charge = 0;
+
+          price_delivery_charge = deliveryPrice.filter((item) => {
             return item.label_key == "Delivery Charge";
           });
 
@@ -2731,13 +2732,23 @@ export class CheckOutContainer extends React.PureComponent {
           // }));
           // deliveryPrice.push(...menuAvailabilityArrayObj);
 
-          if (this.props.dunzo_Delivery_Amount) {
+          if (this.props.dunzo_Delivery_Amount != undefined) {
+            // debugLog(
+            //   "****************************** Vijay ****************************** this.props.dunzo_Delivery_Amount",
+            //   this.props.dunzo_Delivery_Amount
+            // );
+
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
                   menuAvailabilityArray.length
                 : this.props.dunzo_Delivery_Amount;
           } else {
+            // debugLog(
+            //   "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
+            //   price_delivery_charge
+            // );
+
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
                 ? price_delivery_charge[0].value * menuAvailabilityArray.length
@@ -2747,6 +2758,11 @@ export class CheckOutContainer extends React.PureComponent {
           //   subtotal[0].value +
           //   ServiceTaxtotal[0].value +
           //   price_delivery_charge[0].value;
+
+          // debugLog(
+          //   "****************************** Vijay ****************************** else .33333333333",
+          //   price_delivery_charge
+          // );
 
           let intialTotalCountvalue =
             subtotal[0].value +
