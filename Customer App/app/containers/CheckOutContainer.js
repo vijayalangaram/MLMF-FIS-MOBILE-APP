@@ -2641,15 +2641,10 @@ export class CheckOutContainer extends React.PureComponent {
    * @param {Success Response Object } onSuccess
    */
   onSuccessAddCart = (onSuccess) => {
-    // debugLog(
-    //   "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
-    //   onSuccess
-    // );
-
-    // debugLog(
-    //   "********************************** onSuccess ********************************** 2222222222222  onSuccessAddCart ",
-    //   onSuccess.subtotal
-    // );
+    debugLog(
+      "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
+      onSuccess
+    );
 
     // debugLog(
     //   "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
@@ -2727,10 +2722,10 @@ export class CheckOutContainer extends React.PureComponent {
             return item.label_key == "Delivery Charge";
           });
 
-          debugLog(
-            "****************************** Vijay ****************************** price_delivery_charge 00000",
-            price_delivery_charge
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** price_delivery_charge 00000",
+          //   price_delivery_charge
+          // );
 
           let menuAvailabilityArray = [
             ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
@@ -2744,11 +2739,16 @@ export class CheckOutContainer extends React.PureComponent {
           // }));
           // deliveryPrice.push(...menuAvailabilityArrayObj);
 
-          if (this.props.dunzo_Delivery_Amount != undefined) {
-            debugLog(
-              "****************************** Vijay ****************************** this.props.dunzo_Delivery_Amount",
-              this.props.dunzo_Delivery_Amount
-            );
+          // debugLog(
+          //   "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
+          //   typeof Number(this.props.dunzo_Delivery_Amount)
+          // );
+
+          if (Number(this.props.dunzo_Delivery_Amount) > 0) {
+            // debugLog(
+            //   "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
+            //   this.props.dunzo_Delivery_Amount
+            // );
 
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
@@ -2756,10 +2756,10 @@ export class CheckOutContainer extends React.PureComponent {
                   menuAvailabilityArray.length
                 : this.props.dunzo_Delivery_Amount;
           } else {
-            debugLog(
-              "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
-              price_delivery_charge
-            );
+            // debugLog(
+            //   "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
+            //   price_delivery_charge
+            // );
 
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
@@ -2771,10 +2771,10 @@ export class CheckOutContainer extends React.PureComponent {
           //   ServiceTaxtotal[0].value +
           //   price_delivery_charge[0].value;
 
-          debugLog(
-            "****************************** Vijay ****************************** else .33333333333",
-            price_delivery_charge
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** else .33333333333",
+          //   price_delivery_charge
+          // );
 
           let intialTotalCountvalue =
             subtotal[0].value +
@@ -2920,6 +2920,27 @@ export class CheckOutContainer extends React.PureComponent {
             value: parseInt(intialTotalCountvalue),
           };
           onSuccess.price && onSuccess.price.push(uitotal);
+
+          // let findmenucount = [
+          //   ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
+          // ];
+          // debugLog(
+          //   "********************************** onSuccess ********************************** 2222222222222  findmenucount ",
+          //   findmenucount
+          // );
+          // findmenucount &&
+          //   findmenucount.map((items) => {
+          //     onSuccess.price &&
+          //       onSuccess.price.push({
+          //         label: `${items} Delivery`,
+          //         label_key: `${items} Delivery`,
+          //         value: "",
+          //       });
+          //   });
+          // debugLog(
+          //   "********************************** onSuccess **********************************  onSuccess.price ",
+          //   onSuccess.price
+          // );
 
           this.updateUI(deliveryJson);
         }

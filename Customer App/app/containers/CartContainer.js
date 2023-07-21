@@ -32,7 +32,6 @@ import {
   getCartList,
   saveCartData,
 } from "../utils/AsyncStorageHelper";
-import { showDialogue } from "../utils/EDAlert";
 import { EDColors } from "../utils/EDColors";
 import { EDFonts } from "../utils/EDFontConstants";
 import metrics from "../utils/metrics";
@@ -72,6 +71,13 @@ import {
   getWalletHistoryAPI,
 } from "../utils/ServiceManager";
 import axios from "axios";
+import {
+  showDialogue,
+  showNoInternetAlert,
+  showPaymentDialogue,
+  showProceedDialogue,
+  showValidationAlert,
+} from "../utils/EDAlert";
 
 export class CartContainer extends React.PureComponent {
   //#region  LIFE CYCLE EMTHODS
@@ -178,11 +184,9 @@ export class CartContainer extends React.PureComponent {
             //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
             //   getDeliveryChargeAPICall.data
             // );
-
             this.props.save_delivery_dunzo__details(
               getDeliveryChargeAPICall.data
             );
-
             this.props.save_dunzodelivery_amount(
               getDeliveryChargeAPICall.data.directDelivery
             );
