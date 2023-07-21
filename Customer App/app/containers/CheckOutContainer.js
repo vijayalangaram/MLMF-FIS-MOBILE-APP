@@ -1082,10 +1082,10 @@ export class CheckOutContainer extends React.PureComponent {
                                         this.props.currency
                                       )
                                   : item.label_key.includes("Tip") ||
-                                    item.label_key.includes("Fee") ||
+                                    item.label_key.includes("Credit") ||
                                     item.label_key.includes("Delivery") ||
                                     item.label_key.includes("Service") ||
-                                    item.label_key.includes("Credit")
+                                    item.label_key.includes("Fee")
                                   ? item.value.toString().includes("%")
                                     ? isRTLCheck()
                                       ? item.value + " +"
@@ -2049,10 +2049,6 @@ export class CheckOutContainer extends React.PureComponent {
       //   parseInt(actualTotalsubtotalTaxes)
       // );
 
-      debugLog(
-        "***********************************  parseInt(actualTotalsubtotalTaxes) *****************************************",
-        Number(filterForactualTotalsubtotalTaxes)
-      );
       // return false;
 
       var checkoutData = {
@@ -2160,6 +2156,12 @@ export class CheckOutContainer extends React.PureComponent {
         //   "********************************************************* else part this.payment_option",
         //   this.payment_option
         // );
+
+        // debugLog(
+        //   "********************************************************* else part this.payment_option",
+        //   typeof this.payment_option
+        // );
+
         // debugLog(
         //   "********************************************************* else part B0000000000 ",
         //   parseInt(this.state.loggedInUserwalletBalance)
@@ -2170,13 +2172,16 @@ export class CheckOutContainer extends React.PureComponent {
         // );
         // debugLog(
         //   "********************************************************* else part B22222222222",
-        //   parseInt(this.cartResponse.total)
+        //   filterForactualTotalsubtotalTaxes[0]?.value
         // );
+
+        // return false;
+
         if (
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&
           parseInt(this.state.loggedInUserwalletBalance) >
-            Number(filterForactualTotalsubtotalTaxes)
+            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "***************************************************** else part 00000 proceding paymett $$$$$$$$$$$$$$$$"
@@ -2186,20 +2191,23 @@ export class CheckOutContainer extends React.PureComponent {
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&
           parseInt(this.state.loggedInUserwalletBalance) <
-            Number(filterForactualTotalsubtotalTaxes)
+            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "****************************** Vijay ****************************** else part 111111 proceding paymett $$$$$$$$$$$$$$$$"
           );
-          // this.placeOrder();
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
-        } else {
+        } else if (this.payment_option == "cod") {
+          this.placeOrder();
+        } else if (this.payment_option == "razorpay") {
           debugLog(
             "****************************** Vijay ****************************** else part 22222 proceding paymett $$$$$$$$$$$$$$$$"
           );
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
+        } else {
+          showDialogue("Unable To Process Payment, Try Later ");
         }
       } else
         this.props.navigation.navigate("PaymentContainer", {
