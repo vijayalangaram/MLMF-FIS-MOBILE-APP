@@ -2198,9 +2198,17 @@ export class CheckOutContainer extends React.PureComponent {
           );
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
-        } else if (this.payment_option == "cod") {
+        } else if (
+          parseInt(this.state.loggedInUserwalletBalance) >
+            Number(this.props.minOrderAmount) &&
+          this.payment_option == "cod"
+        ) {
           this.placeOrder();
-        } else if (this.payment_option == "razorpay") {
+        } else if (
+          parseInt(this.state.loggedInUserwalletBalance) <
+            Number(this.props.minOrderAmount) ||
+          this.payment_option == "razorpay"
+        ) {
           debugLog(
             "****************************** Vijay ****************************** else part 22222 proceding paymett $$$$$$$$$$$$$$$$"
           );

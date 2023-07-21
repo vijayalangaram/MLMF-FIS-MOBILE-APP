@@ -2434,10 +2434,10 @@ export class AddressListContainer extends React.PureComponent {
         currentPriceTotal
       );
 
-      debugLog(
-        "########################################################################### 111111",
-        this.state.dunzo_Delivery_Point_Amount
-      );
+      // debugLog(
+      //   "########################################################################### 111111",
+      //   this.state.dunzo_Delivery_Point_Amount
+      // );
 
       let dunzo_Delivery_Point_AmountbasedonMenucate =
         findmenucount &&
@@ -2447,17 +2447,17 @@ export class AddressListContainer extends React.PureComponent {
       let PriceandTotalPrice =
         currentPriceTotal + dunzo_Delivery_Point_AmountbasedonMenucate;
 
-      debugLog(
-        "############################################################################ 222222",
-        PriceandTotalPrice
-      );
+      // debugLog(
+      //   "############################################################################ 222222",
+      //   PriceandTotalPrice
+      // );
 
       if (
         parseInt(this.state.loggedInUserwalletBalance) <
         Number(this.props.minOrderAmount)
       ) {
         debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 111111111111111111111111111111111111"
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
         );
 
         let filteredvalue =
@@ -2473,7 +2473,7 @@ export class AddressListContainer extends React.PureComponent {
         parseInt(this.state.loggedInUserwalletBalance) > PriceandTotalPrice
       ) {
         debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2222222222222222222222222222222222"
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
         );
         let filteredvalue =
           onSuccess.Payment_method &&
@@ -2481,11 +2481,6 @@ export class AddressListContainer extends React.PureComponent {
             (items) => items.payment_gateway_slug == "cod"
           );
         this.paymentOptions = filteredvalue;
-
-        debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~filteredvalue[0]"
-        );
-
         this.onOptionSelection(filteredvalue[0]);
       } else if (
         parseInt(this.state.loggedInUserwalletBalance) >
@@ -2493,9 +2488,8 @@ export class AddressListContainer extends React.PureComponent {
         parseInt(this.state.loggedInUserwalletBalance) < PriceandTotalPrice
       ) {
         debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 333333333333333333333"
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  333333333333333333333"
         );
-
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2505,7 +2499,7 @@ export class AddressListContainer extends React.PureComponent {
         this.onOptionSelection(filteredvalue[0]);
       } else {
         debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 444444444444444444444444"
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
         );
         let filteredvalue =
           onSuccess.Payment_method &&
