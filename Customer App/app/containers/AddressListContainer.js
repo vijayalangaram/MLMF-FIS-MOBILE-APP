@@ -156,7 +156,7 @@ export class AddressListContainer extends React.PureComponent {
 
   componentDidMount() {
     debugLog(
-      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      AddressListContainer1111111111111111"
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
     );
 
     // debugLog(
@@ -2099,6 +2099,18 @@ export class AddressListContainer extends React.PureComponent {
               },
             },
           });
+
+          let { dunzo_Point_DeliveryFlag } = this.state;
+
+          if (this.props?.dunzo_Delivery_Details?.directPointDelivery != "") {
+            this.setState({
+              dunzo_Point_DeliveryFlag: false,
+            });
+          } else {
+            this.setState({
+              dunzo_Point_DeliveryFlag: true,
+            });
+          }
         }
       }
     );
@@ -2381,31 +2393,31 @@ export class AddressListContainer extends React.PureComponent {
           );
         }, 0);
 
-      // debugLog(
-      //   "################################################################################ 0000000000",
-      //   currentPriceTotal
-      // );
+      debugLog(
+        "################################################################################ 0000000000",
+        currentPriceTotal
+      );
 
-      // debugLog(
-      //   "########################################################################### 111111",
-      //   this.state.dunzo_Delivery_Point_Amount
-      // );
+      debugLog(
+        "########################################################################### 111111",
+        Number(this.state.dunzo_Delivery_Point_Amount)
+      );
 
       let PriceandTotalPrice =
         currentPriceTotal + Number(this.state.dunzo_Delivery_Point_Amount);
 
-      // debugLog(
-      //   "############################################################################ 222222",
-      //   PriceandTotalPrice
-      // );
+      debugLog(
+        "############################################################################ 222222",
+        PriceandTotalPrice
+      );
 
       if (
         parseInt(this.state.loggedInUserwalletBalance) <
         Number(this.props.minOrderAmount)
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 111111111111111111111111111111111111"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 111111111111111111111111111111111111"
+        );
 
         let filteredvalue =
           onSuccess.Payment_method &&
@@ -2419,9 +2431,9 @@ export class AddressListContainer extends React.PureComponent {
           Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) > PriceandTotalPrice
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2222222222222222222222222222222222"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2222222222222222222222222222222222"
+        );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2429,9 +2441,9 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
 
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~filteredvalue[0]"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~filteredvalue[0]"
+        );
 
         this.onOptionSelection(filteredvalue[0]);
       } else if (
@@ -2439,9 +2451,9 @@ export class AddressListContainer extends React.PureComponent {
           Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) < PriceandTotalPrice
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 333333333333333333333"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 333333333333333333333"
+        );
 
         let filteredvalue =
           onSuccess.Payment_method &&
@@ -2451,9 +2463,9 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 444444444444444444444444"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 444444444444444444444444"
+        );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(

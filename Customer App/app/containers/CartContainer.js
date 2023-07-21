@@ -152,6 +152,11 @@ export class CartContainer extends React.PureComponent {
             address_id: onSuccess.address[0].address_id,
           };
 
+          // debugLog(
+          //   "datas.status *************************** 00000000000000",
+          //   datas
+          // );
+
           let getDeliveryChargeAPICall = await axios.post(
             // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
             "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
@@ -163,19 +168,21 @@ export class CartContainer extends React.PureComponent {
             }
           );
 
-          debugLog(
-            "getDeliveryChargeAPICall.status *************************** 00000000000000",
-            getDeliveryChargeAPICall.status
-          );
+          // debugLog(
+          //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
+          //   getDeliveryChargeAPICall
+          // );
 
           if (getDeliveryChargeAPICall.status === 200) {
             // debugLog(
             //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-            //   getDeliveryChargeAPICall.data.directDelivery
+            //   getDeliveryChargeAPICall.data
             // );
+
             this.props.save_delivery_dunzo__details(
               getDeliveryChargeAPICall.data
             );
+
             this.props.save_dunzodelivery_amount(
               getDeliveryChargeAPICall.data.directDelivery
             );
