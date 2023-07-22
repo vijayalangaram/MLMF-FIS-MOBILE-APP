@@ -1048,10 +1048,10 @@ export class CheckOutContainer extends React.PureComponent {
                           data.label_key !== "Total"
                       )
                       .map((item, index) => {
-                        // debugLog(
-                        //   "item.label_key::::::::::::::::::::::::",
-                        //   item.label_key
-                        // );
+                        debugLog(
+                          "item.label_key::::::::::::::::::::::::",
+                          item.label_key
+                        );
                         return (
                           <PriceDetail
                             key={item.label}
@@ -2847,7 +2847,25 @@ export class CheckOutContainer extends React.PureComponent {
           //   //   loggedInUserwalletBalanceint - totaintialvalue;
           // }
 
-          // push Wallet Discount to price array
+          // deliveryJson.total = total[0].value;
+          if (
+            // parseInt(total[0].value)
+            Number(this.props.minOrderAmount) <
+            parseInt(this.state.loggedInUserwalletBalance)
+          ) {
+            deliveryJson.total = total[0].value;
+            // deliveryJson.total = 0;
+            // this.getcartDataList();
+            this.setState({ walletApplied: true });
+          } else if (
+            // parseInt(total[0].value) >
+            // parseInt(this.state.loggedInUserwalletBalance)
+            Number(this.props.minOrderAmount) >
+            parseInt(this.state.loggedInUserwalletBalance)
+          ) {
+            deliveryJson.total = total[0].value;
+            this.setState({ walletApplied: false });
+          }
 
           if (tempArray.length == 0) {
             // debugLog(
@@ -2902,32 +2920,14 @@ export class CheckOutContainer extends React.PureComponent {
             }
           }
 
-          // deliveryJson.total = total[0].value;
-          if (
-            // parseInt(total[0].value)
-            Number(this.props.minOrderAmount) <
-            parseInt(this.state.loggedInUserwalletBalance)
-          ) {
-            deliveryJson.total = total[0].value;
-            // deliveryJson.total = 0;
-            // this.getcartDataList();
-            this.setState({ walletApplied: true });
-          } else if (
-            // parseInt(total[0].value) >
-            // parseInt(this.state.loggedInUserwalletBalance)
-            Number(this.props.minOrderAmount) >
-            parseInt(this.state.loggedInUserwalletBalance)
-          ) {
-            deliveryJson.total = total[0].value;
-            this.setState({ walletApplied: false });
-          }
-
           const uitotal = {
             label: "Sum Total",
             label_key: "Sum Total",
             value: parseInt(intialTotalCountvalue),
           };
-          onSuccess.price && onSuccess.price.push(uitotal);
+          // onSuccess.price && onSuccess.price.push(uitotal);
+          onSuccess.price &&
+            onSuccess.price.splice(onSuccess.price.length - 1, 0, uitotal);
 
           // let findmenucount = [
           //   ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
@@ -2949,6 +2949,8 @@ export class CheckOutContainer extends React.PureComponent {
           //   "********************************** onSuccess **********************************  onSuccess.price ",
           //   onSuccess.price
           // );
+
+          // push Wallet Discount to price array
 
           this.updateUI(deliveryJson);
         }
@@ -3240,7 +3242,7 @@ export class CheckOutContainer extends React.PureComponent {
           total_taxes = total_taxes + Number(data.value);
         });
       }
-      this.cartResponse.price.splice(this.cartResponse.price.length - 1, 0, {
+      this.cartResponse.price.splice(this.cartResponse.price.length - 2, 0, {
         label: strings("taxes&Fees"),
         value: total_taxes.toFixed(2),
         label_key: "Tax and Fee",
