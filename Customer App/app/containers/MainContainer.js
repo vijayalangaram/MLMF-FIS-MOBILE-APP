@@ -110,6 +110,7 @@ class MainContainer extends React.Component {
   strOnScreenSubtitle = "";
   shouldLoadMore = false;
   availType = 0;
+  getintialAddress = "";
 
   homeSectionData = [
     {
@@ -230,10 +231,13 @@ class MainContainer extends React.Component {
       }
     }
     this.setState({ isLoading: true });
+    this.props.save_delivery_dunzo__details();
+    this.props.save_dunzodelivery_amount();
     this.loading = true;
     this.getRestaurantData();
     this.getUserLanguage();
     this.getCartList();
+    this.getAddressList();
     AppState.addEventListener("change", this._handleAppStateChange);
   }
 
@@ -575,6 +579,7 @@ class MainContainer extends React.Component {
   //#endregion
 
   saveAddressFromList = (address) => {
+    let { getintialAddress } = this.state;
     let addressData = {
       latitude: address.latitude,
       longitude: address.longitude,
@@ -587,6 +592,8 @@ class MainContainer extends React.Component {
       address: address.address,
       address_id: address.address_id,
     };
+
+    this.setState({ getintialAddress: address.address_id });
     this.currentAddress = address.address;
     this.currentCity =
       address.address_label !== undefined &&
@@ -1158,8 +1165,6 @@ class MainContainer extends React.Component {
 
   /** ON POPULAR RES EVENT */
   onPopularResEvent = (restObjModel) => {
-    this.props.save_delivery_dunzo__details();
-    this.props.save_dunzodelivery_amount();
     let { getintialAddress } = this.state;
     this.intialDunzoCall(
       restObjModel.restuarant_id,
@@ -1184,6 +1189,11 @@ class MainContainer extends React.Component {
       address_id: address_id,
     };
 
+    debugLog(
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 00000000000000",
+      datas
+    );
+
     let getDeliveryChargeAPICall = await axios.post(
       // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
       "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
@@ -1195,16 +1205,11 @@ class MainContainer extends React.Component {
       }
     );
 
-    // debugLog(
-    //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
-    //   getDeliveryChargeAPICall.status
-    // );
-
     if (getDeliveryChargeAPICall.status === 200) {
-      // debugLog(
-      //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-      //   getDeliveryChargeAPICall.data
-      // );
+      debugLog(
+        "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+        getDeliveryChargeAPICall.data
+      );
       this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
       this.props.save_dunzodelivery_amount(
         getDeliveryChargeAPICall.data.directDelivery
