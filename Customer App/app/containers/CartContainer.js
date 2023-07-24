@@ -121,6 +121,8 @@ export class CartContainer extends React.PureComponent {
     //   "****************************** Vijay ******************************  this.props.userID",
     //   this.props.userID
     // );
+    this.props.save_delivery_dunzo__details();
+    this.props.save_dunzodelivery_amount();
     this.getAddressList();
   }
 
@@ -156,12 +158,12 @@ export class CartContainer extends React.PureComponent {
             restuarant_id: this.res_id,
             customer_id: this.props.userID || 0,
             address_id: onSuccess.address[0].address_id,
+            // address_id: "1077",
           };
-
-          // debugLog(
-          //   "datas.status *************************** 00000000000000",
-          //   datas
-          // );
+          debugLog(
+            "datas.status *************************** 00000000000000",
+            datas
+          );
 
           let getDeliveryChargeAPICall = await axios.post(
             // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
@@ -174,16 +176,22 @@ export class CartContainer extends React.PureComponent {
             }
           );
 
-          // debugLog(
-          //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
-          //   getDeliveryChargeAPICall
-          // );
+          debugLog(
+            "getDeliveryChargeAPICall.status *************************** 00000000000000",
+            getDeliveryChargeAPICall.status
+          );
 
           if (getDeliveryChargeAPICall.status === 200) {
-            // debugLog(
-            //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-            //   getDeliveryChargeAPICall.data
-            // );
+            debugLog(
+              "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+              getDeliveryChargeAPICall.data
+            );
+
+            debugLog(
+              "getDeliveryChargeAPICall.status *************************** 00000000000000",
+              getDeliveryChargeAPICall.status
+            );
+
             this.props.save_delivery_dunzo__details(
               getDeliveryChargeAPICall.data
             );
@@ -191,7 +199,14 @@ export class CartContainer extends React.PureComponent {
               getDeliveryChargeAPICall.data.directDelivery
             );
           } else {
-            showValidationAlert("Dunzo , Drop Location is not serviceable");
+            debugLog(
+              "getDeliveryChargeAPICall.status *************************** else ifffff ",
+              getDeliveryChargeAPICall.status
+            );
+
+            // showValidationAlert(
+            //   "Drop Location was not serviceable, Please Change addres"
+            // );
             this.props.save_delivery_dunzo__details();
             this.props.save_dunzodelivery_amount();
           }
@@ -291,7 +306,21 @@ export class CartContainer extends React.PureComponent {
                     this.props.userID != "" ? null : (
                       <EDThemeButton
                         style={[
-                          style.themeButton,
+                          {
+                            backgroundColor: "grey",
+                            borderRadius: 16,
+                            width: "100%",
+                            height:
+                              Platform.OS == "android"
+                                ? heightPercentageToDP("6%")
+                                : heightPercentageToDP("6.0%"),
+                            justifyContent: "center",
+                            alignSelf: "center",
+                            flexDirection: "row",
+                            marginBottom: 20,
+                            alignItems: "center",
+                            paddingHorizontal: 10,
+                          },
                           {
                             backgroundColor: EDColors.white,
                             borderColor: EDColors.separatorColorNew,
@@ -307,6 +336,7 @@ export class CartContainer extends React.PureComponent {
                         onPress={this.onNextEventHandler}
                       />
                     )}
+                    {/* {this.state.dunzo_Delivery_Point_Amount_DirectAMOUNT > 0 ? ( */}
                     <EDThemeButton
                       style={[
                         style.themeButton,
@@ -331,6 +361,36 @@ export class CartContainer extends React.PureComponent {
                           : this.navigateToLogin
                       }
                     />
+                    {/* ) : (
+                      <EDThemeButton
+                        style={[
+                          {
+                            backgroundColor: "grey",
+                            borderRadius: 16,
+                            width: "100%",
+                            height:
+                              Platform.OS == "android"
+                                ? heightPercentageToDP("6%")
+                                : heightPercentageToDP("6.0%"),
+                            justifyContent: "center",
+                            alignSelf: "center",
+                            flexDirection: "row",
+                            marginBottom: 20,
+                            alignItems: "center",
+                            paddingHorizontal: 10,
+                          },
+                          {
+                            marginBottom:
+                              (Platform.OS == "ios"
+                                ? initialWindowMetrics.insets.bottom
+                                : 0) + 5,
+                          },
+                        ]}
+                        textStyle={style.themeButtonText}
+                        label={"Loading"}
+                      />
+                    ) */}
+                    {/* } */}
                   </View>
                   {/* TEMPORARY */}
                   {/* <EDRTLView style={style.checkOutContainer}>
