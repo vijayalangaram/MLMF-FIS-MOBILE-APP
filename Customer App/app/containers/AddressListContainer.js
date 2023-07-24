@@ -499,23 +499,23 @@ export class AddressListContainer extends React.PureComponent {
       dunzoPointDelivery,
     } = this.state;
 
-    debugLog(
-      "this.props.dunzo_Delivery_Amount  **************************   render  props **********************",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "this.props.dunzo_Delivery_Details *****************************   render  props   ******************** ",
-      this.props.dunzo_Delivery_Details
-    );
+    // debugLog(
+    //   "this.props.dunzo_Delivery_Amount  **************************   render  props **********************",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "this.props.dunzo_Delivery_Details *****************************   render  props   ******************** ",
+    //   this.props.dunzo_Delivery_Details
+    // );
 
-    debugLog(
-      "  this.props.dunzo_Delivery_Amount  **************************   render state  **********************",
-      this.state.dunzoPointDelivery
-    );
-    debugLog(
-      "this.props.dunzo_Delivery_Details *****************************   render  state   ******************** ",
-      this.state.dunzo_Direct_Delivery_Amt
-    );
+    // debugLog(
+    //   "  this.props.dunzo_Delivery_Amount  **************************   render state  **********************",
+    //   this.state.dunzoPointDelivery
+    // );
+    // debugLog(
+    //   "this.props.dunzo_Delivery_Details *****************************   render  state   ******************** ",
+    //   this.state.dunzo_Direct_Delivery_Amt
+    // );
 
     return (
       <BaseContainer
@@ -1142,8 +1142,10 @@ export class AddressListContainer extends React.PureComponent {
         {/* IF SELECT ADDRESS */}
 
         {this.state.isSelectAddress &&
-        (this.props?.dunzo_Delivery_Details?.directPointDelivery?.price > 0 ||
-          this.props.dunzo_Delivery_Amount > 0) ? (
+        (
+          // this.props?.dunzo_Delivery_Details?.directPointDelivery?.price > 0 ||
+          this.props.dunzo_Delivery_Amount > 0
+          ) ? (
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}

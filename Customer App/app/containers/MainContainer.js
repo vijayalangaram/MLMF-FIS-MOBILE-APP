@@ -53,6 +53,8 @@ import {
   saveTableIDInRedux,
   saveUserFCMInRedux,
   saveWalletMoneyInRedux,
+  save_delivery_dunzo__details,
+  save_dunzodelivery_amount,
 } from "../redux/actions/User";
 import {
   clearCartData,
@@ -92,6 +94,7 @@ import {
   saveUserLanguageinDB,
 } from "../utils/ServiceManager";
 import BaseContainer from "./BaseContainer";
+import axios from "axios";
 
 class MainContainer extends React.Component {
   debugger;
@@ -1155,6 +1158,15 @@ class MainContainer extends React.Component {
 
   /** ON POPULAR RES EVENT */
   onPopularResEvent = (restObjModel) => {
+    this.props.save_delivery_dunzo__details();
+    this.props.save_dunzodelivery_amount();
+    let { getintialAddress } = this.state;
+    this.intialDunzoCall(
+      restObjModel.restuarant_id,
+      this.props.userIdFromRedux,
+      getintialAddress
+    );
+
     this.props.navigation.navigate("RestaurantContainer", {
       restId: restObjModel.restuarant_id,
       content_id: restObjModel.content_id,
@@ -1164,6 +1176,42 @@ class MainContainer extends React.Component {
       resObj: restObjModel,
     });
   };
+
+  intialDunzoCall = async (restuarant_id, customer_id, address_id) => {
+    let datas = {
+      restuarant_id: restuarant_id,
+      customer_id: customer_id,
+      address_id: address_id,
+    };
+
+    let getDeliveryChargeAPICall = await axios.post(
+      // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+      datas,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // debugLog(
+    //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
+    //   getDeliveryChargeAPICall.status
+    // );
+
+    if (getDeliveryChargeAPICall.status === 200) {
+      // debugLog(
+      //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+      //   getDeliveryChargeAPICall.data
+      // );
+      this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
+      this.props.save_dunzodelivery_amount(
+        getDeliveryChargeAPICall.data.directDelivery
+      );
+    }
+  };
+
   //#endregion
 
   onOrderModeSelect = (value) => {
@@ -2033,6 +2081,12 @@ export default connect(
       },
       saveOrderModeInRedux: (mode) => {
         dispatch(saveOrderMode(mode));
+      },
+      save_delivery_dunzo__details: (data) => {
+        dispatch(save_delivery_dunzo__details(data));
+      },
+      save_dunzodelivery_amount: (data) => {
+        dispatch(save_dunzodelivery_amount(data));
       },
     };
   }

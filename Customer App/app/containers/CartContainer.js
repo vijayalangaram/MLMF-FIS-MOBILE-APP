@@ -121,9 +121,18 @@ export class CartContainer extends React.PureComponent {
     //   "****************************** Vijay ******************************  this.props.userID",
     //   this.props.userID
     // );
-    this.props.save_delivery_dunzo__details();
-    this.props.save_dunzodelivery_amount();
-    this.getAddressList();
+
+    debugLog(
+      "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+      this.props.dunzo_Delivery_Amount
+    );
+    debugLog(
+      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
+      this.props.dunzo_Delivery_Details
+    );
+    // this.props.save_delivery_dunzo__details();
+    // this.props.save_dunzodelivery_amount();
+    // this.getAddressList();
   }
 
   cartTotalPrice = (price) => {};
@@ -158,13 +167,11 @@ export class CartContainer extends React.PureComponent {
             restuarant_id: this.res_id,
             customer_id: this.props.userID || 0,
             address_id: onSuccess.address[0].address_id,
-            // address_id: "1077",
           };
-          debugLog(
-            "datas.status *************************** 00000000000000",
-            datas
-          );
-
+          // debugLog(
+          //   "datas.status *************************** 00000000000000",
+          //   datas
+          // );
           let getDeliveryChargeAPICall = await axios.post(
             // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
             "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
@@ -175,7 +182,6 @@ export class CartContainer extends React.PureComponent {
               },
             }
           );
-
           debugLog(
             "getDeliveryChargeAPICall.status *************************** 00000000000000",
             getDeliveryChargeAPICall.status
@@ -203,10 +209,6 @@ export class CartContainer extends React.PureComponent {
               "getDeliveryChargeAPICall.status *************************** else ifffff ",
               getDeliveryChargeAPICall.status
             );
-
-            // showValidationAlert(
-            //   "Drop Location was not serviceable, Please Change addres"
-            // );
             this.props.save_delivery_dunzo__details();
             this.props.save_dunzodelivery_amount();
           }
@@ -780,6 +782,8 @@ export default connect(
       currency: state.checkoutReducer.currency_symbol,
       cartPrice: state.checkoutReducer.cartPrice,
       res_id: state.userOperations.res_id,
+      dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
+      dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };
   },
   (dispatch) => {
