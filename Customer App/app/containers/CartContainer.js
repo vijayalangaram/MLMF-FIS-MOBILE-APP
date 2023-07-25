@@ -132,7 +132,10 @@ export class CartContainer extends React.PureComponent {
     );
     // this.props.save_delivery_dunzo__details();
     // this.props.save_dunzodelivery_amount();
-    // this.getAddressList();
+    //   this.getAddressList();
+    if (this.props.dunzo_Delivery_Amount == undefined) {      
+      this.getAddressList();
+    }
   }
 
   cartTotalPrice = (price) => {};
