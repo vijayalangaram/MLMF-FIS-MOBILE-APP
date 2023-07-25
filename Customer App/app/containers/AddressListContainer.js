@@ -1141,7 +1141,7 @@ export class AddressListContainer extends React.PureComponent {
         {/* IF SELECT ADDRESS */}
 
         {this.state.isSelectAddress &&
-        this.state.dunzo_Direct_Delivery_Amt > 0 ? (
+        (this.state.dunzo_Direct_Delivery_Amt > 0 ||  this.props.dunzo_Delivery_Amount > 0) ? (
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
