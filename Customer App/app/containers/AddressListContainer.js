@@ -1876,12 +1876,12 @@ export class AddressListContainer extends React.PureComponent {
           this.getPaymentOptionsAPI();
           if (
             getDeliveryChargeAPICall?.data?.directPointDelivery
-              ?.deliveryPointName.length > 15
+              ?.deliveryPointName.length > 8
           ) {
             let { dunzoPointDelivery } = this.state;
             let nameSlice = `${getDeliveryChargeAPICall?.data?.directPointDelivery?.deliveryPointName.slice(
               0,
-              15
+              8
             )} ...`;
 
             this.setState({

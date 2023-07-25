@@ -367,7 +367,7 @@ class AddressMapContainer extends React.Component {
                     <Text style={style.homeaddress}>
                       {/* {strings("setDefaultAddress")} */}
                       {`${strings("setDefaultAddress")}-${
-                        this.props.dunzo_Delivery_Details.directDelivery
+                        this.props?.dunzo_Delivery_Details?.directDelivery
                       }`}
                     </Text>
                   </EDRTLView>
