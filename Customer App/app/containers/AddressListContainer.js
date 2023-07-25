@@ -1159,46 +1159,48 @@ export class AddressListContainer extends React.PureComponent {
 
         {/* IF SELECT ADDRESS */}
 
-        {this.state.isSelectAddress &&
-        this.state.dunzo_Direct_Delivery_Amt > 0 ? (
-          // ||
-          // this.props.dunzo_Delivery_Amount > 0
-          <View style={{ marginHorizontal: 10 }}>
-            <EDThemeButton
-              isLoading={this.state.isLoading}
-              onPress={this.onContinueEventHandler}
-              label={strings("continue")}
-              style={[
-                style.themeButton,
+        {
+          // this.state.isSelectAddress &&
+          this.state.dunzo_Direct_Delivery_Amt > 0 ? (
+            // ||
+            // this.props.dunzo_Delivery_Amount > 0
+            <View style={{ marginHorizontal: 10 }}>
+              <EDThemeButton
+                isLoading={this.state.isLoading}
+                onPress={this.onContinueEventHandler}
+                label={strings("continue")}
+                style={[
+                  style.themeButton,
 
-                {
-                  marginBottom:
-                    (Platform.OS == "ios"
-                      ? initialWindowMetrics.insets.bottom
-                      : 0) + 10,
-                },
-              ]}
-              textStyle={style.themeButtonText}
-            />
-          </View>
-        ) : (
-          <View style={{ marginHorizontal: 10 }}>
-            <EDThemeButton
-              isLoading={this.state.isLoading}
-              label="Undeliverable Location"
-              style={[
-                style.undeliverablethemeButton,
-                {
-                  marginBottom:
-                    (Platform.OS == "ios"
-                      ? initialWindowMetrics.insets.bottom
-                      : 0) + 10,
-                },
-              ]}
-              textStyle={style.themeButtonText}
-            />
-          </View>
-        )}
+                  {
+                    marginBottom:
+                      (Platform.OS == "ios"
+                        ? initialWindowMetrics.insets.bottom
+                        : 0) + 10,
+                  },
+                ]}
+                textStyle={style.themeButtonText}
+              />
+            </View>
+          ) : (
+            <View style={{ marginHorizontal: 10 }}>
+              <EDThemeButton
+                isLoading={this.state.isLoading}
+                label="Undeliverable Location"
+                style={[
+                  style.undeliverablethemeButton,
+                  {
+                    marginBottom:
+                      (Platform.OS == "ios"
+                        ? initialWindowMetrics.insets.bottom
+                        : 0) + 10,
+                  },
+                ]}
+                textStyle={style.themeButtonText}
+              />
+            </View>
+          )
+        }
       </BaseContainer>
     );
   }
