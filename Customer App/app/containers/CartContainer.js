@@ -122,14 +122,14 @@ export class CartContainer extends React.PureComponent {
     //   this.props.userID
     // );
 
-    debugLog(
-      "****************************** Vijay ****************************** dunzo_Delivery_Amount",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
-      this.props.dunzo_Delivery_Details
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
+    //   this.props.dunzo_Delivery_Details
+    // );
     // this.props.save_delivery_dunzo__details();
     // this.props.save_dunzodelivery_amount();
     //   this.getAddressList();
@@ -185,21 +185,21 @@ export class CartContainer extends React.PureComponent {
               },
             }
           );
-          debugLog(
-            "getDeliveryChargeAPICall.status *************************** 00000000000000",
-            getDeliveryChargeAPICall.status
-          );
+          // debugLog(
+          //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
+          //   getDeliveryChargeAPICall.status
+          // );
 
           if (getDeliveryChargeAPICall.status === 200) {
-            debugLog(
-              "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-              getDeliveryChargeAPICall.data
-            );
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+            //   getDeliveryChargeAPICall.data
+            // );
 
-            debugLog(
-              "getDeliveryChargeAPICall.status *************************** 00000000000000",
-              getDeliveryChargeAPICall.status
-            );
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
+            //   getDeliveryChargeAPICall.status
+            // );
 
             this.props.save_delivery_dunzo__details(
               getDeliveryChargeAPICall.data
@@ -208,10 +208,10 @@ export class CartContainer extends React.PureComponent {
               getDeliveryChargeAPICall.data.directDelivery
             );
           } else {
-            debugLog(
-              "getDeliveryChargeAPICall.status *************************** else ifffff ",
-              getDeliveryChargeAPICall.status
-            );
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status *************************** else ifffff ",
+            //   getDeliveryChargeAPICall.status
+            // );
             this.props.save_delivery_dunzo__details();
             this.props.save_dunzodelivery_amount();
           }

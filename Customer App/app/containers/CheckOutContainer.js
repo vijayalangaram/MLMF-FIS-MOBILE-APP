@@ -219,18 +219,18 @@ export class CheckOutContainer extends React.PureComponent {
     }
     this.getcartDataList();
 
-    debugLog(
-      "****************************** Vijay ****************************** dunzo_Delivery_Amount",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
-      this.props.dunzo_Delivery_Details
-    );
-    debugLog(
-      "****************************** ******************  this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
+    //   this.props.dunzo_Delivery_Details
+    // );
+    // debugLog(
+    //   "****************************** ******************  this.props.navigation.state.params.payment_option",
+    //   this.props.navigation.state.params.payment_option
+    // );
   }
 
   componentWillUnmount() {
@@ -1048,10 +1048,10 @@ export class CheckOutContainer extends React.PureComponent {
                           data.label_key !== "Total"
                       )
                       .map((item, index) => {
-                        debugLog(
-                          "item.label_key::::::::::::::::::::::::",
-                          item.label_key
-                        );
+                        // debugLog(
+                        //   "item.label_key::::::::::::::::::::::::",
+                        //   item.label_key
+                        // );
                         return (
                           <PriceDetail
                             key={item.label}
@@ -2001,21 +2001,14 @@ export class CheckOutContainer extends React.PureComponent {
         );
       }
     } else {
-      // debugLog(
-      //   "****************************** Vijay ****************************** else part this.cartResponse",
-      //   this.cartResponse
-      // );
-
       debugLog(
-        "****************************** Vijay ****************************** else part this.cartResponse ",
-        this.cartResponse.price
+        "****************************** Vijay ****************************** else part this.cartResponse",
+        this.cartResponse?.delivery_charge
       );
 
       // debugLog(
-      //   "****************************** Vijay ****************************** else part resultvalue",
-      //   parseInt(this.cartResponse.price[0].value),
-      //   parseInt(this.cartResponse.price[1].value),
-      //   parseInt(this.cartResponse.price[4].value)
+      //   "****************************** Vijay ****************************** else part this.cartResponse ",
+      //   this.cartResponse.price
       // );
 
       let filterForactualTotalsubtotalTaxes =
@@ -2030,8 +2023,8 @@ export class CheckOutContainer extends React.PureComponent {
         });
 
       debugLog(
-        "**************************************  filterForactualTotalsubtotalTaxes *******************************",
-        filterForactualTotalsubtotalTaxes
+        "**************************************  this.delivery_charges *******************************",
+        this.delivery_charges
       );
 
       // let actualTotalsubtotalTaxes =
@@ -2076,7 +2069,7 @@ export class CheckOutContainer extends React.PureComponent {
             ? "DineIn"
             : this.props.navigation.state.params.delivery_status,
         language_slug: this.props.lan,
-        delivery_charge: this.delivery_charges,
+        delivery_charge:  this.cartResponse?.delivery_charge || this.delivery_charges,
         extra_comment:
           this.props.navigation !== undefined &&
           this.props.navigation.state !== undefined &&
@@ -2184,8 +2177,9 @@ export class CheckOutContainer extends React.PureComponent {
             filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
-            "***************************************************** else part 00000 proceding paymett $$$$$$$$$$$$$$$$"
+            "***************************************************** else part 00000 COD paymett $$$$$$$$$$$$$$$$"
           );
+          // return false;
           this.placeOrder();
         } else if (
           parseInt(this.state.loggedInUserwalletBalance) >
@@ -2194,8 +2188,9 @@ export class CheckOutContainer extends React.PureComponent {
             filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
-            "****************************** Vijay ****************************** else part 111111 proceding paymett $$$$$$$$$$$$$$$$"
+            "******************************************************* else part 111111 razorpay paymett $$$$$$$$$$$"
           );
+          // return false;
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
         } else if (
@@ -2210,8 +2205,9 @@ export class CheckOutContainer extends React.PureComponent {
           this.payment_option == "razorpay"
         ) {
           debugLog(
-            "****************************** Vijay ****************************** else part 22222 proceding paymett $$$$$$$$$$$$$$$$"
+            "************************************************** else part 22222 razorpay paymett $$$$$$$$$$$$$$$$"
           );
+          // return false;
           this.payment_option == "razorpay";
           this.navigateToPaymentGateway("razorpay");
         } else {
@@ -2309,10 +2305,10 @@ export class CheckOutContainer extends React.PureComponent {
       );
 
       if (getDeliveryChargeAPICall.status === 200) {
-        debugLog(
-          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
-          getDeliveryChargeAPICall
-        );
+        // debugLog(
+        //   ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
+        //   getDeliveryChargeAPICall
+        // );
       } else {
       }
     }
@@ -2386,6 +2382,13 @@ export class CheckOutContainer extends React.PureComponent {
 
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
+
+      // debugLog(
+      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~",
+      //   addOrderParams
+      // );
+      // return false;
+
       if (status) {
         this.setState({ isLoading: true });
         addOrder(
@@ -2649,10 +2652,10 @@ export class CheckOutContainer extends React.PureComponent {
    * @param {Success Response Object } onSuccess
    */
   onSuccessAddCart = (onSuccess) => {
-    debugLog(
-      "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
-      onSuccess
-    );
+    // debugLog(
+    //   "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
+    //   onSuccess
+    // );
 
     // debugLog(
     //   "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
@@ -2709,8 +2712,6 @@ export class CheckOutContainer extends React.PureComponent {
         this.table_id = onSuccess.table_id;
         this.allowPayLater = onSuccess.pay_later;
 
-        /// update delivery charges changes vijay/rahul
-
         let deliveryJson = onSuccess;
 
         if (deliveryJson) {
@@ -2747,28 +2748,37 @@ export class CheckOutContainer extends React.PureComponent {
           // }));
           // deliveryPrice.push(...menuAvailabilityArrayObj);
 
-          // debugLog(
-          //   "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
-          //   typeof Number(this.props.dunzo_Delivery_Amount)
-          // );
+          debugLog(
+            "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
+            this.props.dunzo_Delivery_Amount
+          );
 
-          if (Number(this.props.dunzo_Delivery_Amount) > 0) {
-            // debugLog(
-            //   "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
-            //   this.props.dunzo_Delivery_Amount
-            // );
-
+          if (this.props.dunzo_Delivery_Amount > 0) {
+            debugLog(
+              "****************************** Vijay ****************************** if block this.props.dunzo_Delivery_Amount",
+              this.props.dunzo_Delivery_Amount
+            );
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
                   menuAvailabilityArray.length
                 : this.props.dunzo_Delivery_Amount;
+
+            deliveryJson["delivery_charge"] =
+              menuAvailabilityArray.length > 0
+                ? this.props.dunzo_Delivery_Amount *
+                  menuAvailabilityArray.length
+                : this.props.dunzo_Delivery_Amount;
+
+            // deliveryJson?.delivery_charge =   menuAvailabilityArray.length > 0
+            // ? this.props.dunzo_Delivery_Amount *
+            //   menuAvailabilityArray.length
+            // : this.props.dunzo_Delivery_Amount;
           } else {
             // debugLog(
             //   "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
             //   price_delivery_charge
             // );
-
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
                 ? price_delivery_charge[0].value * menuAvailabilityArray.length
@@ -2929,13 +2939,29 @@ export class CheckOutContainer extends React.PureComponent {
           onSuccess.price &&
             onSuccess.price.splice(onSuccess.price.length - 1, 0, uitotal);
 
+          // debugLog(
+          //   "********************************** onSuccess ********************************** onSuccess?.items ",
+          //   onSuccess?.items
+          // );
+
           // let findmenucount = [
           //   ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
           // ];
+
           // debugLog(
-          //   "********************************** onSuccess ********************************** 2222222222222  findmenucount ",
+          //   "********************************** onSuccess ********************************** findmenucount ",
           //   findmenucount
           // );
+
+          // let findmenucount222 = new Set(
+          //   findmenucount.flatMap((s) => s.split(","))
+          // );
+
+          // debugLog(
+          //   "********************************** onSuccess ********************************** findmenucount222 ",
+          //   findmenucount222
+          // );
+
           // findmenucount &&
           //   findmenucount.map((items) => {
           //     onSuccess.price &&
@@ -2945,13 +2971,12 @@ export class CheckOutContainer extends React.PureComponent {
           //         value: "",
           //       });
           //   });
-          // debugLog(
-          //   "********************************** onSuccess **********************************  onSuccess.price ",
-          //   onSuccess.price
-          // );
 
+          debugLog(
+            "********************************** onSuccess ********************************** deliveryJson",
+            deliveryJson
+          );
           // push Wallet Discount to price array
-
           this.updateUI(deliveryJson);
         }
       } else if (onSuccess.status !== COUPON_ERROR) {
