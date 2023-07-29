@@ -522,10 +522,10 @@ export class CheckOutContainer extends React.PureComponent {
 
   // RENDER METHOD
   render() {
-    // debugLog(
-    //   "this.cartResponse ********************************************************************",
-    //   this.cartResponse
-    // );
+    debugLog(
+      "this.cartResponse ********************************************************************",
+      this.cartResponse
+    );
 
     // debugLog(
     //   "************************************************************************************************"
@@ -2069,7 +2069,8 @@ export class CheckOutContainer extends React.PureComponent {
             ? "DineIn"
             : this.props.navigation.state.params.delivery_status,
         language_slug: this.props.lan,
-        delivery_charge:  this.cartResponse?.delivery_charge || this.delivery_charges,
+        delivery_charge:
+          this.cartResponse?.delivery_charge || this.delivery_charges,
         extra_comment:
           this.props.navigation !== undefined &&
           this.props.navigation.state !== undefined &&
@@ -2731,6 +2732,10 @@ export class CheckOutContainer extends React.PureComponent {
             return item.label_key == "Delivery Charge";
           });
 
+          if (ServiceTaxtotal && ServiceTaxtotal.length > 0) {
+            ServiceTaxtotal[0].value = Math.round(ServiceTaxtotal[0].value);
+          }
+
           // debugLog(
           //   "****************************** Vijay ****************************** price_delivery_charge 00000",
           //   price_delivery_charge
@@ -3110,15 +3115,15 @@ export class CheckOutContainer extends React.PureComponent {
 
         this.addToCartData = objAddToCart;
 
-        // debugLog(
-        //   "***************************************  11111111111111  this.addToCartData",
-        //   this.addToCartData
-        // );
+        debugLog(
+          "***************************************  11111111111111  this.addToCartData",
+          this.addToCartData
+        );
 
-        // debugLog(
-        //   "***************************************  4444444444444444444  objAddToCart",
-        //   objAddToCart
-        // );
+        debugLog(
+          "***************************************  4444444444444444444  objAddToCart",
+          objAddToCart
+        );
 
         // debugLog(
         //   "***************************************  00000000000000000 is_wallet_applied",

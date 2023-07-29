@@ -147,7 +147,6 @@ export class AddressListContainer extends React.PureComponent {
       defaultIntialAddress: "",
       // isGuestVerified: true,
       dunzoPointDelivery: "",
-
       dunzo_Point_DeliveryFlag: true,
       dunzo_Direct_Delivery_Amt: "",
     };
@@ -155,18 +154,18 @@ export class AddressListContainer extends React.PureComponent {
   }
 
   componentDidMount() {
-    debugLog(
-      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
-    );
+    // debugLog(
+    //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
+    // );
 
-    // debugLog(
-    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
-    //   this.props.dunzo_Delivery_Amount
-    // );
-    // debugLog(
-    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
-    //   this.props.dunzo_Delivery_Details
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
+      this.props.dunzo_Delivery_Amount
+    );
+    debugLog(
+      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
+      this.props.dunzo_Delivery_Details
+    );
 
     // debugLog(
     //   "****************************** Vijay ******************************     this.state.addressId",
@@ -191,10 +190,10 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props.checkoutDetail
     // );
 
-    // debugLog(
-    //   "****************************** Vijay ******************************    this.checkoutData ",
-    //   this.checkoutData
-    // );
+    debugLog(
+      "****************************** Vijay ******************************    this.checkoutData ",
+      this.checkoutData
+    );
 
     // debugLog(
     //   "****************************** Vijay ******************************   this.checkoutData.minOrderAmount ",
@@ -520,9 +519,8 @@ export class AddressListContainer extends React.PureComponent {
     // );
     // debugLog(
     //   "  this.props.dunzo_Delivery_Amount  **************************   render state 11 **********************",
-    //   this.state?.dunzoPointDelivery
+    //   this.state.dunzoPointDelivery
     // );
-
     // debugLog(
     //   "this.props.dunzo_Delivery_Details *****************************   render  state  22  ******************** ",
     //   this.state.dunzo_Direct_Delivery_Amt
@@ -1049,7 +1047,7 @@ export class AddressListContainer extends React.PureComponent {
               </View>
             ) : null}
 
-            {this.state.dunzo_Direct_Delivery_Amt > 0 ? (
+            {this.state?.dunzo_Direct_Delivery_Amt > 0 ? (
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1066,7 +1064,12 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   />
                   <EDRTLText
-                    title={`Direct Delivery (₹ ${this.state.dunzo_Direct_Delivery_Amt})`}
+                    title={`Direct Delivery (₹ ${this.state?.dunzo_Direct_Delivery_Amt} - `}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  <EDRTLText
+                    title={`${this.state?.dunzoPointDelivery?.directDistance} K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1074,7 +1077,7 @@ export class AddressListContainer extends React.PureComponent {
                   <Icon
                     // name={"check-box"}
                     name={
-                      this.state.dunzo_Point_DeliveryFlag === false
+                      this.state?.dunzo_Point_DeliveryFlag === false
                         ? "check-box"
                         : "check-box-outline-blank"
                     }
@@ -1089,12 +1092,14 @@ export class AddressListContainer extends React.PureComponent {
                     }
                     onPress={this.dunzo_Point_DeliveryFlagCall}
                   />
+
                   {/* // ) : null} */}
                 </EDRTLView>
               </EDRTLView>
             ) : null}
 
             {this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 ? (
+              // this?.state?.dunzo_Direct_Delivery_Amt
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1112,7 +1117,17 @@ export class AddressListContainer extends React.PureComponent {
                   />
 
                   <EDRTLText
-                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.deliveryPointName}  ( ₹ ${this.state?.dunzoPointDelivery?.directPointDelivery?.price})`}
+                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.deliveryPointName.slice(
+                      0,
+                      11
+                    )}...  ( ₹ ${
+                      this.state?.dunzoPointDelivery?.directPointDelivery?.price
+                    } - `}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  <EDRTLText
+                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.distance} K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1120,7 +1135,7 @@ export class AddressListContainer extends React.PureComponent {
                   <Icon
                     // name={"check-box"}
                     name={
-                      this.state.dunzo_Point_DeliveryFlag === true
+                      this.state?.dunzo_Point_DeliveryFlag === true
                         ? "check-box"
                         : "check-box-outline-blank"
                     }
@@ -1128,6 +1143,7 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={style.dunzoDeliveryView}
                     onPress={this.dunzo_Point_DeliveryFlagCall}
                   />
+
                   {/* ) : null} */}
                 </EDRTLView>
               </EDRTLView>
@@ -1889,13 +1905,19 @@ export class AddressListContainer extends React.PureComponent {
           this.getPaymentOptionsAPI();
           if (
             getDeliveryChargeAPICall?.data?.directPointDelivery
-              ?.deliveryPointName.length > 10
+              ?.deliveryPointName.length > 9
           ) {
             let { dunzoPointDelivery } = this.state;
             let nameSlice = `${getDeliveryChargeAPICall?.data?.directPointDelivery?.deliveryPointName.slice(
               0,
-              10
+              9
             )} ...`;
+
+            // debugLog(
+            //   "****************************** 22 this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
+            //   this.props?.dunzo_Delivery_Details?.directPointDelivery
+            //     ?.deliveryPointName
+            // );
 
             this.setState({
               dunzoPointDelivery: {
@@ -2228,10 +2250,10 @@ export class AddressListContainer extends React.PureComponent {
       "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
       this.props.dunzo_Delivery_Amount
     );
-    // debugLog(
-    //   "****************************** dunzoApiCall ********************** Number(this.props.dunzo_Delivery_Details > 0)  > 0",
-    //   this.props.dunzo_Delivery_Details
-    // );
+    debugLog(
+      "****************************** dunzoApiCall ********************** Number(this.props.dunzo_Delivery_Details > 0)  > 0",
+      this.props.dunzo_Delivery_Details
+    );
     // debugLog(
     //   "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
     //   this.props.dunzo_Delivery_Amount > 0
@@ -2242,7 +2264,7 @@ export class AddressListContainer extends React.PureComponent {
     // );
     // debugLog(
     //   "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
-    //   this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName
+    //   this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.length
     // );
 
     if (
@@ -2259,13 +2281,24 @@ export class AddressListContainer extends React.PureComponent {
 
           if (
             this.props?.dunzo_Delivery_Details?.directPointDelivery
-              ?.deliveryPointName.length > 15
+              ?.deliveryPointName.length > 9
           ) {
+            debugLog(
+              "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
+              this.props?.dunzo_Delivery_Details?.directPointDelivery
+                ?.deliveryPointName.length
+            );
+
             let { dunzoPointDelivery } = this.state;
             let nameSlice = `${this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.slice(
               0,
-              15
+              9
             )} ...`;
+
+            debugLog(
+              "****************************** nameSlice ******************************",
+              nameSlice
+            );
 
             this.setState({
               dunzoPointDelivery: {
