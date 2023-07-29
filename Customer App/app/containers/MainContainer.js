@@ -129,11 +129,11 @@ class MainContainer extends React.Component {
       size: 15,
       selected: 1,
     },
-    {
-      label: strings("pickUpOrder"),
-      size: 15,
-      selected: 0,
-    },
+    // {
+    //   label: strings("pickUpOrder"),
+    //   size: 15,
+    //   selected: 0,
+    // },
   ];
   is_filter = false;
   locationError = false;
@@ -1790,7 +1790,8 @@ class MainContainer extends React.Component {
         title={"home"}
         isTitleIcon
         left={"menu"}
-        tabs={[strings("deliveryOrder"), strings("pickUpOrder")]}
+        // tabs={[strings("deliveryOrder"), strings("pickUpOrder")]}
+        tabs={[strings("deliveryOrder")]}
         selectedIndex={this.props.orderModeInRedux}
         onSegmentIndexChangeHandler={this.onOrderModeSelect}
         // onLeftFC={this._onChangeLanguagePressed}
@@ -1831,8 +1832,8 @@ class MainContainer extends React.Component {
         {this.renderLanguageSelectDialogue()}
 
         {/* CAMERA FOR DIGITAL DINE IN */}
-        {this.state.floatVisible ? this.renderScanButton() : null}
-        {this.renderQRCameraDialogue()}
+        {/* {this.state.floatVisible ? this.renderScanButton() : null}
+        {this.renderQRCameraDialogue()} */}
 
         {/* LOCATION STRIP */}
         {this.state.locationError && this.currentCity == undefined ? (
