@@ -433,7 +433,11 @@ export class AddressListContainer extends React.PureComponent {
       dunzo_Direct_Delivery_Amt,
       dunzoPointDelivery,
       isPaymentLoading,
+      isLoading,
     } = this.state;
+
+    this.setState({ isLoading: true, isPaymentLoading: true });
+
     this.setState(
       {
         dunzo_Point_DeliveryFlag: !dunzo_Point_DeliveryFlag,
@@ -466,10 +470,10 @@ export class AddressListContainer extends React.PureComponent {
 
         let dunzo_Delivery_Amount = Number(calulatedunzodeliveryAMT);
 
-        // debugLog(
-        //   "*****************************************3333333333333333333333333333333333333333333",
-        //   dunzo_Delivery_Amount
-        // );
+        debugLog(
+          "*****************************************3333333333333333333333333333333333333333333",
+          dunzo_Delivery_Amount
+        );
 
         // debugLog(
         //   "*****************************************4444444444444444444444444444444444444444444",
@@ -493,8 +497,8 @@ export class AddressListContainer extends React.PureComponent {
         });
       }
     );
-
-    this.setState({ isPaymentLoading: false });
+    this.onWillFocus();
+    this.setState({ isLoading: false, isPaymentLoading: false });
   };
 
   //#region
@@ -1106,7 +1110,8 @@ export class AddressListContainer extends React.PureComponent {
             }
 
             {this.state?.dunzoPointDelivery?.directPointDelivery?.price <
-            this?.state?.dunzo_Direct_Delivery_Amt ? (
+              this?.state?.dunzo_Direct_Delivery_Amt &&
+            this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 ? (
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
