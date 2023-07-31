@@ -45,11 +45,11 @@ class EventBookContainer extends React.PureComponent {
         this.eventLimit = 1;
         this.tableLimit = 1;
         this.allBookingModes = [
-            {
-                label: strings("eventTitle"),
-                size: 15,
-                selected: 1
-            },
+            // {
+            //     label: strings("eventTitle"),
+            //     size: 15,
+            //     selected: 1
+            // },
             {
                 label: strings("bookTable"),
                 size: 15,

@@ -95,30 +95,30 @@ class SideBar extends React.PureComponent {
         icon: "handbag",
         type: "simple-line-icon",
       },
-      {
-        route: "PendingOrders",
-        screenName: strings("activeDineInOrder"),
-        icon: "fast-food-outline",
-        type: "ionicon",
-      },
-      {
-        route: "Recipe",
-        screenName: strings("recipeTitle"),
-        icon: "restaurant-outline",
-        type: "ionicon",
-      },
-      {
-        route: "Event",
-        screenName: strings("bookingsOnline"),
-        icon: "calendar",
-        type: "ant-design",
-      },
-      {
-        route: "MyBooking",
-        screenName: strings("myReservations"),
-        icon: "calendar-check-o",
-        type: "font-awesome",
-      },
+      // {
+      //   route: "PendingOrders",
+      //   screenName: strings("activeDineInOrder"),
+      //   icon: "fast-food-outline",
+      //   type: "ionicon",
+      // },
+      // {
+      //   route: "Recipe",
+      //   screenName: strings("recipeTitle"),
+      //   icon: "restaurant-outline",
+      //   type: "ionicon",
+      // },
+      // {
+      //   route: "Event",
+      //   screenName: strings("bookingsOnline"),
+      //   icon: "calendar",
+      //   type: "ant-design",
+      // },
+      // {
+      //   route: "MyBooking",
+      //   screenName: strings("myReservations"),
+      //   icon: "calendar-check-o",
+      //   type: "font-awesome",
+      // },
       {
         route: "Notification",
         screenName: strings("notification"),
@@ -167,15 +167,15 @@ class SideBar extends React.PureComponent {
       };
     });
     let arraySideMenuData = arrTemp.concat(arrCMSPages);
-    arraySideMenuData = arraySideMenuData.concat([
-      {
-        route: "contactUs",
-        screenName: strings("contact"),
-        icon: "chatbubble-ellipses-outline",
-        type: "ionicon",
-      },
-      { route: "FAQs", screenName: strings("faqs"), icon: "question-answer" },
-    ]);
+    // arraySideMenuData = arraySideMenuData.concat([
+    //   {
+    //     route: "contactUs",
+    //     screenName: strings("contact"),
+    //     icon: "chatbubble-ellipses-outline",
+    //     type: "ionicon",
+    //   },
+    //  { route: "FAQs", screenName: strings("faqs"), icon: "question-answer" },
+    // ]);
     this.arrayFinalSideMenu =
       this.props.firstName != undefined && this.props.firstName != ""
         ? arraySideMenuData.concat({
@@ -186,42 +186,42 @@ class SideBar extends React.PureComponent {
         : arraySideMenuData;
 
     this.arrSocialApps = [];
-    if (
-      this.props.socialURL.facebook !== undefined &&
-      this.props.socialURL.facebook !== null &&
-      this.props.socialURL.facebook.trim().length !== 0
-    ) {
-      this.arrSocialApps.push({
-        name: "facebook",
-        color: EDColors.facebook,
-        url: this.props.socialURL.facebook,
-      });
-    }
-    if (
-      this.props.socialURL.twitter !== undefined &&
-      this.props.socialURL.twitter !== null &&
-      this.props.socialURL.twitter.trim().length !== 0
-    ) {
-      this.arrSocialApps.push({
-        name: "twitter",
-        color: EDColors.twitter,
-        type: "entypo",
-        url: this.props.socialURL.twitter,
-      });
-    }
+    // if (
+    //   this.props.socialURL.facebook !== undefined &&
+    //   this.props.socialURL.facebook !== null &&
+    //   this.props.socialURL.facebook.trim().length !== 0
+    // ) {
+    //   this.arrSocialApps.push({
+    //     name: "facebook",
+    //     color: EDColors.facebook,
+    //     url: this.props.socialURL.facebook,
+    //   });
+    // }
+    // if (
+    //   this.props.socialURL.twitter !== undefined &&
+    //   this.props.socialURL.twitter !== null &&
+    //   this.props.socialURL.twitter.trim().length !== 0
+    // ) {
+    //   this.arrSocialApps.push({
+    //     name: "twitter",
+    //     color: EDColors.twitter,
+    //     type: "entypo",
+    //     url: this.props.socialURL.twitter,
+    //   });
+    // }
 
-    if (
-      this.props.socialURL.linkedin !== undefined &&
-      this.props.socialURL.linkedin !== null &&
-      this.props.socialURL.linkedin.trim().length !== 0
-    ) {
-      this.arrSocialApps.push({
-        name: "logo-linkedin",
-        type: "ionicon",
-        color: EDColors.linkedin,
-        url: this.props.socialURL.linkedin,
-      });
-    }
+    // if (
+    //   this.props.socialURL.linkedin !== undefined &&
+    //   this.props.socialURL.linkedin !== null &&
+    //   this.props.socialURL.linkedin.trim().length !== 0
+    // ) {
+    //   this.arrSocialApps.push({
+    //     name: "logo-linkedin",
+    //     type: "ionicon",
+    //     color: EDColors.linkedin,
+    //     url: this.props.socialURL.linkedin,
+    //   });
+    // }
 
     return (
       <View
