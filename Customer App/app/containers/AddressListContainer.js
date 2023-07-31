@@ -2669,8 +2669,13 @@ export class AddressListContainer extends React.PureComponent {
           return accumulator + some;
         }, 0);
 
+      // debugLog(
+      //   "################################################################################ this.state.cartItems",
+      //   this.state.cartItems
+      // );
+
       let findmenucount = [
-        ...new Set(this.state.cartItems.map((item) => item.availability)),
+        ...new Set(this.state.cartItems.map((item) => item.menu_avail)),
       ];
 
       // debugLog(
@@ -2710,9 +2715,9 @@ export class AddressListContainer extends React.PureComponent {
         parseInt(this.state.loggedInUserwalletBalance) <
         Number(this.props.minOrderAmount)
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
+        );
 
         let filteredvalue =
           onSuccess.Payment_method &&
@@ -2726,9 +2731,9 @@ export class AddressListContainer extends React.PureComponent {
           Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) > PriceandTotalPrice
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
+        );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2741,9 +2746,9 @@ export class AddressListContainer extends React.PureComponent {
           Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) < PriceandTotalPrice
       ) {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  333333333333333333333"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  333333333333333333333"
+        );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -2752,9 +2757,9 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else {
-        // debugLog(
-        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
-        // );
+        debugLog(
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
+        );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
