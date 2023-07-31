@@ -436,6 +436,18 @@ export class AddressListContainer extends React.PureComponent {
       isLoading,
     } = this.state;
 
+    if (
+      this?.state?.dunzo_Direct_Delivery_Amt <
+      this.state?.dunzoPointDelivery?.directPointDelivery?.price
+    ) {
+      //  debugLog(
+      //     "***************************************** 0000000000000000000000000000000 ***************************************** ",
+      //     this?.state?.dunzo_Direct_Delivery_Amt <
+      //     this.state?.dunzoPointDelivery?.directPointDelivery?.price
+      //   );
+      return false;
+    }
+
     this.setState({ isLoading: true, isPaymentLoading: true });
 
     this.setState(
