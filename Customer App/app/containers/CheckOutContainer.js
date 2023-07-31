@@ -1087,7 +1087,9 @@ export class CheckOutContainer extends React.PureComponent {
                                     // item.label_key.includes(
                                     //   "Delivery Charge"
                                     // ) ||
-                                    item.label_key.includes("Delivery Charge") ||
+                                    item.label_key.includes(
+                                      "Delivery Charge"
+                                    ) ||
                                     item.label_key.includes("Service") ||
                                     item.label_key.includes("Fee")
                                   ? item.value.toString().includes("%")
@@ -2740,6 +2742,23 @@ export class CheckOutContainer extends React.PureComponent {
             ServiceTaxtotal[0].value = Math.round(ServiceTaxtotal[0].value);
           }
 
+          // push individual Delivery Charge
+          let findmenucount = [
+            ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
+          ];
+          let findmenucount222 = [
+            ...new Set(findmenucount.flatMap((s) => s.split(","))),
+          ];
+          findmenucount222 &&
+            findmenucount222.map((items) => {
+              onSuccess.price &&
+                onSuccess.price.push({
+                  label: `${items} Delivery Charge`,
+                  label_key: `${items} Delivery Charge`,
+                  value: this.props.dunzo_Delivery_Amount,
+                });
+            });
+
           // debugLog(
           //   "****************************** Vijay ****************************** price_delivery_charge 00000",
           //   price_delivery_charge
@@ -2866,23 +2885,6 @@ export class CheckOutContainer extends React.PureComponent {
           //   //   loggedInUserwalletBalanceint - totaintialvalue;
           // }
 
-          // push individual Delivery Charge
-          let findmenucount = [
-            ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
-          ];
-          let findmenucount222 = [
-            ...new Set(findmenucount.flatMap((s) => s.split(","))),
-          ];
-          findmenucount222 &&
-            findmenucount222.map((items) => {
-              onSuccess.price &&
-                onSuccess.price.push({
-                  label: `${items} Delivery Charge`,
-                  label_key: `${items} Delivery Charge`,
-                  value: this.props.dunzo_Delivery_Amount,
-                });
-            });
-
           // deliveryJson.total = total[0].value;
           if (
             // parseInt(total[0].value)
@@ -2961,9 +2963,19 @@ export class CheckOutContainer extends React.PureComponent {
             label_key: "Sum Total",
             value: parseInt(intialTotalCountvalue),
           };
-          // onSuccess.price && onSuccess.price.push(uitotal);
-          onSuccess.price &&
-            onSuccess.price.splice(onSuccess.price.length - 1, 0, uitotal);
+
+          if (
+            parseInt(this.state.loggedInUserwalletBalance) <
+            Number(this.props.minOrderAmount)
+          ) {
+            // onSuccess.price && onSuccess.price.push(uitotal);
+            onSuccess.price &&
+              onSuccess.price.splice(onSuccess.price.length, 0, uitotal);
+          } else {
+            // onSuccess.price && onSuccess.price.push(uitotal);
+            onSuccess.price &&
+              onSuccess.price.splice(onSuccess.price.length - 1, 0, uitotal);
+          }
 
           // debugLog(
           //   "********************************** onSuccess ********************************** onSuccess?.items ",
@@ -3265,12 +3277,31 @@ export class CheckOutContainer extends React.PureComponent {
           total_taxes = total_taxes + Number(data.value);
         });
       }
-      this.cartResponse.price.splice(this.cartResponse.price.length - 2, 0, {
-        label: strings("taxes&Fees"),
-        value: total_taxes.toFixed(2),
-        label_key: "Tax and Fee",
-        showToolTip: true,
-      });
+      // this.cartResponse.price.splice(this.cartResponse.price.length - 2, 0, {
+      //   label: strings("taxes&Fees"),
+      //   value: total_taxes.toFixed(2),
+      //   label_key: "Tax and Fee",
+      //   showToolTip: true,
+      // });
+
+      if (
+        parseInt(this.state.loggedInUserwalletBalance) <
+        Number(this.props.minOrderAmount)
+      ) {
+        this.cartResponse.price.splice(this.cartResponse.price.length - 1, 0, {
+          label: strings("taxes&Fees"),
+          value: total_taxes.toFixed(2),
+          label_key: "Tax and Fee",
+          showToolTip: true,
+        });
+      } else {
+        this.cartResponse.price.splice(this.cartResponse.price.length - 2, 0, {
+          label: strings("taxes&Fees"),
+          value: total_taxes.toFixed(2),
+          label_key: "Tax and Fee",
+          showToolTip: true,
+        });
+      }
     }
     this.cart_id = response.cart_id;
     this.table_id = response.table_id;
