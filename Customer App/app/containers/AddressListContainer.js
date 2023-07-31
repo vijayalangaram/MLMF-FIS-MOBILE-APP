@@ -2678,20 +2678,20 @@ export class AddressListContainer extends React.PureComponent {
         ...new Set(this.state.cartItems.map((item) => item.menu_avail)),
       ];
 
-      // debugLog(
-      //   "################################################################################ findmenucount",
-      //   findmenucount
-      // );
+      debugLog(
+        "################################################################################ findmenucount",
+        findmenucount
+      );
 
       // debugLog(
       //   "################################################################################ findmenucount",
       //   findmenucount.length
       // );
 
-      // debugLog(
-      //   "################################################################################ 0000000000",
-      //   currentPriceTotal
-      // );
+      debugLog(
+        "################################################################################ 0000000000",
+        currentPriceTotal
+      );
 
       // debugLog(
       //   "########################################################################### 111111",
@@ -2703,13 +2703,20 @@ export class AddressListContainer extends React.PureComponent {
         findmenucount.length *
           Number(this.state.dunzo_Direct_Delivery_Amt || 1);
 
-      let PriceandTotalPrice =
-        currentPriceTotal + dunzo_Delivery_Point_AmountbasedonMenucate;
+      let taxesintialcalc = currentPriceTotal / 20;
 
-      // debugLog(
-      //   "############################################################################ 222222",
-      //   PriceandTotalPrice
-      // );
+      debugLog(
+        "############################################################################ taxesintialcalc",
+        taxesintialcalc
+      );
+
+      let PriceandTotalPrice =
+        currentPriceTotal + dunzo_Delivery_Point_AmountbasedonMenucate + taxesintialcalc;
+
+      debugLog(
+        "############################################################################ 222222",
+        PriceandTotalPrice
+      );
 
       if (
         parseInt(this.state.loggedInUserwalletBalance) <

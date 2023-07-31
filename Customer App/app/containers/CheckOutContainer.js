@@ -1087,7 +1087,7 @@ export class CheckOutContainer extends React.PureComponent {
                                     // item.label_key.includes(
                                     //   "Delivery Charge"
                                     // ) ||
-                                    item.label_key.includes("Delivery Price") ||
+                                    item.label_key.includes("Delivery Charge") ||
                                     item.label_key.includes("Service") ||
                                     item.label_key.includes("Fee")
                                   ? item.value.toString().includes("%")
@@ -2866,7 +2866,7 @@ export class CheckOutContainer extends React.PureComponent {
           //   //   loggedInUserwalletBalanceint - totaintialvalue;
           // }
 
-          // push individual Delivery Price
+          // push individual Delivery Charge
           let findmenucount = [
             ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
           ];
@@ -2877,8 +2877,8 @@ export class CheckOutContainer extends React.PureComponent {
             findmenucount222.map((items) => {
               onSuccess.price &&
                 onSuccess.price.push({
-                  label: `${items} Delivery Price`,
-                  label_key: `${items} Delivery Price`,
+                  label: `${items} Delivery Charge`,
+                  label_key: `${items} Delivery Charge`,
                   value: this.props.dunzo_Delivery_Amount,
                 });
             });
