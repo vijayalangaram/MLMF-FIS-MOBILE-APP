@@ -55,6 +55,7 @@ import {
   saveWalletMoneyInRedux,
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
+  save_selected_Res_ID,
 } from "../redux/actions/User";
 import {
   clearCartData,
@@ -1172,6 +1173,8 @@ class MainContainer extends React.Component {
       getintialAddress
     );
 
+    this.props.save_selected_Res_ID(restObjModel.restuarant_id);
+
     this.props.navigation.navigate("RestaurantContainer", {
       restId: restObjModel.restuarant_id,
       content_id: restObjModel.content_id,
@@ -2093,6 +2096,9 @@ export default connect(
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));
+      },
+      save_selected_Res_ID: (data) => {
+        dispatch(save_selected_Res_ID(data));
       },
     };
   }

@@ -961,7 +961,7 @@ export class AddressListContainer extends React.PureComponent {
             {this.state.value == 1 ? (
               <>
                 {/* ADD ADDRESS */}
-                <EDRTLView style={style.addView}>
+                {/* <EDRTLView style={style.addView}>
                   <EDRTLText
                     style={style.titleText}
                     title={strings("addressTitle")}
@@ -1006,9 +1006,10 @@ export class AddressListContainer extends React.PureComponent {
                     }}
                     onPress={this.onAddAddressEventHandler}
                   />
-                </EDRTLView>
+                </EDRTLView> */}
+
                 {/* ADDRESS LIST */}
-                {this.props.userID !== undefined &&
+                {/* {this.props.userID !== undefined &&
                 this.props.userID !== null &&
                 this.props.userID !== "" ? (
                   this.state.selectedAddress != undefined &&
@@ -1029,8 +1030,8 @@ export class AddressListContainer extends React.PureComponent {
                       style={style.noAddress}
                     />
                   )
-                ) : null}
-                {this.props.userID == undefined ||
+                ) : null} */}
+                {/* {this.props.userID == undefined ||                
                 this.props.userID == null ||
                 this.props.userID == "" ? (
                   this.state.guestAddress !== undefined ? (
@@ -1049,9 +1050,48 @@ export class AddressListContainer extends React.PureComponent {
                       style={style.noAddress}
                     />
                   )
-                ) : null}
+                ) : null} */}
               </>
             ) : null}
+
+            {/* {this.state.dunzo_Direct_Delivery_Amt > 0 ? ( */}
+            <View style={{ flex: 1 }}>
+              <EDRTLText
+                title={"Delivery Address"}
+                style={style.paymentHeader}
+              />
+            </View>
+            {/* ) : null} */}
+
+            {/* {this.state?.dunzo_Direct_Delivery_Amt > 0 ? ( */}
+            <EDRTLView style={style.walletContainer}>
+              <EDRTLView
+                style={{
+                  alignItems: "center",
+                  marginHorizontal: 15,
+                  marginVertical: 10,
+                }}
+              >
+                <Icon
+                  name={"home-filled"}
+                  color={EDColors.primary}
+                  containerStyle={{ marginRight: 20 }}
+                />
+                <EDRTLText
+                  // title={`${this.props?.currentLocation?.address }`}
+                  title={`${this.props?.currentLocation?.address.slice(
+                    0,
+                    30
+                  )}.. `}
+                  // title={this.props?.currentLocation?.address.substring(
+                  //   this.props?.currentLocation?.address.indexOf(",") + 2
+                  // )}
+                  // style={style.currentLocationSubText}
+                  style={style.dunzoDeliveryHeader}
+                />
+              </EDRTLView>
+            </EDRTLView>
+            {/* ) : null} */}
 
             {
               // this.state.loader_Flag_dunzo_CallResponse === false &&
@@ -1241,7 +1281,7 @@ export class AddressListContainer extends React.PureComponent {
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
-              label="Undeliverable Location"
+              label="Temporarily Undeliverable Location"
               style={[
                 style.undeliverablethemeButton,
                 {
@@ -2681,13 +2721,13 @@ export class AddressListContainer extends React.PureComponent {
           return accumulator + some;
         }, 0);
 
-      debugLog(
-        "################################################################################ this.state.cartItems",
-        this.state.cartItems
-      );
+      // debugLog(
+      //   "################################################################################ this.state.cartItems",
+      //   this.state.cartItems
+      // );
 
       let findmenucount = [
-        ...new Set(this.state.cartItems.map((item) => item.menu_avail || item.availability )),
+        ...new Set(this.state.cartItems.map((item) => item.menu_avail)),
       ];
 
       debugLog(
@@ -3173,6 +3213,13 @@ const style = StyleSheet.create({
     // marginHorizontal: 15,
     // marginTop: 20,
   },
+
+  currentLocationSubText: {
+    fontSize: getProportionalFontSize(13),
+    fontFamily: EDFonts.regular,
+    color: EDColors.blackSecondary,
+  },
+
   contactView: {
     marginVertical: 10,
     marginHorizontal: 15,
