@@ -10,7 +10,7 @@ import EDRTLText from "../components/EDRTLText";
 import EDRTLView from "../components/EDRTLView";
 import EDThemeButton from "../components/EDThemeButton";
 import { strings } from "../locales/i18n";
-
+import axios from "axios";
 import {
   showDialogue,
   showNoInternetAlert,
@@ -383,42 +383,11 @@ class SearchLocationContainer extends React.PureComponent {
   };
 
   saveAddressFromList = async (index) => {
-    // debugLog(
-    //   "##########################################################################saveAddressFromList",
-    //   index
-    // );
-
-    let datas = {
-      restuarant_id: this.props.selected_Res_Id || this.props.res_id,
-      customer_id: this.props.userID,
-      address_id: this.arrayAddress[index].address_id,
-    };
-
-    let getDeliveryChargeAPICall = await axios.post(
-      // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
-      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
-      datas,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    debugLog(
+      "##########################################################################saveAddressFromList",
+      index
     );
 
-    if (getDeliveryChargeAPICall.status === 200) {
-      this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
-      this.props.save_dunzodelivery_amount(
-        getDeliveryChargeAPICall.data.directDelivery
-      );
-    }
-    // else {
-    //   this.props.save_delivery_dunzo__details();
-    //   this.props.save_dunzodelivery_amount();
-    // }
-
-    // if (this.state.selectedIndex == -1)
-    //     showValidationAlert(strings("addressSelectionValidation"))
-    // else {
     let addressData = {
       latitude: this.arrayAddress[index].latitude,
       longitude: this.arrayAddress[index].longitude,
@@ -433,6 +402,69 @@ class SearchLocationContainer extends React.PureComponent {
     };
     this.props.saveCurrentLocation(addressData);
     this.navigateToBack();
+
+    let datas = {
+      restuarant_id: this.props.selected_Res_Id || this.props.res_id,
+      customer_id: this.props.userID,
+      address_id: this.arrayAddress[index].address_id,
+    };
+
+    // debugLog(
+    //   "########################################################################## datas",
+    //   datas
+    // );
+
+    let getDeliveryChargeAPICall = await axios
+      .post(
+        // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+        "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+        datas,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        // debugLog(
+        //   "########################################################################## else 0000",
+        //   response.data
+        // );
+        if (response.status === 200) {
+          this.props.save_delivery_dunzo__details(response.data);
+          this.props.save_dunzodelivery_amount(response.data.directDelivery);
+        }
+      })
+      .then((data) => {})
+      .catch((error) => {
+        // debugLog(
+        //   "########################################################################## else 33333",
+        //   error
+        // );
+        // this.props.save_delivery_dunzo__details();
+        // this.props.save_dunzodelivery_amount();
+        showDialogue("Undeliverable Location, Please Change Address");
+      });
+
+    // debugLog(
+    //   "########################################################################## getDeliveryChargeAPICall.status",
+    //   getDeliveryChargeAPICall.status
+    // );
+
+    // if (getDeliveryChargeAPICall.status === 200) {
+    //   this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
+    //   this.props.save_dunzodelivery_amount(
+    //     getDeliveryChargeAPICall.data.directDelivery
+    //   );
+    // } else {
+    //   this.props.save_delivery_dunzo__details();
+    //   this.props.save_dunzodelivery_amount();
+    //   showDialogue("Undeliverable Location");
+    // }
+
+    // if (this.state.selectedIndex == -1)
+    //     showValidationAlert(strings("addressSelectionValidation"))
+    // else {
 
     // }
   };
@@ -786,6 +818,12 @@ export default connect(
     return {
       saveCurrentLocation: (data) => {
         dispatch(saveCurrentLocation(data));
+      },
+      save_delivery_dunzo__details: (data) => {
+        dispatch(save_delivery_dunzo__details(data));
+      },
+      save_dunzodelivery_amount: (data) => {
+        dispatch(save_dunzodelivery_amount(data));
       },
     };
   }

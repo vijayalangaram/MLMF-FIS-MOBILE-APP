@@ -159,14 +159,14 @@ export class AddressListContainer extends React.PureComponent {
     //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
     // );
 
-    // debugLog(
-    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
-    //   this.props.dunzo_Delivery_Amount
-    // );
-    // debugLog(
-    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
-    //   this.props.dunzo_Delivery_Details
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
+      this.props.dunzo_Delivery_Amount
+    );
+    debugLog(
+      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
+      this.props.dunzo_Delivery_Details
+    );
 
     // debugLog(
     //   "****************************** Vijay ******************************     this.state.addressId",
@@ -1095,7 +1095,7 @@ export class AddressListContainer extends React.PureComponent {
 
             {
               // this.state.loader_Flag_dunzo_CallResponse === false &&
-              this.state.dunzo_Direct_Delivery_Amt > 0 ? (
+              this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
                 // ||
                 // this.props.dunzo_Delivery_Amount > 0
                 <View style={{ flex: 1 }}>
@@ -1109,7 +1109,7 @@ export class AddressListContainer extends React.PureComponent {
 
             {
               // this.state.loader_Flag_dunzo_CallResponse === false &&
-              this.state?.dunzo_Direct_Delivery_Amt > 0 ? (
+              this.state?.dunzo_Direct_Delivery_Amt >= 0 ? (
                 <EDRTLView style={style.walletContainer}>
                   <EDRTLView
                     style={{
@@ -1131,7 +1131,9 @@ export class AddressListContainer extends React.PureComponent {
                     />
 
                     <EDRTLText
-                      title={`${this.state?.dunzoPointDelivery?.directDistance} K.M )`}
+                      title={`${
+                        this.state?.dunzoPointDelivery?.directDistance || 0
+                      } K.M )`}
                       style={style.dunzoDeliveryHeader}
                     />
 
@@ -1191,7 +1193,10 @@ export class AddressListContainer extends React.PureComponent {
                   />
 
                   <EDRTLText
-                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.distance} K.M )`}
+                    title={`${
+                      this.state?.dunzoPointDelivery?.directPointDelivery
+                        ?.distance || 0
+                    } K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1258,7 +1263,7 @@ export class AddressListContainer extends React.PureComponent {
           </View>
         )} */}
 
-        {this.state.dunzo_Direct_Delivery_Amt > 0 ? (
+        {this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
@@ -2721,13 +2726,17 @@ export class AddressListContainer extends React.PureComponent {
           return accumulator + some;
         }, 0);
 
-      // debugLog(
-      //   "################################################################################ this.state.cartItems",
-      //   this.state.cartItems
-      // );
+      debugLog(
+        "################################################################################ this.state.cartItems",
+        this.state.cartItems
+      );
 
       let findmenucount = [
-        ...new Set(this.state.cartItems.map((item) => item.menu_avail)),
+        ...new Set(
+          this.state.cartItems.map(
+            (item) => item.menu_avail || item.availability
+          )
+        ),
       ];
 
       debugLog(
