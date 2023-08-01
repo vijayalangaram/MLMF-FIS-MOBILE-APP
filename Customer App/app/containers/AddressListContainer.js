@@ -2681,13 +2681,13 @@ export class AddressListContainer extends React.PureComponent {
           return accumulator + some;
         }, 0);
 
-      // debugLog(
-      //   "################################################################################ this.state.cartItems",
-      //   this.state.cartItems
-      // );
+      debugLog(
+        "################################################################################ this.state.cartItems",
+        this.state.cartItems
+      );
 
       let findmenucount = [
-        ...new Set(this.state.cartItems.map((item) => item.menu_avail)),
+        ...new Set(this.state.cartItems.map((item) => item.menu_avail || item.availability )),
       ];
 
       debugLog(
