@@ -96,6 +96,7 @@ import {
 } from "../utils/ServiceManager";
 import BaseContainer from "./BaseContainer";
 import axios from "axios";
+import EDThemeButton from "../components/EDThemeButton";
 
 class MainContainer extends React.Component {
   debugger;
@@ -159,6 +160,9 @@ class MainContainer extends React.Component {
     isShowReview: false,
     isListLoading: false,
     isAddressLoading: false,
+    today: new Date(),
+    tomorrow: new Date() + 1,
+    today_tomorrow_Flag: false,
   };
 
   /** DID MOUNT */
@@ -240,6 +244,55 @@ class MainContainer extends React.Component {
     this.getCartList();
     this.getAddressList();
     AppState.addEventListener("change", this._handleAppStateChange);
+
+    this.dateIntialCall();
+  }
+
+  dateIntialCall() {
+    let { today, tomorrow, today_tomorrow_Flag } = this.state;
+
+    var today__date = new Date();
+    var today__date2 = new Date(today__date);
+    today__date2.setDate(today.getDate() + 1);
+    today__date2.toLocaleDateString();
+
+    // let dormat_today = new Date().toLocaleDateString();
+    // let dormat_tomorrow = new Date(today__date2).toLocaleDateString();
+
+    let setfromDate = new Date();
+    let setdate1 =
+      setfromDate.getDate() +
+      "-" +
+      (setfromDate.getMonth() + 1) +
+      "-" +
+      setfromDate.getFullYear();
+    let settoDate = new Date(today__date2);
+    let setdate2 =
+      settoDate.getDate() +
+      "-" +
+      (settoDate.getMonth() + 1) +
+      "-" +
+      settoDate.getFullYear();
+
+    this.setState({
+      today: setdate1,
+      tomorrow: setdate2,
+    });
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.state.today ******************************",
+    //   this.state.today
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ******************************   this.state.tomorrow ******************************",
+    //   this.state.tomorrow
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ****************************** this.state.today_tomorrow_Flag ******************************",
+    //   this.state.today_tomorrow_Flag
+    // );
   }
 
   /** GET PENDING ORDER API */
@@ -1166,7 +1219,7 @@ class MainContainer extends React.Component {
 
   /** ON POPULAR RES EVENT */
   onPopularResEvent = (restObjModel) => {
-    let { getintialAddress } = this.state;
+    let { getintialAddress, today_tomorrow_Flag } = this.state;
     this.intialDunzoCall(
       restObjModel.restuarant_id,
       this.props.userIdFromRedux,
@@ -1182,6 +1235,7 @@ class MainContainer extends React.Component {
       isDineIn: false,
       isShowReview: this.state.isShowReview,
       resObj: restObjModel,
+      today_tomorrow_Flag: this.state.today_tomorrow_Flag,
     });
   };
 
@@ -1357,6 +1411,50 @@ class MainContainer extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         {/* POPULAR RESTAURANT LIST */}
+
+        <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+          <EDThemeButton
+            label={`Today \n${this.state.today}`}
+            style={{
+              width: "40%",
+              backgroundColor: !this.state.today_tomorrow_Flag
+                ? "green"
+                : "grey",
+              marginLeft: 15,
+              //   height: 40,
+              //   borderRadius: 16,
+              //   paddingVertical: 0,
+              //   marginHorizontal: 3,
+            }}
+            textStyle={{
+              fontSize: getProportionalFontSize(14),
+              paddingLeft: 7,
+              paddingRight: 7,
+            }}
+            onPress={this.onChange_today_tomorrow_Flag}
+          />
+          <EDThemeButton
+            label={`Tomorrow ${this.state.tomorrow}`}
+            style={{
+              width: "45%",
+              backgroundColor: this.state.today_tomorrow_Flag
+                ? "green"
+                : "grey",
+              marginLeft: 15,
+              //   height: 40,
+              //   borderRadius: 16,
+              //   paddingVertical: 0,
+              //   marginHorizontal: 3,
+              // }}
+              // textStyle={{
+              //   fontSize: getProportionalFontSize(14),
+              //   paddingLeft: 7,
+              //   paddingRight: 7,
+            }}
+            onPress={this.onChange_today_tomorrow_Flag}
+          />
+        </EDRTLView>
+
         {this.arrayRestaurants != undefined &&
         this.arrayRestaurants != null &&
         this.arrayRestaurants.length > 0 ? (
@@ -1768,6 +1866,7 @@ class MainContainer extends React.Component {
           table_id: data.table_id,
           isDineIn: true,
           isShowReview: this.state.isShowReview,
+          today_tomorrow_Flag: this.state.today_tomorrow_Flag,
         });
         this.props.saveTableID(data.table_id);
         this.props.saveResID(data.restuarant_id);
@@ -1786,8 +1885,25 @@ class MainContainer extends React.Component {
   };
   //#endregion
 
+  onChange_today_tomorrow_Flag = () => {
+    let { today, tomorrow, today_tomorrow_Flag } = this.state;
+    this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag });
+  };
+
   //#endregion
   render() {
+    let { today, tomorrow, today_tomorrow_Flag } = this.state;
+
+    debugLog(
+      "****************************** Vijay ******************************   this.state.today ******************************",
+      this.state.today
+    );
+
+    debugLog(
+      "****************************** Vijay ******************************   this.state.tomorrow ******************************",
+      this.state.tomorrow
+    );
+
     return (
       <BaseContainer
         title={"home"}
