@@ -283,16 +283,6 @@ class MainContainer extends React.Component {
     //   "****************************** Vijay ******************************   this.state.today ******************************",
     //   this.state.today
     // );
-
-    // debugLog(
-    //   "****************************** Vijay ******************************   this.state.tomorrow ******************************",
-    //   this.state.tomorrow
-    // );
-
-    // debugLog(
-    //   "****************************** Vijay ****************************** this.state.today_tomorrow_Flag ******************************",
-    //   this.state.today_tomorrow_Flag
-    // );
   }
 
   /** GET PENDING ORDER API */
@@ -1893,16 +1883,6 @@ class MainContainer extends React.Component {
   //#endregion
   render() {
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
-
-    debugLog(
-      "****************************** Vijay ******************************   this.state.today ******************************",
-      this.state.today
-    );
-
-    debugLog(
-      "****************************** Vijay ******************************   this.state.tomorrow ******************************",
-      this.state.tomorrow
-    );
 
     return (
       <BaseContainer

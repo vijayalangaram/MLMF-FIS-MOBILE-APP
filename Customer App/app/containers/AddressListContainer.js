@@ -533,20 +533,21 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props.dunzo_Delivery_Details
     // );
 
-    // debugLog(
-    //   "this.state.loader_Flag_dunzo_CallResponse  **************************   render state 11 **********************",
-    //   this.state.loader_Flag_dunzo_CallResponse
-    // );
+    debugLog(
+      "this.state.loader_Flag_dunzo_CallResponse  **************************   render state 11 **********************",
+      this.state?.dunzoPointDelivery?.directPointDelivery?.price
+    );
 
-    // debugLog(
-    //   "this.props.dunzo_Delivery_Details *****************************   render  state  22  ******************** ",
-    //   this.state.dunzo_Direct_Delivery_Amt
-    // );
+    debugLog(
+      "this.props.dunzo_Delivery_Details *****************************   render  state  22  ******************** ",
+      this?.state?.dunzo_Direct_Delivery_Amt
+    );
 
-    // debugLog(
-    //   "this.state.dunzo_Point_DeliveryFlag *****************************   render  state 333  ******************** ",
-    //   this.state.dunzo_Point_DeliveryFlag
-    // );
+    debugLog(
+      "this.state.dunzo_Point_DeliveryFlag *****************************   render  state 333  ******************** ",
+      this?.state?.dunzo_Direct_Delivery_Amt >
+        this.state?.dunzoPointDelivery?.directPointDelivery?.price
+    );
 
     return (
       <BaseContainer
@@ -1163,9 +1164,9 @@ export class AddressListContainer extends React.PureComponent {
               ) : null
             }
 
-            {this.state?.dunzoPointDelivery?.directPointDelivery?.price <
-              this?.state?.dunzo_Direct_Delivery_Amt &&
-            this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 ? (
+            {this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 &&
+            this?.state?.dunzo_Direct_Delivery_Amt >
+              this.state?.dunzoPointDelivery?.directPointDelivery?.price ? (
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
