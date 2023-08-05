@@ -174,6 +174,14 @@ export function save_selected_Res_ID(details) {
   };
 }
 
+export const TYPE_TODAY_TOMORROW__DATE = "TYPE_TODAY_TOMORROW__DATE";
+export function save_today_tomorrow_details(details) {
+  return {
+    type: TYPE_TODAY_TOMORROW__DATE,
+    value: details,
+  };
+}
+
 export const TYPE_DUNZO_DELIVERY_AMT = "TYPE_DUNZO_DELIVERY_AMT";
 export function save_dunzodelivery_amount(details) {
   return {

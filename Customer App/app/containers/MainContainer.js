@@ -56,6 +56,7 @@ import {
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
   save_selected_Res_ID,
+  save_today_tomorrow_details,
 } from "../redux/actions/User";
 import {
   clearCartData,
@@ -246,6 +247,9 @@ class MainContainer extends React.Component {
     AppState.addEventListener("change", this._handleAppStateChange);
 
     this.dateIntialCall();
+
+    let { today } = this.state;
+    this.props.save_today_tomorrow_details(today);
   }
 
   dateIntialCall() {
@@ -1877,7 +1881,15 @@ class MainContainer extends React.Component {
 
   onChange_today_tomorrow_Flag = () => {
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
-    this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag });
+    this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag }, () => {
+      let { today, tomorrow, today_tomorrow_Flag } = this.state;
+
+      if (today_tomorrow_Flag === false) {
+        this.props.save_today_tomorrow_details(today);
+      } else {
+        this.props.save_today_tomorrow_details(tomorrow);
+      }
+    });
   };
 
   //#endregion
@@ -2189,6 +2201,9 @@ export default connect(
       },
       save_delivery_dunzo__details: (data) => {
         dispatch(save_delivery_dunzo__details(data));
+      },
+      save_today_tomorrow_details: (data) => {
+        dispatch(save_today_tomorrow_details(data));
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));
