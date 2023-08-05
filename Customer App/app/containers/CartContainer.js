@@ -122,10 +122,10 @@ export class CartContainer extends React.PureComponent {
     //   this.props.userID
     // );
 
-    // debugLog(
-    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
-    //   this.props.dunzo_Delivery_Amount
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
+      this.props.dunzo_Delivery_Amount
+    );
     // debugLog(
     //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
     //   this.props.dunzo_Delivery_Details
@@ -133,7 +133,7 @@ export class CartContainer extends React.PureComponent {
     // this.props.save_delivery_dunzo__details();
     // this.props.save_dunzodelivery_amount();
     //   this.getAddressList();
-    if (this.props.dunzo_Delivery_Amount == undefined) {      
+    if (this.props.dunzo_Delivery_Amount == undefined) {
       this.getAddressList();
     }
   }

@@ -496,7 +496,7 @@ export class AddressListContainer extends React.PureComponent {
           dunzoPointDelivery: this.state.dunzoPointDelivery,
           // dunzo_Direct_Delivery_Amt:
           //   dunzo_Delivery_Amount || this.state.dunzo_Direct_Delivery_Amt,
-          dunzo_Direct_Delivery_Amt:          dunzo_Delivery_Amount 
+          dunzo_Direct_Delivery_Amt: dunzo_Delivery_Amount,
         });
       }
     );
@@ -1301,8 +1301,9 @@ export class AddressListContainer extends React.PureComponent {
           </View>
         )} */}
 
-        {this.state.dunzo_Direct_Delivery_Amt >= 0 &&
-        this.state.dunzo_Direct_Delivery_Amt != undefined ? (
+        {this.state.dunzo_Point_DeliveryFlag === 0 ||
+        (this.state.dunzo_Direct_Delivery_Amt > 0 &&
+          this.state.dunzo_Direct_Delivery_Amt != undefined) ? (
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
