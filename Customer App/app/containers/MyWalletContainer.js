@@ -554,7 +554,7 @@ class MyWalletContainer extends React.Component {
                     <Text style={[style.headerText]}>
                       {strings("transactions")}
                     </Text>
-                    {this.total_credited !== undefined &&
+                    {/* {this.total_credited !== undefined &&
                     this.total_credited !== 0 &&
                     this.total_credited !== "0.00" ? (
                       <Text style={[style.normalHeader]}>
@@ -568,7 +568,7 @@ class MyWalletContainer extends React.Component {
                             " " +
                             parseFloat(this.total_credited).toFixed(2)}
                       </Text>
-                    ) : null}
+                    ) : null} */}
                   </EDRTLView>
                   {this.state.arrayTransactions !== undefined &&
                   this.state.arrayTransactions !== null &&

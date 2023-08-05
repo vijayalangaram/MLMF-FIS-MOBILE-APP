@@ -219,18 +219,18 @@ export class CheckOutContainer extends React.PureComponent {
     }
     this.getcartDataList();
 
-    debugLog(
-      "****************************** Vijay ****************************** dunzo_Delivery_Amount",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
-      this.props.dunzo_Delivery_Details
-    );
-    debugLog(
-      "****************************** ******************  this.props.navigation.state.params.payment_option",
-      this.props.navigation.state.params.payment_option
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
+    //   this.props.dunzo_Delivery_Details
+    // );
+    // debugLog(
+    //   "****************************** ******************  this.props.navigation.state.params.payment_option",
+    //   this.props.navigation.state.params.payment_option
+    // );
   }
 
   componentWillUnmount() {
@@ -522,10 +522,10 @@ export class CheckOutContainer extends React.PureComponent {
 
   // RENDER METHOD
   render() {
-    debugLog(
-      "this.cartResponse ********************************************************************",
-      this.cartResponse
-    );
+    // debugLog(
+    //   "this.cartResponse ********************************************************************",
+    //   this.cartResponse
+    // );
 
     // debugLog(
     //   "************************************************************************************************"
@@ -1892,7 +1892,9 @@ export class CheckOutContainer extends React.PureComponent {
               ? "DineIn"
               : this.props.navigation.state.params.delivery_status,
           language_slug: this.props.lan,
-          delivery_charge: this.delivery_charges,
+          // delivery_charge: this.delivery_charges,
+          delivery_charge:
+            this.cartResponse?.delivery_charge || this.delivery_charges,
           delivery_instructions:
             this.props.navigation !== undefined &&
             this.props.navigation.state !== undefined &&
@@ -2008,7 +2010,7 @@ export class CheckOutContainer extends React.PureComponent {
       }
     } else {
       debugLog(
-        "****************************** Vijay ****************************** else part this.cartResponse",
+        "****************************** Vijay ****************************** else part this.cartResponse ****************************** ",
         this.cartResponse?.delivery_charge
       );
 
@@ -2659,10 +2661,10 @@ export class CheckOutContainer extends React.PureComponent {
    * @param {Success Response Object } onSuccess
    */
   onSuccessAddCart = (onSuccess) => {
-    // debugLog(
-    //   "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
-    //   onSuccess
-    // );
+    debugLog(
+      "********************************** onSuccess ********************************** 1111111111111111 onSuccessAddCart",
+      onSuccess
+    );
 
     // debugLog(
     //   "********************************** onSuccess ********************************** 333333333333  onSuccessAddCart",
@@ -2776,10 +2778,10 @@ export class CheckOutContainer extends React.PureComponent {
           // }));
           // deliveryPrice.push(...menuAvailabilityArrayObj);
 
-          debugLog(
-            "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
-            this.props.dunzo_Delivery_Amount
-          );
+          // debugLog(
+          //   "****************************** Vijay ****************************** if this.props.dunzo_Delivery_Amount",
+          //   this.props.dunzo_Delivery_Amount
+          // );
 
           if (this.props.dunzo_Delivery_Amount >= 0) {
             debugLog(
@@ -2793,6 +2795,12 @@ export class CheckOutContainer extends React.PureComponent {
                 : this.props.dunzo_Delivery_Amount;
 
             deliveryJson["delivery_charge"] =
+              menuAvailabilityArray.length > 0
+                ? this.props.dunzo_Delivery_Amount *
+                  menuAvailabilityArray.length
+                : this.props.dunzo_Delivery_Amount;
+
+            this.delivery_charges =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
                   menuAvailabilityArray.length
@@ -3125,10 +3133,10 @@ export class CheckOutContainer extends React.PureComponent {
           this.addToCartData
         );
 
-        debugLog(
-          "***************************************  4444444444444444444  objAddToCart",
-          objAddToCart
-        );
+        // debugLog(
+        //   "***************************************  4444444444444444444  objAddToCart",
+        //   objAddToCart
+        // );
 
         // debugLog(
         //   "***************************************  00000000000000000 is_wallet_applied",
