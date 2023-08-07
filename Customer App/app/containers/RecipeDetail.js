@@ -1471,7 +1471,8 @@ class RecipeDetail extends React.PureComponent {
                     let objRestaurantData = {
                         language_slug: this.props.lan,
                         restaurant_id: this.resId,
-                        content_id: this.content_id
+                        content_id: this.content_id,
+                        plan_date: this.props.type_today_tomorrow__date,
                     }
                     getRestaurantMenu(objRestaurantData, this.onSuccessResMenuData, this.onFailureResMenuData, this.props);
                 } else {
@@ -2249,7 +2250,8 @@ export default connect(
             currency: state.checkoutReducer.currency_symbol,
             minOrderAmount: state.userOperations.minOrderAmount,
             table_id: state.userOperations.table_id,
-            res_id: state.userOperations.res_id
+            res_id: state.userOperations.res_id,
+            type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date, 
         };
     },
     dispatch => {
