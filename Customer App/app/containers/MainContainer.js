@@ -282,14 +282,10 @@ class MainContainer extends React.Component {
       today: setdate1,
       tomorrow: setdate2,
     });
-
-    let setdate1reverse =
-      setfromDate.getFullYear() +
-      "-" +
-      (setfromDate.getMonth() + 1) +
-      "-" +
-      setfromDate.getDate();
-    this.props.save_today_tomorrow_details(setdate1reverse);
+    
+      let todayreverreverse = setdate1 && setdate1.split("-").reverse().join("-");
+    
+      this.props.save_today_tomorrow_details(todayreverreverse);
   }
 
   /** GET PENDING ORDER API */
