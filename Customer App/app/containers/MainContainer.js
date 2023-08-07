@@ -247,9 +247,6 @@ class MainContainer extends React.Component {
     AppState.addEventListener("change", this._handleAppStateChange);
 
     this.dateIntialCall();
-
-    let { today } = this.state;
-    this.props.save_today_tomorrow_details(today);
   }
 
   dateIntialCall() {
@@ -282,10 +279,14 @@ class MainContainer extends React.Component {
       today: setdate1,
       tomorrow: setdate2,
     });
-    
-      let todayreverreverse = setdate1 && setdate1.split("-").reverse().join("-");
-    
-      this.props.save_today_tomorrow_details(todayreverreverse);
+    let todayreverreverse = setdate1 && setdate1.split("-").reverse().join("-");
+
+    debugLog(
+      "todayreverreverse   ***********************  render state 11 **********************",
+      todayreverreverse
+    );
+
+    this.props.save_today_tomorrow_details(todayreverreverse);
   }
 
   /** GET PENDING ORDER API */
