@@ -284,12 +284,13 @@ class MainContainer extends React.Component {
       setfromDate.getFullYear() +
       "-" +
       (setfromDate.getMonth() + 1) +
+      "-" +
       setfromDate.getDate();
 
-        debugLog(
-      "****************************** Vijay ****************************** todayreverreverse  ",
-      todayreverreverse
-    );
+    // debugLog(
+    // "****************************** Vijay ****************************** todayreverreverse  ",
+    // todayreverreverse
+    // );
 
     this.props.save_today_tomorrow_details(todayreverreverse);
   }
