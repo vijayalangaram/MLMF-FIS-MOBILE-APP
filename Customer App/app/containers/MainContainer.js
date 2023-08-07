@@ -279,10 +279,15 @@ class MainContainer extends React.Component {
       today: setdate1,
       tomorrow: setdate2,
     });
-    let todayreverreverse = setdate1 && setdate1.split("-").reverse().join("-");
 
-    debugLog(
-      "todayreverreverse   ***********************  render state 11 **********************",
+    let todayreverreverse =
+      setfromDate.getFullYear() +
+      "-" +
+      (setfromDate.getMonth() + 1) +
+      setfromDate.getDate();
+
+        debugLog(
+      "****************************** Vijay ****************************** todayreverreverse  ",
       todayreverreverse
     );
 

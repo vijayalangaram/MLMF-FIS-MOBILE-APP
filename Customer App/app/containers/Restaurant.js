@@ -159,7 +159,7 @@ export class Restaurant extends React.Component {
     this.networkConnectivityStatus();
 
     debugLog(
-      "****************************** Vijay ******************************   this.props.type_today_tomorrow__date ******************************",
+      "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
       this.props.type_today_tomorrow__date
     );
   };
