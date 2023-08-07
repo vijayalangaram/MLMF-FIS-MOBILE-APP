@@ -1482,7 +1482,7 @@ export class Restaurant extends React.Component {
           food: "" + this.foodArray,
           price: "" + this.priceType,
           availability: this.availType,
-          date: this.props.type_today_tomorrow__date,
+          plan_date: this.props.type_today_tomorrow__date,
         };
 
         getRestaurantMenu(

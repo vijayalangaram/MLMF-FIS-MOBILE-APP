@@ -1885,9 +1885,9 @@ class MainContainer extends React.Component {
       let { today, tomorrow, today_tomorrow_Flag } = this.state;
 
       if (today_tomorrow_Flag === false) {
-        this.props.save_today_tomorrow_details(today);
+        this.props.save_today_tomorrow_details(today && today.reverse());
       } else {
-        this.props.save_today_tomorrow_details(tomorrow);
+        this.props.save_today_tomorrow_details(tomorrow && tomorrow.reverse());
       }
     });
   };
