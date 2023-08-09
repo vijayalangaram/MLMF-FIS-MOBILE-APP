@@ -127,7 +127,7 @@ export class CartContainer extends React.PureComponent {
     );
 
     debugLog(
-      "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+      "********************************** CartContainer this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
       this.props.selected_Res_Id
     );
 
@@ -175,18 +175,18 @@ export class CartContainer extends React.PureComponent {
 
     // this.props.selected_Res_Id
 
-    debugLog(
-      "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
-      this.props.selected_Res_Id
-    );
+    // debugLog(
+    //   "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+    //   this.props.selected_Res_Id
+    // );
 
     let splitres_name =
       this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
 
-    debugLog(
-      "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
-      splitres_name
-    );
+    // debugLog(
+    //   "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+    //   splitres_name
+    // );
 
     if (onSuccess != undefined) {
       if (onSuccess.status == RESPONSE_SUCCESS) {
@@ -196,12 +196,12 @@ export class CartContainer extends React.PureComponent {
             restuarant_id: this.res_id || splitres_name[0],
             customer_id: this.props.userID || 0,
             address_id: onSuccess?.address[0].address_id || 0,
-            restuarantName: splitres_name[1] || 0,
+            restuarantName: splitres_name[1] || "",
           };
-          debugLog(
-            "datas.status *************************** 00000000000000",
-            datas
-          );
+          // debugLog(
+          //   "datas.status *************************** 00000000000000",
+          //   datas
+          // );
           let getDeliveryChargeAPICall = await axios.post(
             // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
             "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
@@ -218,11 +218,10 @@ export class CartContainer extends React.PureComponent {
           // );
 
           if (getDeliveryChargeAPICall.status === 200) {
-            debugLog(
-              "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-              getDeliveryChargeAPICall?.data[0]
-            );
-
+            // debugLog(
+            //   "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
+            //   getDeliveryChargeAPICall?.data[0]
+            // );
             // debugLog(
             //   "getDeliveryChargeAPICall.status *************************** 00000000000000",
             //   getDeliveryChargeAPICall.status

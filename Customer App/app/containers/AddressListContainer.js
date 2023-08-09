@@ -456,17 +456,17 @@ export class AddressListContainer extends React.PureComponent {
           dunzoPointDelivery,
         } = this.state;
 
-        debugLog(
-          "***************************************** dunzo_Point_DeliveryFlag",
-          dunzo_Point_DeliveryFlag
-        );
+        // debugLog(
+        //   "***************************************** dunzo_Point_DeliveryFlag",
+        //   dunzo_Point_DeliveryFlag
+        // );
 
         let calulatedunzodeliveryAMT =
-          dunzo_Point_DeliveryFlag == 0
-            ? "0"
-            : dunzo_Point_DeliveryFlag == 2
-            ? this.state?.dunzoPointDelivery?.directPointDelivery?.price
-            : this.state?.dunzoPointDelivery?.directDelivery;
+          (dunzo_Point_DeliveryFlag == 0 && "0") ||
+          (dunzo_Point_DeliveryFlag == 1 &&
+            this.state?.dunzoPointDelivery?.directPointDelivery?.amount) ||
+          (dunzo_Point_DeliveryFlag == 2 &&
+            this.state?.dunzoPointDelivery?.directRestaurantDelivery?.amount);
 
         debugLog(
           "***************************************** 0000000000000000000000000000000",
@@ -524,15 +524,15 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props.dunzo_Delivery_Details
     // );
 
-    // debugLog(
-    //   "?.directPointDelivery?.price  ***********************  render state 11 **********************",
-    //   this.state?.dunzoPointDelivery?.directPointDelivery?.price
-    // );
+    debugLog(
+      "  this.state?.dunzoPointDelivery  ***********************  render state 11 **********************",
+      this.state?.dunzoPointDelivery
+    );
 
-    // debugLog(
-    //   "dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
-    //   this?.state?.dunzo_Direct_Delivery_Amt
-    // );
+    debugLog(
+      " this.state?.dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
+      this.state?.dunzo_Direct_Delivery_Amt
+    );
 
     // debugLog(
     //   "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
@@ -1101,7 +1101,7 @@ export class AddressListContainer extends React.PureComponent {
               </View>
             ) : null}
 
-            {/* {
+            {
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1115,10 +1115,24 @@ export class AddressListContainer extends React.PureComponent {
                     color={EDColors.primary}
                     containerStyle={{ marginRight: 20 }}
                   />
+
                   <EDRTLText
-                    title={`Self Pickup-Annai Times (₹.0)`}
+                    title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
+                      0,
+                      12
+                    )}`}
                     style={style.dunzoDeliveryHeader}
                   />
+
+                  <EDRTLText
+                    title={`(₹ ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || ""
+                    } K.M )`}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
                   <Icon
                     name={
                       this.state?.dunzo_Point_DeliveryFlag === 0
@@ -1132,7 +1146,7 @@ export class AddressListContainer extends React.PureComponent {
                   />
                 </EDRTLView>
               </EDRTLView>
-            } */}
+            }
 
             {/* {this.state?.dunzo_Direct_Delivery_Amt >= 0 ? (
               <EDRTLView style={style.walletContainer}>
@@ -2047,10 +2061,10 @@ export class AddressListContainer extends React.PureComponent {
       // this.props.save_dunzodelivery_amount();
     }
 
-    debugLog(
-      "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-      getDeliveryChargeAPICall.status
-    );
+    // debugLog(
+    //   "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    //   getDeliveryChargeAPICall.status
+    // );
     this.setState({ isLoading: false, isPaymentLoading: false });
   };
   //#region ADD ADDRESS
@@ -2353,11 +2367,11 @@ export class AddressListContainer extends React.PureComponent {
     let { dunzoPointDelivery } = this.state;
 
     debugLog(
-      "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
+      "****************************** dunzoApiCall ******************** dunzo_Delivery_Amount *********************",
       this.props.dunzo_Delivery_Amount
     );
     debugLog(
-      "****************************** dunzoApiCall ********************** Number(this.props.dunzo_Delivery_Details > 0)  > 0",
+      "****************************** dunzoApiCall **********************  this.props.dunzo_Delivery_Details  *********************",
       this.props.dunzo_Delivery_Details
     );
     // debugLog(
@@ -2373,10 +2387,10 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.length
     // );
 
-    return false;
+    // return false;
     if (
-      this.props.dunzo_Delivery_Amount > 0 ||
-      this.props?.dunzo_Delivery_Details?.directPointDelivery.price > 0
+      this.props.dunzo_Delivery_Amount >= 0
+      // ||      this.props?.dunzo_Delivery_Details?.directPointDelivery.price > 0
     ) {
       this.setState(
         {
@@ -2385,55 +2399,55 @@ export class AddressListContainer extends React.PureComponent {
         },
         () => {
           this.getPaymentOptionsAPI();
+          // return false;
+          // if (
+          //   this.props?.dunzo_Delivery_Details?.directPointDelivery
+          //     ?.deliveryPointName.length > 9
+          // ) {
+          // debugLog(
+          //   "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
+          //   this.props?.dunzo_Delivery_Details?.directPointDelivery
+          //     ?.deliveryPointName.length
+          // );
+          // let { dunzoPointDelivery } = this.state;
+          // let nameSlice = `${this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.slice(
+          //   0,
+          //   12
+          // )} ...`;
+          // debugLog(
+          //   "****************************** nameSlice ******************************",
+          //   nameSlice
+          // );
 
-          if (
-            this.props?.dunzo_Delivery_Details?.directPointDelivery
-              ?.deliveryPointName.length > 9
-          ) {
-            // debugLog(
-            //   "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
-            //   this.props?.dunzo_Delivery_Details?.directPointDelivery
-            //     ?.deliveryPointName.length
-            // );
-            let { dunzoPointDelivery } = this.state;
-            let nameSlice = `${this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.slice(
-              0,
-              12
-            )} ...`;
-            // debugLog(
-            //   "****************************** nameSlice ******************************",
-            //   nameSlice
-            // );
+          // this.setState({
+          //   dunzoPointDelivery: {
+          //     ...this.state.dunzoPointDelivery,
+          //     directPointDelivery: {
+          //       ...this.state.dunzoPointDelivery.directPointDelivery,
+          //       deliveryPointName: nameSlice,
+          //     },
+          //   },
+          // });
 
-            this.setState({
-              dunzoPointDelivery: {
-                ...this.state.dunzoPointDelivery,
-                directPointDelivery: {
-                  ...this.state.dunzoPointDelivery.directPointDelivery,
-                  deliveryPointName: nameSlice,
-                },
-              },
-            });
+          // let { dunzo_Point_DeliveryFlag } = this.state;
 
-            let { dunzo_Point_DeliveryFlag } = this.state;
-
-            // if (this.props.dunzo_Delivery_Amount > 0) {
-            //   this.setState({
-            //     dunzo_Point_DeliveryFlag: true,
-            //   });
-            // } else {
-            //   this.setState({
-            //     dunzo_Point_DeliveryFlag: false,
-            //   });
-            // }
-          }
+          // if (this.props.dunzo_Delivery_Amount > 0) {
+          //   this.setState({
+          //     dunzo_Point_DeliveryFlag: true,
+          //   });
+          // } else {
+          //   this.setState({
+          //     dunzo_Point_DeliveryFlag: false,
+          //   });
+          // }
+          // }
         }
       );
       this.dunzo_Point_DeliveryFlagCall(1);
       // return false;
     } else {
       showValidationAlert(
-        "Drop Location was not serviceable,Please change Address"
+        "Drop Location was not serviceable, Please change Address"
       );
     }
 

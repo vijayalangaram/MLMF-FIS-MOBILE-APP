@@ -511,14 +511,6 @@ class MainContainer extends React.Component {
         if (this.table_id !== undefined && this.table_id !== "")
           this.props.navigation.navigate("CheckOutContainer");
         else {
-          let { restaurant_restaurantName } = this.state;
-
-          debugLog(
-            "restaurant_restaurantName  *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
-            restaurant_restaurantName
-          );
-
-          this.props.save_selected_Res_ID(restaurant_restaurantName);
           this.props.navigation.navigate("CartContainer", { isview: false });
         }
       }
