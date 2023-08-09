@@ -506,15 +506,15 @@ export function getRestaurantMenu(
   let restaurant_idvalue = resParams["restaurant_id"].toString();
   let userStrCon = propsFromContainer?.userID.toString();
   let restaurant_user = restaurant_idvalue.concat("-", userStrCon);
-  debugLog(
-    "vijaygetRestaurantMenu  ***************************************************************** 3333333333 ====>",
-    restaurant_user
-  );
+  // debugLog(
+  //   "vijaygetRestaurantMenu  ***************************************************************** 3333333333 ====>",
+  //   restaurant_user
+  // );
   resParams["restaurant_id"] = restaurant_user;
-  debugLog(
-    "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
-    resParams
-  );
+  // debugLog(
+  //   "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
+  //   resParams
+  // );
   callAPI(
     GET_RESTAURANT_MENU,
     resParams,

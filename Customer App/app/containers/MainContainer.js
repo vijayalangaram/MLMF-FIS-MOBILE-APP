@@ -1223,11 +1223,10 @@ class MainContainer extends React.Component {
     this.intialDunzoCall(
       restObjModel.restuarant_id,
       this.props.userIdFromRedux,
-      getintialAddress
+      getintialAddress,
+      restObjModel.name
     );
-
     this.props.save_selected_Res_ID(restObjModel.restuarant_id);
-
     this.props.navigation.navigate("RestaurantContainer", {
       restId: restObjModel.restuarant_id,
       content_id: restObjModel.content_id,
@@ -1239,17 +1238,23 @@ class MainContainer extends React.Component {
     });
   };
 
-  intialDunzoCall = async (restuarant_id, customer_id, address_id) => {
+  intialDunzoCall = async (
+    restuarant_id,
+    customer_id,
+    address_id,
+    restuarantName
+  ) => {
     let datas = {
       restuarant_id: restuarant_id,
       customer_id: customer_id,
       address_id: address_id,
+      restuarantName: restuarantName,
     };
 
-    debugLog(
-      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 00000000000000",
-      datas
-    );
+    // debugLog(
+    //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 00000000000000",
+    //   datas
+    // );
 
     let getDeliveryChargeAPICall = await axios.post(
       // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
@@ -1263,13 +1268,21 @@ class MainContainer extends React.Component {
     );
 
     if (getDeliveryChargeAPICall.status === 200) {
-      debugLog(
-        "getDeliveryChargeAPICall.status ************************** 2222222222222222222222222",
-        getDeliveryChargeAPICall.data
+      // debugLog(
+      //   " getDeliveryChargeAPICall?.data[0]  ************************** 2222222222222222222222222",
+      //   getDeliveryChargeAPICall?.data[0]
+      // );
+
+      // debugLog(
+      //   " getDeliveryChargeAPICall?.data[0] ************************** 2222222222222222222222222",
+      //   getDeliveryChargeAPICall?.data[0]?.directPointDelivery?.amount
+      // );
+
+      this.props.save_delivery_dunzo__details(
+        getDeliveryChargeAPICall?.data[0]
       );
-      this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
       this.props.save_dunzodelivery_amount(
-        getDeliveryChargeAPICall.data.directDelivery
+        getDeliveryChargeAPICall?.data[0]?.directPointDelivery?.amount
       );
     }
   };
