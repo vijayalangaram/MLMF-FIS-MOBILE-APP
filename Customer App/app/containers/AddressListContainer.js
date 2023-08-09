@@ -524,20 +524,20 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props.dunzo_Delivery_Details
     // );
 
-    debugLog(
-      "?.directPointDelivery?.price  ***********************  render state 11 **********************",
-      this.state?.dunzoPointDelivery?.directPointDelivery?.price
-    );
+    // debugLog(
+    //   "?.directPointDelivery?.price  ***********************  render state 11 **********************",
+    //   this.state?.dunzoPointDelivery?.directPointDelivery?.price
+    // );
 
-    debugLog(
-      "dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
-      this?.state?.dunzo_Direct_Delivery_Amt
-    );
+    // debugLog(
+    //   "dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
+    //   this?.state?.dunzo_Direct_Delivery_Amt
+    // );
 
-    debugLog(
-      "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
-      this?.state?.dunzo_Point_DeliveryFlag
-    );
+    // debugLog(
+    //   "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
+    //   this?.state?.dunzo_Point_DeliveryFlag
+    // );
 
     // debugLog(
     //   "this.state.dunzo_Point_DeliveryFlag *****************************   render  state 333  ******************** ",
@@ -1090,21 +1090,18 @@ export class AddressListContainer extends React.PureComponent {
             </EDRTLView>
             {/* ) : null} */}
 
-            {
-              // this.state.loader_Flag_dunzo_CallResponse === false &&
-              this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
-                // ||
-                // this.props.dunzo_Delivery_Amount > 0
-                <View style={{ flex: 1 }}>
-                  <EDRTLText
-                    title={"Choose Delivery Option"}
-                    style={style.paymentHeader}
-                  />
-                </View>
-              ) : null
-            }
+            {this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
+              // ||
+              // this.props.dunzo_Delivery_Amount > 0
+              <View style={{ flex: 1 }}>
+                <EDRTLText
+                  title={"Choose Delivery Option"}
+                  style={style.paymentHeader}
+                />
+              </View>
+            ) : null}
 
-            {
+            {/* {
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1115,9 +1112,7 @@ export class AddressListContainer extends React.PureComponent {
                 >
                   <Icon
                     name={"business"}
-                    // type={this.props.data.is_main == "1" ? "material" : "ionicon"}
                     color={EDColors.primary}
-                    // size={this.props.data.is_main == "1" ? 28 : 23}
                     containerStyle={{ marginRight: 20 }}
                   />
                   <EDRTLText
@@ -1131,81 +1126,15 @@ export class AddressListContainer extends React.PureComponent {
                         : "check-box-outline-blank"
                     }
                     color={EDColors.primary}
-                    containerStyle={
-                      {
-                        // alignItems: "right",
-                        // alignSelf: "right",
-                        // justifyContent: "flex-end",
-                        // alignSelf: "flex-end",
-                      }
-                    }
                     onPress={(e) => {
                       this.dunzo_Point_DeliveryFlagCall(0);
                     }}
                   />
                 </EDRTLView>
               </EDRTLView>
-            }
+            } */}
 
-            {
-              // this.state.loader_Flag_dunzo_CallResponse === false &&
-              this.state?.dunzo_Direct_Delivery_Amt >= 0 ? (
-                <EDRTLView style={style.walletContainer}>
-                  <EDRTLView
-                    style={{
-                      alignItems: "center",
-                      marginHorizontal: 15,
-                      marginVertical: 10,
-                    }}
-                  >
-                    <Icon
-                      name={"business"}
-                      // type={this.props.data.is_main == "1" ? "material" : "ionicon"}
-                      color={EDColors.primary}
-                      // size={this.props.data.is_main == "1" ? 28 : 23}
-                      containerStyle={{ marginRight: 20 }}
-                    />
-                    <EDRTLText
-                      title={`Direct Delivery (₹ ${this.state?.dunzo_Direct_Delivery_Amt} - `}
-                      style={style.dunzoDeliveryHeader}
-                    />
-
-                    <EDRTLText
-                      title={`${
-                        this.state?.dunzoPointDelivery?.directDistance || 0
-                      } K.M )`}
-                      style={style.dunzoDeliveryHeader}
-                    />
-
-                    <Icon
-                      // name={"check-box"}
-                      name={
-                        this.state?.dunzo_Point_DeliveryFlag === 1
-                          ? "check-box"
-                          : "check-box-outline-blank"
-                      }
-                      color={EDColors.primary}
-                      containerStyle={
-                        {
-                          // alignItems: "right",
-                          // alignSelf: "right",
-                          // justifyContent: "flex-end",
-                          // alignSelf: "flex-end",
-                        }
-                      }
-                      onPress={(e) => {
-                        this.dunzo_Point_DeliveryFlagCall(1);
-                      }}
-                    />
-                  </EDRTLView>
-                </EDRTLView>
-              ) : null
-            }
-
-            {this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 ? (
-              // &&
-              // this?.state?.dunzo_Direct_Delivery_Amt >
-              //   this.state?.dunzoPointDelivery?.directPointDelivery?.price
+            {/* {this.state?.dunzo_Direct_Delivery_Amt >= 0 ? (
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1216,9 +1145,48 @@ export class AddressListContainer extends React.PureComponent {
                 >
                   <Icon
                     name={"business"}
-                    // type={this.props.data.is_main == "1" ? "material" : "ionicon"}
                     color={EDColors.primary}
-                    // size={this.props.data.is_main == "1" ? 28 : 23}
+                    containerStyle={{ marginRight: 20 }}
+                  />
+                  <EDRTLText
+                    title={`Direct Delivery (₹ ${this.state?.dunzo_Direct_Delivery_Amt} - `}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  <EDRTLText
+                    title={`${
+                      this.state?.dunzoPointDelivery?.directDistance || 0
+                    } K.M )`}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  <Icon
+                    name={
+                      this.state?.dunzo_Point_DeliveryFlag === 1
+                        ? "check-box"
+                        : "check-box-outline-blank"
+                    }
+                    color={EDColors.primary}
+                    onPress={(e) => {
+                      this.dunzo_Point_DeliveryFlagCall(1);
+                    }}
+                  />
+                </EDRTLView>
+              </EDRTLView>
+            ) : null} */}
+
+            {/* {this.state?.dunzoPointDelivery?.directPointDelivery?.price > 0 ? (
+              <EDRTLView style={style.walletContainer}>
+                <EDRTLView
+                  style={{
+                    alignItems: "center",
+                    marginHorizontal: 15,
+                    marginVertical: 10,
+                  }}
+                >
+                  <Icon
+                    name={"business"}
+                    color={EDColors.primary}
                     containerStyle={{ marginRight: 17 }}
                   />
 
@@ -1254,7 +1222,7 @@ export class AddressListContainer extends React.PureComponent {
                   />
                 </EDRTLView>
               </EDRTLView>
-            ) : null}
+            ) : null} */}
 
             {this.state.isSelectAddress ? (
               <View style={{ flex: 1 }}>
@@ -1978,11 +1946,17 @@ export class AddressListContainer extends React.PureComponent {
     }
     this.setState({ selectedAddress: address });
 
+    let splitres_name =
+      this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
+
     let datas = {
       restuarant_id:
-        this.props.res_id || this.props.navigation.state.params.resId,
+        this.props.res_id ||
+        this.props.navigation.state.params.resId ||
+        splitres_name[0],
       customer_id: this.props.userID || 0,
       address_id: address?.address_id,
+      restuarantName: splitres_name[1] || 0,
     };
 
     let getDeliveryChargeAPICall = await axios.post(
@@ -2009,9 +1983,11 @@ export class AddressListContainer extends React.PureComponent {
         dunzo_Point_DeliveryFlag,
       } = this.state;
 
-      this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
+      this.props.save_delivery_dunzo__details(
+        getDeliveryChargeAPICall?.data[0]
+      );
       this.props.save_dunzodelivery_amount(
-        getDeliveryChargeAPICall.data.directDelivery
+        getDeliveryChargeAPICall?.data[0]?.directPointDelivery?.amount
       );
       this.setState(
         {
@@ -2376,14 +2352,14 @@ export class AddressListContainer extends React.PureComponent {
   dunzoApiCall = async () => {
     let { dunzoPointDelivery } = this.state;
 
-    // debugLog(
-    //   "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
-    //   this.props.dunzo_Delivery_Amount
-    // );
-    // debugLog(
-    //   "****************************** dunzoApiCall ********************** Number(this.props.dunzo_Delivery_Details > 0)  > 0",
-    //   this.props.dunzo_Delivery_Details
-    // );
+    debugLog(
+      "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
+      this.props.dunzo_Delivery_Amount
+    );
+    debugLog(
+      "****************************** dunzoApiCall ********************** Number(this.props.dunzo_Delivery_Details > 0)  > 0",
+      this.props.dunzo_Delivery_Details
+    );
     // debugLog(
     //   "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
     //   this.props.dunzo_Delivery_Amount > 0
@@ -2397,6 +2373,7 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.length
     // );
 
+    return false;
     if (
       this.props.dunzo_Delivery_Amount > 0 ||
       this.props?.dunzo_Delivery_Details?.directPointDelivery.price > 0
@@ -2413,18 +2390,16 @@ export class AddressListContainer extends React.PureComponent {
             this.props?.dunzo_Delivery_Details?.directPointDelivery
               ?.deliveryPointName.length > 9
           ) {
-            debugLog(
-              "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
-              this.props?.dunzo_Delivery_Details?.directPointDelivery
-                ?.deliveryPointName.length
-            );
-
+            // debugLog(
+            //   "****************************** this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
+            //   this.props?.dunzo_Delivery_Details?.directPointDelivery
+            //     ?.deliveryPointName.length
+            // );
             let { dunzoPointDelivery } = this.state;
             let nameSlice = `${this.props?.dunzo_Delivery_Details?.directPointDelivery?.deliveryPointName.slice(
               0,
               12
             )} ...`;
-
             // debugLog(
             //   "****************************** nameSlice ******************************",
             //   nameSlice
@@ -2462,10 +2437,15 @@ export class AddressListContainer extends React.PureComponent {
       );
     }
 
+    let splitres_name =
+      this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
+
     let data = {
-      restuarant_id: this.props.navigation.state.params.resId,
+      restuarant_id:
+        splitres_name[0] || this.props.navigation.state.params.resId,
       customer_id: this.props.userID || 0,
       address_id: this.state.selectedAddress.address_id,
+      restuarantName: splitres_name[1] || 0,
     };
 
     let getDeliveryChargeAPICall = await axios.post(
@@ -2481,12 +2461,17 @@ export class AddressListContainer extends React.PureComponent {
 
     if (getDeliveryChargeAPICall.status === 200) {
       let { dunzoPointDelivery } = this.state;
-      getDeliveryChargeAPICall.data.directDelivery;
 
-      this.props.save_delivery_dunzo__details(getDeliveryChargeAPICall.data);
-      this.props.save_dunzodelivery_amount(
-        getDeliveryChargeAPICall.data.directDelivery
+      // getDeliveryChargeAPICall.data.directDelivery;
+
+      this.props.save_delivery_dunzo__details(
+        getDeliveryChargeAPICall?.data[0]
       );
+
+      this.props.save_dunzodelivery_amount(
+        getDeliveryChargeAPICall?.data[0]?.directPointDelivery?.amount
+      );
+
       this.setState({
         dunzoPointDelivery: getDeliveryChargeAPICall.data,
         dunzo_Direct_Delivery_Amt: getDeliveryChargeAPICall.data.directDelivery,
@@ -3451,7 +3436,7 @@ export default connect(
       currentLocation: state.userOperations.currentLocation || {},
       googleMapKey: state.userOperations.googleMapKey,
       minOrderAmount: state.userOperations.minOrderAmount,
-
+      selected_Res_Id: state.userOperations.selected_Res_Id,
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };

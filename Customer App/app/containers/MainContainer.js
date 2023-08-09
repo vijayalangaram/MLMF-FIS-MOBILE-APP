@@ -164,6 +164,7 @@ class MainContainer extends React.Component {
     today: new Date(),
     tomorrow: new Date() + 1,
     today_tomorrow_Flag: false,
+    restaurant_restaurantName: "",
   };
 
   /** DID MOUNT */
@@ -509,7 +510,17 @@ class MainContainer extends React.Component {
       } else {
         if (this.table_id !== undefined && this.table_id !== "")
           this.props.navigation.navigate("CheckOutContainer");
-        else this.props.navigation.navigate("CartContainer", { isview: false });
+        else {
+          let { restaurant_restaurantName } = this.state;
+
+          debugLog(
+            "restaurant_restaurantName  *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+            restaurant_restaurantName
+          );
+
+          this.props.save_selected_Res_ID(restaurant_restaurantName);
+          this.props.navigation.navigate("CartContainer", { isview: false });
+        }
       }
     } else {
       if (index == 0) {
@@ -1219,7 +1230,8 @@ class MainContainer extends React.Component {
 
   /** ON POPULAR RES EVENT */
   onPopularResEvent = (restObjModel) => {
-    let { getintialAddress, today_tomorrow_Flag } = this.state;
+    let { getintialAddress, today_tomorrow_Flag, restaurant_restaurantName } =
+      this.state;
     this.intialDunzoCall(
       restObjModel.restuarant_id,
       this.props.userIdFromRedux,
@@ -1229,6 +1241,11 @@ class MainContainer extends React.Component {
     this.props.save_selected_Res_ID(
       `${restObjModel.restuarant_id}-${restObjModel.name}`
     );
+
+    this.setState({
+      restaurant_restaurantName: `${restObjModel.restuarant_id}-${restObjModel.name}`,
+    });
+
     this.props.navigation.navigate("RestaurantContainer", {
       restId: restObjModel.restuarant_id,
       content_id: restObjModel.content_id,
