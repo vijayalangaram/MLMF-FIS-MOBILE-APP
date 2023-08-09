@@ -43,10 +43,10 @@ export class RestaurantOverview extends React.Component {
   state = { today_tomorrow__date: "" };
 
   componentDidMount = () => {
-    debugLog(
-      "***********************************************************this.props.type_today_tomorrow__date ******************************",
-      this.props.type_today_tomorrow__date
-    );
+    // debugLog(
+    //   "***********************************************************this.props.type_today_tomorrow__date ******************************",
+    //   this.props.type_today_tomorrow__date
+    // );
 
     let todayrever =
       this.props.type_today_tomorrow__date &&

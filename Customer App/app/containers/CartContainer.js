@@ -113,15 +113,14 @@ export class CartContainer extends React.PureComponent {
   };
 
   componentDidMount() {
-    debugLog(
-      "****************************** Vijay ******************************  this.props.navigation.state.params",
-      this.props
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  this.props.navigation.state.params",
+    //   this.props
+    // );
     // debugLog(
     //   "****************************** Vijay ******************************  this.props.userID",
-    //   this.props.userID
+    //   this.props.selected_Res_Id
     // );
-
     // debugLog(
     //   "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
     //   this.props.dunzo_Delivery_Amount
@@ -168,19 +167,35 @@ export class CartContainer extends React.PureComponent {
     //   onSuccess.address[0]
     // );
 
+    // this.props.selected_Res_Id
+
+    // debugLog(
+    //   "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+    //   this.props.selected_Res_Id
+    // );
+
+    let splitres_name =
+      this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
+
+    // debugLog(
+    //   "datas.status *************************** this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+    //   splitres_name
+    // );
+
     if (onSuccess != undefined) {
       if (onSuccess.status == RESPONSE_SUCCESS) {
         if (onSuccess.address !== undefined && onSuccess.address.length > 0) {
           let datas = {
-            restuarant_id: this.res_id,
+            // restuarant_id: this.res_id,
+            restuarant_id: splitres_name[0] || this.res_id,
             customer_id: this.props.userID || 0,
-            address_id: onSuccess.address[0].address_id,
-            // restuarantName: onSuccess.address[0].name,
+            address_id: onSuccess?.address[0].address_id || 0,
+            restuarantName: splitres_name[1] || 0,
           };
-          debugLog(
-            "datas.status *************************** 00000000000000",
-            datas
-          );
+          // debugLog(
+          //   "datas.status *************************** 00000000000000",
+          //   datas
+          // );
           let getDeliveryChargeAPICall = await axios.post(
             // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
             "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
@@ -257,7 +272,6 @@ export class CartContainer extends React.PureComponent {
                 return (
                   <EDRTLText
                     title={strings("addMore")}
-                    // title={"asdfasdfasdf"}
                     style={style.addMoreText}
                     onPress={this.navigateToRestaurant}
                   />
@@ -790,6 +804,7 @@ export default connect(
       currency: state.checkoutReducer.currency_symbol,
       cartPrice: state.checkoutReducer.cartPrice,
       res_id: state.userOperations.res_id,
+      selected_Res_Id: state.userOperations.selected_Res_Id,
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
     };

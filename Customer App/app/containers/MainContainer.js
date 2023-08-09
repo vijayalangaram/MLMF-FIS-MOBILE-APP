@@ -1226,7 +1226,9 @@ class MainContainer extends React.Component {
       getintialAddress,
       restObjModel.name
     );
-    this.props.save_selected_Res_ID(restObjModel.restuarant_id);
+    this.props.save_selected_Res_ID(
+      `${restObjModel.restuarant_id}-${restObjModel.name}`
+    );
     this.props.navigation.navigate("RestaurantContainer", {
       restId: restObjModel.restuarant_id,
       content_id: restObjModel.content_id,
