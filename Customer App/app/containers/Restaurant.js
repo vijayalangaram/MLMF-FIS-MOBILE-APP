@@ -158,10 +158,10 @@ export class Restaurant extends React.Component {
   componentDidMount = () => {
     this.networkConnectivityStatus();
 
-    debugLog(
-      "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
-      this.props.type_today_tomorrow__date
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
+    //   this.props.type_today_tomorrow__date
+    // );
   };
 
   getCartDataList = () => {
