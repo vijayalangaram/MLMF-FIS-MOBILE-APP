@@ -1911,6 +1911,12 @@ export class CheckOutContainer extends React.PureComponent {
           // delivery_charge: this.delivery_charges,
           delivery_charge:
             this.cartResponse?.delivery_charge || this.delivery_charges,
+          delivery_flag: this.props.save_order_payload?.flag,
+          address_id: this.props.save_order_payload?.id,
+
+          delivery_flag: this.props.save_order_payload?.flag,
+          address_id: this.props.save_order_payload?.id,
+
           delivery_instructions:
             this.props.navigation !== undefined &&
             this.props.navigation.state !== undefined &&
@@ -2416,9 +2422,21 @@ export class CheckOutContainer extends React.PureComponent {
         }
       }
 
+      addOrderParams.delivery_point = this.props.save_order_payload?.id;
+      addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
+
+      // debugLog(
+      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
+      //   this.props.save_order_payload?.id
+      // );
+
+      // debugLog(
+      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 11",
+      //   this.props.save_order_payload?.flag
+      // );
+
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
-
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~",
       //   addOrderParams
