@@ -81,6 +81,7 @@ import {
   saveMinOrderAmount,
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
+  save_order_payload_req,
 } from "../../app/redux/actions/User";
 
 export class AddressListContainer extends React.PureComponent {
@@ -166,6 +167,15 @@ export class AddressListContainer extends React.PureComponent {
     debugLog(
       "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
       this.props.dunzo_Delivery_Details
+    );
+
+    this.props.save_order_payload_req(
+      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
+    );
+
+    localStorage.setItem(
+      "save_order_payload",
+      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
     );
 
     // debugLog(
@@ -498,6 +508,37 @@ export class AddressListContainer extends React.PureComponent {
           //   dunzo_Delivery_Amount || this.state.dunzo_Direct_Delivery_Amt,
           dunzo_Direct_Delivery_Amt: dunzo_Delivery_Amount,
         });
+
+        if (dunzo_Point_DeliveryFlag == 0) {
+          localStorage.setItem(
+            "save_order_payload",
+            this.state?.dunzoPointDelivery?.selfPickUp
+          );
+
+          this.props.save_order_payload_req(
+            this.state?.dunzoPointDelivery?.selfPickUp
+          );
+        } else if (dunzo_Point_DeliveryFlag == 1) {
+          localStorage.setItem(
+            "save_order_payload",
+            this.state?.dunzoPointDelivery?.directPointDelivery
+          );
+
+          this.props.save_order_payload_req(
+            this.state?.dunzoPointDelivery?.directPointDelivery
+          );
+        } else if (dunzo_Point_DeliveryFlag == 2) {
+          localStorage.setItem(
+            "save_order_payload",
+            this.state?.dunzoPointDelivery?.directRestaurantDelivery
+          );
+
+          this.props.save_order_payload_req(
+            this.state?.dunzoPointDelivery?.directRestaurantDelivery
+          );
+        } else {
+          localStorage.setItem("save_order_payload", {});
+        }
       }
     );
     this.onWillFocus();
@@ -1101,7 +1142,7 @@ export class AddressListContainer extends React.PureComponent {
               </View>
             ) : null}
 
-            {
+            {this.state?.dunzoPointDelivery?.selfPickUp?.amount >= 0 ? (
               <EDRTLView style={style.walletContainer}>
                 <EDRTLView
                   style={{
@@ -1119,17 +1160,8 @@ export class AddressListContainer extends React.PureComponent {
                   <EDRTLText
                     title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
                       0,
-                      12
-                    )}`}
-                    style={style.dunzoDeliveryHeader}
-                  />
-
-                  <EDRTLText
-                    title={`(₹ ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || ""
-                    } K.M )`}
+                      25
+                    )}..\n `}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1144,9 +1176,172 @@ export class AddressListContainer extends React.PureComponent {
                       this.dunzo_Point_DeliveryFlagCall(0);
                     }}
                   />
+                  <EDRTLText
+                    title={`\n (₹ ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
+                    } K.M )`}
+                    style={{
+                      // style.dunzoDeliveryHeader}
+                      fontSize: getProportionalFontSize(16),
+                      fontFamily: EDFonts.bold,
+                      color: EDColors.black,
+                      // textAlign: "justify",
+                      // marginHorizontal: 15,
+                      // marginTop: 20,
+                      // marginLeft: "auto",
+                      // marginLeft: -150,
+                      // marginRight: 150,
+                      // alignItems: "left",
+                      // textAlign: "left",
+                      // margin: "auto",
+                      // paddingRight: "right",
+                      // Right: 610,
+                    }}
+                  />
                 </EDRTLView>
               </EDRTLView>
-            }
+            ) : null}
+
+            {this.state?.dunzoPointDelivery?.directPointDelivery?.amount >=
+            0 ? (
+              <EDRTLView style={style.walletContainer}>
+                <EDRTLView
+                  style={{
+                    alignItems: "center",
+                    marginHorizontal: 15,
+                    marginVertical: 10,
+                  }}
+                >
+                  <Icon
+                    name={"business"}
+                    color={EDColors.primary}
+                    containerStyle={{ marginRight: 20 }}
+                  />
+
+                  <EDRTLText
+                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.name.slice(
+                      0,
+                      25
+                    )}..\n `}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  <Icon
+                    name={
+                      this.state?.dunzo_Point_DeliveryFlag === 1
+                        ? "check-box"
+                        : "check-box-outline-blank"
+                    }
+                    color={EDColors.primary}
+                    onPress={(e) => {
+                      this.dunzo_Point_DeliveryFlagCall(1);
+                    }}
+                  />
+                  <EDRTLText
+                    title={`\n (₹ ${
+                      this.state?.dunzoPointDelivery?.directPointDelivery
+                        ?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.directPointDelivery
+                        ?.distance || 0
+                    } K.M )`}
+                    style={{
+                      // style.dunzoDeliveryHeader}
+                      fontSize: getProportionalFontSize(16),
+                      fontFamily: EDFonts.bold,
+                      color: EDColors.black,
+                      // marginHorizontal: 15,
+                      // marginTop: 20,
+                      // marginLeft: "auto",
+                      textAlign: "justify",
+                      // marginLeft: -150,
+                      // marginRight: 150,
+                      // alignItems: "left",
+                      // textAlign: "left",
+                      // margin: "auto",
+                      // paddingRight: "right",
+                      // Right: 610,
+                    }}
+                  />
+                </EDRTLView>
+              </EDRTLView>
+            ) : null}
+
+            {this.state?.dunzoPointDelivery?.directRestaurantDelivery?.amount >=
+            0 ? (
+              <EDRTLView style={style.walletContainer}>
+                <EDRTLView
+                  style={{
+                    alignItems: "center",
+                    marginHorizontal: 15,
+                    marginVertical: 10,
+                  }}
+                >
+                  <Icon
+                    name={"business"}
+                    color={EDColors.primary}
+                    containerStyle={{ marginRight: 20 }}
+                  />
+
+                  <EDRTLText
+                    title={`${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
+                        0,
+                        30
+                      ) || "Direct Restaurant Delivery"
+                    }..\n `}
+                    style={style.dunzoDeliveryHeader}
+                  />
+
+                  {/* <EDRTLText
+                    title={`Direct Restaurant Deliveryasdfasdfasdf \n `}
+                    style={style.dunzoDeliveryHeader}
+                  /> */}
+
+                  <Icon
+                    name={
+                      this.state?.dunzo_Point_DeliveryFlag === 2
+                        ? "check-box"
+                        : "check-box-outline-blank"
+                    }
+                    color={EDColors.primary}
+                    onPress={(e) => {
+                      this.dunzo_Point_DeliveryFlagCall(2);
+                    }}
+                  />
+                  <EDRTLText
+                    title={`\n (₹ ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.distance || 0
+                    } K.M )`}
+                    style={{
+                      // style.dunzoDeliveryHeader}
+                      fontSize: getProportionalFontSize(16),
+                      fontFamily: EDFonts.bold,
+                      color: EDColors.black,
+
+                      // alignItems:"center",
+                      // marginHorizontal: 15,
+                      // marginTop: 20,
+                      // marginLeft: "auto",
+                      //textAlign: "justify",
+                      // marginLeft: -150,
+                      // marginRight: 150,
+                      // alignItems: "left",
+                      // textAlign: "left",
+                      // margin: "auto",
+                      // paddingRight: "right",
+                      // Right: 610,
+                    }}
+                  />
+                </EDRTLView>
+              </EDRTLView>
+            ) : null}
 
             {/* {this.state?.dunzo_Direct_Delivery_Amt >= 0 ? (
               <EDRTLView style={style.walletContainer}>
@@ -3471,6 +3666,9 @@ export default connect(
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));
+      },
+      save_order_payload_req: (data) => {
+        dispatch(save_order_payload_req(data));
       },
     };
   }

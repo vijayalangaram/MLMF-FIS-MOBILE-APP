@@ -37,7 +37,8 @@ import {
     ORDER_TYPE
 } from "./app/utils/EDConstants";
 import NavigationService from "./NavigationService";
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
+import 'localstorage-polyfill';
 
 
 const rootReducer = combineReducers({

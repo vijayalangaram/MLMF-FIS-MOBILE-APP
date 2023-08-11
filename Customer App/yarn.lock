@@ -5898,10 +5898,20 @@ load-json-file@^2.0.0:
     pify "^2.0.0"
     strip-bom "^3.0.0"
 
+local-storage@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/local-storage/-/local-storage-2.0.0.tgz"
+  integrity sha512-/0sRoeijw7yr/igbVVygDuq6dlYCmtsuTmmpnweVlVtl/s10pf5BCq8LWBxW/AMyFJ3MhMUuggMZiYlx6qr9tw==
+
 locale-currency@0.0.2:
   version "0.0.2"
   resolved "https://registry.npmjs.org/locale-currency/-/locale-currency-0.0.2.tgz"
   integrity sha512-5uUCVWBhixSV9x48yONxyGaW7YNGwFqM3f0ue1V+GbcHXGfOLKP+2HrwSFxkQ59V7cgcxahkRLD2Lw/CRfBJAQ==
+
+localstorage-polyfill@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/localstorage-polyfill/-/localstorage-polyfill-1.0.1.tgz"
+  integrity sha512-m4iHVZxFH5734oQcPKU08025gIz2+4bjWR9lulP8ZYxEJR0BpA0w32oJmkzh8y3UI9ci7xCBehQDc3oA1X+VHw==
 
 locate-path@^2.0.0:
   version "2.0.0"

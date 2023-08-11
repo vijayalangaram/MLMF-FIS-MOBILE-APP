@@ -190,6 +190,16 @@ export function save_dunzodelivery_amount(details) {
   };
 }
 
+export const SAVE_ORDER_PAYLOAD = "SAVE_ORDER_PAYLOAD";
+export function save_order_payload_req(details) {
+  return {
+    type: SAVE_ORDER_PAYLOAD,
+    value: details,
+  };
+}
+
+
+
 export const TYPE_SAVE_TABLE_ID = "TYPE_SAVE_TABLE_ID";
 export function saveTableIDInRedux(details) {
   return {

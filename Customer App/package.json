@@ -37,6 +37,8 @@
     "i18n-js": "^3.9.2",
     "jstz": "^2.1.1",
     "libphonenumber-js": "^1.10.6",
+    "local-storage": "^2.0.0",
+    "localstorage-polyfill": "^1.0.1",
     "lodash.memoize": "^4.1.2",
     "lottie-ios": "3.2.3",
     "lottie-react-native": "^4.1.3",

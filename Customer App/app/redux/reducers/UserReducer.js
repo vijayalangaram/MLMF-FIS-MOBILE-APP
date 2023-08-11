@@ -12,6 +12,7 @@ import {
   TYPE_TODAY_TOMORROW__DATE,
   TYPE_SELECTED_RES_ID,
   TYPE_DUNZO_DELIVERY_AMT,
+  SAVE_ORDER_PAYLOAD,
   TYPE_SHOW_SOCIAL_BUTTON,
   TYPE_SOCIAL_LOGIN,
   TYPE_SAVE_LOGIN_FCM,
@@ -213,6 +214,12 @@ export function userOperations(state = initialStateUser, action) {
     case TYPE_DUNZO_DELIVERY_AMT: {
       return Object.assign({}, state, {
         dunzo_Delivery_Amount: action.value,
+      });
+    }
+
+    case SAVE_ORDER_PAYLOAD: {
+      return Object.assign({}, state, {
+        save_order_payload: action.value,
       });
     }
 

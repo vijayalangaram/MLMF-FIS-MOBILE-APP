@@ -194,6 +194,7 @@ export class CheckOutContainer extends React.PureComponent {
     descriptionVisible: true,
     url: undefined,
     loggedInUserwalletBalance: "",
+    // save_order_payload: localStorage.getItem("save_order_payload"),
   };
 
   componentDidMount() {
@@ -218,6 +219,21 @@ export class CheckOutContainer extends React.PureComponent {
       });
     }
     this.getcartDataList();
+
+    // debugLog(
+    //   "****************************** Vijay ****************************** save_order_payload",
+    //   this.state.save_order_payload
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ****************************** save_order_payload",
+    //   this.props.save_order_payload
+    // );
+
+    // debugLog(
+    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
 
     // debugLog(
     //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
@@ -2302,9 +2318,20 @@ export class CheckOutContainer extends React.PureComponent {
       let username = "OMS_ORDER";
       let password = "OMSORDER$&";
 
+      let dataforsaveorder = {
+        order_id: onSuccess.order_id,
+        delivery_flag: this.props.save_order_payload?.flag,
+        address_id: this.props.save_order_payload?.id,
+      };
+
+      // debugLog(
+      //   ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ::::::::::onSuccess.order_id",
+      //   dataforsaveorder
+      // );
+
       let getDeliveryChargeAPICall = await axios.post(
         "http://52.77.35.146:8080/FIS/api/auth/saveOrder",
-        onSuccess.order_id,
+        dataforsaveorder,
         {
           headers: {
             "Content-Type": "application/json",
@@ -3471,6 +3498,7 @@ export default connect(
       phoneNumber: state.userOperations.phoneNumberInRedux,
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
+      save_order_payload: state.userOperations.save_order_payload,
     };
   },
   (dispatch) => {
