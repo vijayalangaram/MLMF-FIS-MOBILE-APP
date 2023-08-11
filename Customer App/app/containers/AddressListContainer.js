@@ -1151,20 +1151,47 @@ export class AddressListContainer extends React.PureComponent {
                     marginVertical: 10,
                   }}
                 >
-                  <Icon
+                  {/* <Icon
                     name={"business"}
                     color={EDColors.primary}
                     containerStyle={{ marginRight: 20 }}
-                  />
+                  /> */}
 
                   <EDRTLText
                     title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
                       0,
-                      25
-                    )}..\n `}
+                      20
+                    )} (₹ ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
+                    } K.M )  ..`}
                     style={style.dunzoDeliveryHeader}
                   />
 
+                  {/* <EDRTLText
+                    title={`(₹ ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
+                    } K.M )`}
+                    style={{
+                      fontSize: getProportionalFontSize(16),
+                      fontFamily: EDFonts.bold,
+                      color: EDColors.black,
+                      // textAlign: "justify",
+                      // marginHorizontal: 15,
+                      // marginTop: 20,
+                      // marginLeft: "auto",
+                      marginLeft: -150,
+                      // marginRight: 150,
+                      // alignItems: "left",
+                      // textAlign: "left",
+                      // margin: "auto",
+                      // paddingRight: "right",
+                      // Right: 610,
+                    }}
+                  /> */}
                   <Icon
                     name={
                       this.state?.dunzo_Point_DeliveryFlag === 0
@@ -1174,30 +1201,6 @@ export class AddressListContainer extends React.PureComponent {
                     color={EDColors.primary}
                     onPress={(e) => {
                       this.dunzo_Point_DeliveryFlagCall(0);
-                    }}
-                  />
-                  <EDRTLText
-                    title={`\n (₹ ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
-                    } K.M )`}
-                    style={{
-                      // style.dunzoDeliveryHeader}
-                      fontSize: getProportionalFontSize(16),
-                      fontFamily: EDFonts.bold,
-                      color: EDColors.black,
-                      // textAlign: "justify",
-                      // marginHorizontal: 15,
-                      // marginTop: 20,
-                      // marginLeft: "auto",
-                      // marginLeft: -150,
-                      // marginRight: 150,
-                      // alignItems: "left",
-                      // textAlign: "left",
-                      // margin: "auto",
-                      // paddingRight: "right",
-                      // Right: 610,
                     }}
                   />
                 </EDRTLView>
@@ -1214,17 +1217,23 @@ export class AddressListContainer extends React.PureComponent {
                     marginVertical: 10,
                   }}
                 >
-                  <Icon
+                  {/* <Icon
                     name={"business"}
                     color={EDColors.primary}
                     containerStyle={{ marginRight: 20 }}
-                  />
+                  /> */}
 
                   <EDRTLText
                     title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.name.slice(
                       0,
-                      25
-                    )}..\n `}
+                      20
+                    )} (₹ ${
+                      this.state?.dunzoPointDelivery?.directPointDelivery
+                        ?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.directPointDelivery
+                        ?.distance
+                    } K.M )  ..`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1239,7 +1248,7 @@ export class AddressListContainer extends React.PureComponent {
                       this.dunzo_Point_DeliveryFlagCall(1);
                     }}
                   />
-                  <EDRTLText
+                  {/* <EDRTLText
                     title={`\n (₹ ${
                       this.state?.dunzoPointDelivery?.directPointDelivery
                         ?.amount
@@ -1255,8 +1264,8 @@ export class AddressListContainer extends React.PureComponent {
                       // marginHorizontal: 15,
                       // marginTop: 20,
                       // marginLeft: "auto",
-                      textAlign: "justify",
-                      // marginLeft: -150,
+                      // textAlign: "justify",
+                      marginLeft: -150,
                       // marginRight: 150,
                       // alignItems: "left",
                       // textAlign: "left",
@@ -1264,7 +1273,7 @@ export class AddressListContainer extends React.PureComponent {
                       // paddingRight: "right",
                       // Right: 610,
                     }}
-                  />
+                  /> */}
                 </EDRTLView>
               </EDRTLView>
             ) : null}
@@ -1279,19 +1288,25 @@ export class AddressListContainer extends React.PureComponent {
                     marginVertical: 10,
                   }}
                 >
-                  <Icon
+                  {/* <Icon
                     name={"business"}
                     color={EDColors.primary}
                     containerStyle={{ marginRight: 20 }}
-                  />
+                  /> */}
 
                   <EDRTLText
                     title={`${
                       this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
                         0,
-                        30
-                      ) || "Direct Restaurant Delivery"
-                    }..\n `}
+                        20
+                      ) || "My Bhojan"
+                    } (₹ ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.distance
+                    } K.M )  ..`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1311,7 +1326,7 @@ export class AddressListContainer extends React.PureComponent {
                       this.dunzo_Point_DeliveryFlagCall(2);
                     }}
                   />
-                  <EDRTLText
+                  {/* <EDRTLText
                     title={`\n (₹ ${
                       this.state?.dunzoPointDelivery?.directRestaurantDelivery
                         ?.amount
@@ -1324,13 +1339,12 @@ export class AddressListContainer extends React.PureComponent {
                       fontSize: getProportionalFontSize(16),
                       fontFamily: EDFonts.bold,
                       color: EDColors.black,
-
                       // alignItems:"center",
                       // marginHorizontal: 15,
                       // marginTop: 20,
                       // marginLeft: "auto",
                       //textAlign: "justify",
-                      // marginLeft: -150,
+                      // marginLeft: -70,
                       // marginRight: 150,
                       // alignItems: "left",
                       // textAlign: "left",
@@ -1338,7 +1352,7 @@ export class AddressListContainer extends React.PureComponent {
                       // paddingRight: "right",
                       // Right: 610,
                     }}
-                  />
+                  /> */}
                 </EDRTLView>
               </EDRTLView>
             ) : null}
@@ -1478,9 +1492,8 @@ export class AddressListContainer extends React.PureComponent {
           </View>
         )} */}
 
-        {this.state.dunzo_Point_DeliveryFlag === 0 ||
-        (this.state.dunzo_Direct_Delivery_Amt > 0 &&
-          this.state.dunzo_Direct_Delivery_Amt != undefined) ? (
+        {this.state.dunzo_Direct_Delivery_Amt >= 0 &&
+        this.state.dunzo_Direct_Delivery_Amt != undefined ? (
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}

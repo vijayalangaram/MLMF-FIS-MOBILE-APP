@@ -83,11 +83,13 @@ class SearchLocationContainer extends React.PureComponent {
 
   componentDidMount = () => {
     this.getCurrentLocation();
+
     debugLog(
       " this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
       this.props.selected_Res_Id
     );
-    debugLog(" this.props  ::: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", this.props);
+
+    // debugLog(" this.props  ::: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", this.props);
     // debugLog(
     //   " this.props.navigation.state.params  ::: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
     //   this.props.navigation.state
@@ -403,16 +405,20 @@ class SearchLocationContainer extends React.PureComponent {
     this.props.saveCurrentLocation(addressData);
     this.navigateToBack();
 
+    let splitres_name =
+      this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
+
     let datas = {
-      restuarant_id: this.props.selected_Res_Id || this.props.res_id,
+      restuarant_id: splitres_name[0] || this.props.res_id,
       customer_id: this.props.userID,
       address_id: this.arrayAddress[index].address_id,
+      restuarantName: splitres_name[1] || "",
     };
 
-    // debugLog(
-    //   "########################################################################## datas",
-    //   datas
-    // );
+    debugLog(
+      "########################################################################## datas",
+      datas
+    );
 
     let getDeliveryChargeAPICall = await axios
       .post(
@@ -426,10 +432,10 @@ class SearchLocationContainer extends React.PureComponent {
         }
       )
       .then((response) => {
-        // debugLog(
-        //   "########################################################################## else 0000",
-        //   response.data
-        // );
+        debugLog(
+          "########################################################################## else 0000",
+          response.data
+        );
         if (response.status === 200) {
           this.props.save_delivery_dunzo__details(response.data);
           this.props.save_dunzodelivery_amount(response.data.directDelivery);
