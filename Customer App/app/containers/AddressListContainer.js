@@ -145,6 +145,7 @@ export class AddressListContainer extends React.PureComponent {
       noDefaultCard: false,
       selectedAddress: undefined,
       loggedInUserwalletBalance: "",
+      currentTotalSumValue: "",
       defaultIntialAddress: "",
       // isGuestVerified: true,
       dunzoPointDelivery: "",
@@ -869,6 +870,7 @@ export class AddressListContainer extends React.PureComponent {
                     size={getProportionalFontSize(20)}
                     style={style.headerIconStyle}
                   /> */}
+
                   <EDRTLView
                     style={{
                       alignItems: "center",
@@ -880,6 +882,7 @@ export class AddressListContainer extends React.PureComponent {
                       style={style.walletText}
                       title={`Available Wallet Balance  ₹ ${this.state.loggedInUserwalletBalance} `}
                     />
+
                     {/* {Number(this.checkoutData.minOrderAmount) <
                       parseInt(this.state.loggedInUserwalletBalance) && (
                       <EDRTLText
@@ -899,12 +902,27 @@ export class AddressListContainer extends React.PureComponent {
                   </EDRTLView>
                 </EDRTLView>
 
+                <EDRTLView style={style.walletContainer}>
+                  <EDRTLView
+                    style={{
+                      alignItems: "center",
+                      marginHorizontal: 15,
+                      marginVertical: 10,
+                    }}
+                  >
+                    <EDRTLText
+                      style={style.walletText}
+                      title={`Current Item Sum Total  ₹  ${this.state.currentTotalSumValue} `}
+                    />
+                  </EDRTLView>
+                </EDRTLView>
+
                 {/* <EDRTLText
                   style={style.orderView}
                   title={strings("orderType")}
                 /> */}
 
-                <View style={style.deliveryOptionView}>
+                {/* <View style={style.deliveryOptionView}>
                   {this.state.availableOrderModes.includes("Delivery") ? (
                     <TouchableOpacity
                       onPress={this.selectCod}
@@ -993,7 +1011,9 @@ export class AddressListContainer extends React.PureComponent {
                       ) : null}
                     </TouchableOpacity>
                   ) : null}
-                </View>
+                </View> */}
+
+
               </View>
             ) : null}
             {this.state.value == 1 ? (
@@ -3032,6 +3052,9 @@ export class AddressListContainer extends React.PureComponent {
         "############################################################################ 222222",
         PriceandTotalPrice
       );
+
+      let { currentTotalSumValue } = this.state;
+      this.setState({ currentTotalSumValue: Math.round(PriceandTotalPrice) });
 
       if (
         parseInt(this.state.loggedInUserwalletBalance) <

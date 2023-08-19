@@ -157,7 +157,11 @@ export class Restaurant extends React.Component {
 
   componentDidMount = () => {
     this.networkConnectivityStatus();
-    localStorage.removeItem("save_storeavailabilityData");
+
+    if (this.state.cartData != undefined && this.state.cartData.length == 0) {
+      localStorage.removeItem("save_storeavailabilityData");
+    }
+
     // debugLog(
     //   "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
     //   this.props.type_today_tomorrow__date
@@ -248,7 +252,7 @@ export class Restaurant extends React.Component {
     // debugLog("this.state.cartData -----------------------------");
     debugLog("this.state.cartData", this.state.cartData);
 
-    if (this.state.cartData && this.state.cartData.length == 0) {
+    if (this.state.cartData != undefined && this.state.cartData.length == 0) {
       localStorage.removeItem("save_storeavailabilityData");
     }
 
@@ -260,6 +264,11 @@ export class Restaurant extends React.Component {
 
     (storeavailabilityData == null || storeavailabilityData == "") &&
       localStorage.setItem("save_storeavailabilityData", data?.availability);
+
+    if (storeavailabilityData == null || storeavailabilityData == "") {
+      let { cartData } = this.state;
+      this.setState({ cartData: [{}] });
+    }
 
     debugLog("111111111111111111111", storeavailabilityData);
     debugLog("333333333333333333333", data?.availability);
@@ -296,9 +305,11 @@ export class Restaurant extends React.Component {
     } else
       getCartList(
         (success) => {
-          // console.log(":::::::::::", success);
+          console.log(":::::::::::", success);
           if (success != undefined) {
-            cartArray = success.items;
+            // cartArray = success.items;
+            cartArray = storeavailabilityData != null ? success.items : [];
+
             // debugLog(":::::::::::  cartArray.length   ", cartArray.length);
             // if (cartArray.length - 1 == 0) {
             //   debugLog("::::::::::: removeItem  ", cartArray.length);
@@ -493,7 +504,11 @@ export class Restaurant extends React.Component {
           onDismissHandler={this.onDismissItemDetailHandler}
           onPress={this.onPressAddtoCartItemHandler}
           isOpen={this.isOpen.toLowerCase() === "open" ? true : false}
-          cartData={this.state.cartData.length === 0 ? [] : this.state.cartData}
+          cartData={
+            this.state.cartData != undefined && this.state.cartData.length === 0
+              ? []
+              : this.state.cartData
+          }
           navigateToCart={this.navigateToCart}
           onRecipeDetails={this.onRecipeDetails}
           allowPreOrder={this.restaurantDetails.allow_scheduled_delivery == "1"}
@@ -523,7 +538,11 @@ export class Restaurant extends React.Component {
           onDismissHandler={this.onDismissItemDetailHandler}
           onPress={this.onPressAddtoCartItemHandler}
           isOpen={this.isOpen.toLowerCase() === "open" ? true : false}
-          cartData={this.state.cartData.length === 0 ? [] : this.state.cartData}
+          cartData={
+            this.state.cartData != undefined && this.state.cartData.length === 0
+              ? []
+              : this.state.cartData
+          }
           navigateToCart={this.navigateToCart}
         />
       </EDPopupView>
