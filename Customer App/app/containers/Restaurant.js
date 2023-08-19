@@ -157,7 +157,7 @@ export class Restaurant extends React.Component {
 
   componentDidMount = () => {
     this.networkConnectivityStatus();
-
+    localStorage.removeItem("save_storeavailabilityData");
     // debugLog(
     //   "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
     //   this.props.type_today_tomorrow__date
@@ -177,7 +177,7 @@ export class Restaurant extends React.Component {
    * @param { Success Cart List From ASync } success
    */
   onSuccessCartListAsync = (success) => {
-    console.log("[][[][][][][][ ASYNC", success);
+    // console.log("[][[][][][][][ ASYNC", success);
     this.cartDataDict = success;
     this.setState({
       cartData: success.items,
@@ -245,6 +245,44 @@ export class Restaurant extends React.Component {
     var cartArray = [];
     var cartData = {};
 
+    // debugLog("this.state.cartData -----------------------------");
+    debugLog("this.state.cartData", this.state.cartData);
+
+    if (this.state.cartData && this.state.cartData.length == 0) {
+      localStorage.removeItem("save_storeavailabilityData");
+    }
+
+    let storeavailabilityData = localStorage.getItem(
+      "save_storeavailabilityData"
+    );
+
+    debugLog("00000000000000", storeavailabilityData);
+
+    (storeavailabilityData == null || storeavailabilityData == "") &&
+      localStorage.setItem("save_storeavailabilityData", data?.availability);
+
+    debugLog("111111111111111111111", storeavailabilityData);
+    debugLog("333333333333333333333", data?.availability);
+
+    // debugLog(
+    //   "2222222222222222222222222",
+    //   storeavailabilityData == data?.availability
+    // );
+    // debugLog(
+    //   "2222222222222222222222222",
+    //   storeavailabilityData !== data?.availability
+    // );
+
+    if (
+      storeavailabilityData != null &&
+      storeavailabilityData != data?.availability
+    ) {
+      showValidationAlert(
+        `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${data?.availability},`
+      );
+      return false;
+    }
+
     if (this.props.table_id !== undefined && this.props.table_id !== "")
       this.takeToCheckout = true;
     else this.takeToCheckout = false;
@@ -258,9 +296,14 @@ export class Restaurant extends React.Component {
     } else
       getCartList(
         (success) => {
-          console.log(":::::::::::", success);
+          // console.log(":::::::::::", success);
           if (success != undefined) {
             cartArray = success.items;
+            // debugLog(":::::::::::  cartArray.length   ", cartArray.length);
+            // if (cartArray.length - 1 == 0) {
+            //   debugLog("::::::::::: removeItem  ", cartArray.length);
+            //   localStorage.removeItem("save_storeavailabilityData");
+            // }
             if (cartArray.length > 0) {
               if (success.resId == this.resId) {
                 var repeatArray = cartArray.filter((item) => {
@@ -324,6 +367,7 @@ export class Restaurant extends React.Component {
               }
             } else if (cartArray.length == 0) {
               //cart empty
+
               data.quantity = customQty !== "" ? customQty : qty;
               cartData = {
                 resId: this.resId,
@@ -362,6 +406,7 @@ export class Restaurant extends React.Component {
               cartData.table_id = this.props.table_id;
             this.updateCount(cartData.items, true);
             this.saveData(cartData);
+
             this.setState({
               cartData: cartData.items,
               key: this.state.key + 1,
@@ -644,7 +689,6 @@ export class Restaurant extends React.Component {
   //#region
   /** ONMINUS CLICKED */
   onMinusEventHandler = (value, index) => {
-    debugLog("MINUS EVENT ::::", value, index);
     // if (value > 0) {
     //     var array = this.state.cartData
     //     this.state.cartData.items[index].quantity = value;
@@ -1121,7 +1165,7 @@ export class Restaurant extends React.Component {
       var cartArray = [];
       getCartList(
         (success) => {
-          console.log("[][[][][][][][ 2", success);
+          // console.log("[][[][][][][][ 2", success);
           if (success !== undefined) {
             cartArray = success.items;
             if (cartArray.length > 0) {
