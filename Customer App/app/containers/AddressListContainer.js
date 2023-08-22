@@ -880,7 +880,8 @@ export class AddressListContainer extends React.PureComponent {
                   >
                     <EDRTLText
                       style={style.walletText}
-                      title={`Available Wallet Balance  ₹ ${this.state.loggedInUserwalletBalance} `}
+                      title={` Available Wallet Balance  ₹ ${this.state.loggedInUserwalletBalance} \n Current Item Sum Total    ₹ ${this.state?.currentTotalSumValue}.00 
+                      `}
                     />
 
                     {/* {Number(this.checkoutData.minOrderAmount) <
@@ -902,7 +903,7 @@ export class AddressListContainer extends React.PureComponent {
                   </EDRTLView>
                 </EDRTLView>
 
-                <EDRTLView style={style.walletContainer}>
+                {/* <EDRTLView style={style.walletContainer}>
                   <EDRTLView
                     style={{
                       alignItems: "center",
@@ -912,10 +913,10 @@ export class AddressListContainer extends React.PureComponent {
                   >
                     <EDRTLText
                       style={style.walletText}
-                      title={`Current Item Sum Total  ₹  ${this.state.currentTotalSumValue} `}
+                      title={`Current Item Sum Total  ₹  ${this.state?.currentTotalSumValue} `}
                     />
                   </EDRTLView>
-                </EDRTLView>
+                </EDRTLView> */}
 
                 {/* <EDRTLText
                   style={style.orderView}
@@ -1012,8 +1013,6 @@ export class AddressListContainer extends React.PureComponent {
                     </TouchableOpacity>
                   ) : null}
                 </View> */}
-
-
               </View>
             ) : null}
             {this.state.value == 1 ? (
@@ -3048,13 +3047,17 @@ export class AddressListContainer extends React.PureComponent {
         dunzo_Delivery_Point_AmountbasedonMenucate +
         taxesintialcalc;
 
+      let PriceandSumTotalPrice = currentPriceTotal + taxesintialcalc;
+
       debugLog(
         "############################################################################ 222222",
         PriceandTotalPrice
       );
 
       let { currentTotalSumValue } = this.state;
-      this.setState({ currentTotalSumValue: Math.round(PriceandTotalPrice) });
+      this.setState({
+        currentTotalSumValue: Math.round(PriceandSumTotalPrice),
+      });
 
       if (
         parseInt(this.state.loggedInUserwalletBalance) <
