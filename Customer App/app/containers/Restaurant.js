@@ -55,7 +55,11 @@ import BaseContainer from "./BaseContainer";
 import EDRadioDailogWithButton from "../components/EDRadioDailogWithButton";
 import EDMenuListComponent from "../components/EDMenuListComponent";
 import { heightPercentageToDP } from "react-native-responsive-screen";
-import { saveTableIDInRedux, saveResIDInRedux } from "../redux/actions/User";
+import {
+  saveTableIDInRedux,
+  saveResIDInRedux,
+  save_slot_Master_details,
+} from "../redux/actions/User";
 import { FlatList } from "react-native";
 import EDRTLView from "../components/EDRTLView";
 import { initialWindowMetrics } from "react-native-safe-area-context";
@@ -65,6 +69,7 @@ import { EDOperationHours } from "../components/EDOperatingHours";
 import deviceInfoModule from "react-native-device-info";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 // import EDRecipeDetails from "../components/EDRecipeDetails";
+import axios from "axios";
 
 export class Restaurant extends React.Component {
   //#region LIFE CYCLE METHODS
@@ -143,6 +148,7 @@ export class Restaurant extends React.Component {
     isSearchVisible: false,
     strSearch: "",
     timeVisible: false,
+    category_Master: [],
   };
 
   //#region
@@ -157,15 +163,17 @@ export class Restaurant extends React.Component {
 
   componentDidMount = () => {
     this.networkConnectivityStatus();
-
     if (this.state.cartData != undefined && this.state.cartData.length == 0) {
       localStorage.removeItem("save_storeavailabilityData");
     }
-
     // debugLog(
     //   "****************************** Vijay ****************************** Restaurant  this.props.type_today_tomorrow__date ******************************",
     //   this.props.type_today_tomorrow__date
     // );
+    debugLog(
+      "****************************** Vijay ****************************** Restaurant  this.props.res_id ******************************",
+      this.props.navigation.state.params.restId
+    );
   };
 
   getCartDataList = () => {
@@ -245,7 +253,7 @@ export class Restaurant extends React.Component {
 
   //#region STORE
   /** STORE DATA */
-  storeData = (data, qty = 1, customQty = "") => {
+  storeData = async (data, qty = 1, customQty = "") => {
     var cartArray = [];
     var cartData = {};
 
@@ -262,8 +270,73 @@ export class Restaurant extends React.Component {
 
     debugLog("00000000000000", storeavailabilityData);
 
-    (storeavailabilityData == null || storeavailabilityData == "") &&
+    if (storeavailabilityData == null || storeavailabilityData == "") {
       localStorage.setItem("save_storeavailabilityData", data?.availability);
+      let { category_Master } = this.state;
+      debugLog("444444444444444444444444444444444", category_Master);
+      let get_category_Master =
+        category_Master &&
+        category_Master.filter((item) => {
+          return data?.availability === item?.category_name;
+        });
+
+      debugLog("555555555555555555555555", get_category_Master[0]?.category_id);
+      // this.props.navigation.state.params.restId
+
+      let getDeliveryChargeAPICall = await axios.get(
+        `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      debugLog("666666666666666666666666666", getDeliveryChargeAPICall?.data);
+      let Slot_Master = [
+        {
+          compCode: "1000",
+          outletId: "160",
+          menuCategory: "1",
+          slotId: "1",
+          startTime: "09:00:00",
+          endTime: "10:00:00",
+          status: "A",
+        },
+        {
+          compCode: "1000",
+          outletId: "160",
+          menuCategory: "1",
+          slotId: "2",
+          startTime: "10:00:00",
+          endTime: "11:00:00",
+          status: "A",
+        },
+        {
+          compCode: "1000",
+          outletId: "160",
+          menuCategory: "1",
+          slotId: "3",
+          startTime: "11:00:00",
+          endTime: "12:00:00",
+          status: "A",
+        },
+        {
+          compCode: "1000",
+          outletId: "160",
+          menuCategory: "1",
+          slotId: "4",
+          startTime: "12:00:00",
+          endTime: "01:00:00",
+          status: "A",
+        },
+      ];
+      // localStorage.setItem("Slot_Master_Rest_Category", Slot_Master);
+      localStorage.setItem(
+        "Slot_Master_Rest_Category",
+        JSON.stringify(Slot_Master)
+      );
+      this.props.save_slot_Master_details(Slot_Master);
+    }
 
     if (storeavailabilityData == null || storeavailabilityData == "") {
       let { cartData } = this.state;
@@ -1458,6 +1531,14 @@ export class Restaurant extends React.Component {
    * @param { Success Response Object } onSuccess
    */
   onSuccessResMenuData = (onSuccess) => {
+    debugLog(
+      "**************************   onSuccessResMenuData ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+      onSuccess?.menu_item
+    );
+
+    let { category_Master } = this.state;
+    this.setState({ category_Master: onSuccess?.menu_item });
+
     if (onSuccess.error != undefined) {
       showValidationAlert(
         onSuccess.error.message != undefined
@@ -1690,6 +1771,7 @@ export default connect(
       table_id: state.userOperations.table_id,
       res_id: state.userOperations.res_id,
       type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
+      slot_Master_details: state.userOperations.slot_Master_details,
     };
   },
   (dispatch) => {
@@ -1711,6 +1793,10 @@ export default connect(
       },
       saveResID: (table_id) => {
         dispatch(saveResIDInRedux(table_id));
+      },
+
+      save_slot_Master_details: (table_id) => {
+        dispatch(save_slot_Master_details(table_id));
       },
     };
   }

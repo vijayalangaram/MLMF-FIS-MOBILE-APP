@@ -9,6 +9,7 @@ import {
   SAVE_ALERT_DATA,
   TYPE_SAVE_MIN_ORDER_AMOUNT,
   TYPE_DELIVERY_DUNZO__DETAILS,
+  TYPE_SLOT_MASTER_DETAILS,
   TYPE_TODAY_TOMORROW__DATE,
   TYPE_SELECTED_RES_ID,
   TYPE_DUNZO_DELIVERY_AMT,
@@ -196,6 +197,12 @@ export function userOperations(state = initialStateUser, action) {
     case TYPE_DELIVERY_DUNZO__DETAILS: {
       return Object.assign({}, state, {
         dunzo_Delivery_Details: action.value,
+      });
+    }
+
+    case TYPE_SLOT_MASTER_DETAILS: {
+      return Object.assign({}, state, {
+        slot_Master_details: action.value,
       });
     }
 

@@ -141,6 +141,8 @@ export class CartContainer extends React.PureComponent {
     if (this.props.dunzo_Delivery_Amount == undefined) {
       this.getAddressList();
     }
+
+   
   }
 
   cartTotalPrice = (price) => {};

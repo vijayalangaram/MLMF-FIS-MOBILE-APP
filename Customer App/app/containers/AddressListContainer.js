@@ -152,6 +152,7 @@ export class AddressListContainer extends React.PureComponent {
       dunzo_Point_DeliveryFlag: 1,
       dunzo_Direct_Delivery_Amt: "",
       // loader_Flag_dunzo_CallResponse: false,
+      slot_Master_against_category: [],
     };
     this.checkoutData = this.props.checkoutDetail;
   }
@@ -161,14 +162,14 @@ export class AddressListContainer extends React.PureComponent {
     //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
     // );
 
-    debugLog(
-      "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
-      this.props.dunzo_Delivery_Details
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
+    //   this.props.dunzo_Delivery_Details
+    // );
 
     this.props.save_order_payload_req(
       this.props.dunzo_Delivery_Details?.directRestaurantDelivery
@@ -229,6 +230,7 @@ export class AddressListContainer extends React.PureComponent {
     this.getWalletHistoryAPIREQ();
     this.getAddressList();
     this.dunzoApiCall();
+    this.slot_masterCall();
   }
 
   getWalletHistoryAPIREQ = () => {
@@ -245,6 +247,46 @@ export class AddressListContainer extends React.PureComponent {
       this.props,
       true
     );
+  };
+
+  slot_masterCall = () => {
+    let localstrSlotMaster = localStorage.getItem("Slot_Master_Rest_Category");
+
+    let { slot_Master_against_category } = this.state;
+
+    let filterstatesMastervalues = [];
+
+    // debugLog(
+    //   "this.props.slot_Master_details ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
+    //   this.props.slot_Master_details
+    // );
+
+    if (
+      this.props.slot_Master_details != undefined &&
+      this.props.slot_Master_details != null &&
+      this.props.slot_Master_details.length > 0
+    ) {
+      // debugLog(
+      //   "localstrSlotMaster ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 000000000000 ",
+      //   localstrSlotMaster
+      // );
+
+      filterstatesMastervalues = this.props.slot_Master_details.map(
+        ({ startTime, endTime, slotId }) => ({
+          name: ` ${" "}From ${startTime} - To: ${endTime}${" "}`,
+          flag: false,
+          slotId,
+        })
+      );
+    }
+    debugLog(
+      "filterstatesMastervalues ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalues ",
+      filterstatesMastervalues
+    );
+
+    this.setState({
+      slot_Master_against_category: filterstatesMastervalues || [],
+    });
   };
 
   onSuccessFetchWallet = (onSuccess) => {
@@ -546,6 +588,27 @@ export class AddressListContainer extends React.PureComponent {
     this.setState({ isLoading: false, isPaymentLoading: false });
   };
 
+  slot_Master_against_category_Call = (value) => {
+    let { slot_Master_against_category } = this.state;
+    let filterstatesMastervalues = slot_Master_against_category.map(
+      (item, i) => {
+        if (i == value) {
+          item.flag = true;
+        } else {
+          item.flag = false;
+        }
+        return item;
+      }
+    );
+    debugLog(
+      "****************************** Vijay ****************************** filterstatesMastervalues",
+      filterstatesMastervalues
+    );
+    this.setState({
+      slot_Master_against_category: filterstatesMastervalues,
+    });
+  };
+
   //#region
   /** RENDER METHOD */
   render() {
@@ -554,6 +617,7 @@ export class AddressListContainer extends React.PureComponent {
       dunzo_Direct_Delivery_Amt,
       isSelectAddress,
       dunzoPointDelivery,
+      slot_Master_against_category,
       // loader_Flag_dunzo_CallResponse,
     } = this.state;
 
@@ -566,15 +630,15 @@ export class AddressListContainer extends React.PureComponent {
     //   this.props.dunzo_Delivery_Details
     // );
 
-    debugLog(
-      "  this.state?.dunzoPointDelivery  ***********************  render state 11 **********************",
-      this.state?.dunzoPointDelivery
-    );
+    // debugLog(
+    //   "  this.state?.dunzoPointDelivery  ***********************  render state 11 **********************",
+    //   this.state?.dunzoPointDelivery
+    // );
 
-    debugLog(
-      " this.state?.dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
-      this.state?.dunzo_Direct_Delivery_Amt
-    );
+    // debugLog(
+    //   " this.state?.dunzo_Direct_Delivery_Amt  **************************** render  state  22  ******************** ",
+    //   this.state?.dunzo_Direct_Delivery_Amt
+    // );
 
     // debugLog(
     //   "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
@@ -1150,6 +1214,57 @@ export class AddressListContainer extends React.PureComponent {
             </EDRTLView>
             {/* ) : null} */}
 
+            {this.state?.slot_Master_against_category &&
+            this.state?.slot_Master_against_category.length > 0 ? (
+              <View style={{ flex: 1 }}>
+                <EDRTLText
+                  title={"Choose Delivery Slot"}
+                  style={style.paymentHeader}
+                />
+              </View>
+            ) : null}
+
+            {this.state?.slot_Master_against_category.length > 0 &&
+              this.state?.slot_Master_against_category.map(
+                (slot_Master_against_categoryitems, index) => {
+                  return (
+                    <EDRTLView style={style.walletContainer}>
+                      <EDRTLView
+                        style={{
+                          alignItems: "center",
+                          marginHorizontal: 15,
+                          marginVertical: 10,
+                        }}
+                      >
+                        <Icon
+                          name="clockcircleo"
+                          color={EDColors.black}
+                          size={getProportionalFontSize(13)}
+                          type={"ant-design"}
+                          style={{ color: "red" }}
+                        />
+
+                        <EDRTLText
+                          title={`${slot_Master_against_categoryitems?.name}`}
+                          style={style.dunzoDeliveryHeader}
+                        />
+                        <Icon
+                          name={
+                            slot_Master_against_categoryitems?.flag
+                              ? "check-box"
+                              : "check-box-outline-blank"
+                          }
+                          color={EDColors.primary}
+                          onPress={() => {
+                            this.slot_Master_against_category_Call(index);
+                          }}
+                        />
+                      </EDRTLView>
+                    </EDRTLView>
+                  );
+                }
+              )}
+
             {this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
               // ||
               // this.props.dunzo_Delivery_Amount > 0
@@ -1184,7 +1299,7 @@ export class AddressListContainer extends React.PureComponent {
                       this.state?.dunzoPointDelivery?.selfPickUp?.amount
                     } - ${
                       this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
-                    } K.M )  ..`}
+                    } K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1252,7 +1367,7 @@ export class AddressListContainer extends React.PureComponent {
                     } - ${
                       this.state?.dunzoPointDelivery?.directPointDelivery
                         ?.distance
-                    } K.M )  ..`}
+                    } K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -1325,7 +1440,7 @@ export class AddressListContainer extends React.PureComponent {
                     } - ${
                       this.state?.dunzoPointDelivery?.directRestaurantDelivery
                         ?.distance
-                    } K.M )  ..`}
+                    } K.M )`}
                     style={style.dunzoDeliveryHeader}
                   />
 
@@ -2253,7 +2368,7 @@ export class AddressListContainer extends React.PureComponent {
             let nameSlice = `${getDeliveryChargeAPICall?.data?.directPointDelivery?.deliveryPointName.slice(
               0,
               12
-            )} ...`;
+            )}...`;
 
             // debugLog(
             //   "****************************** 22 this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
@@ -2674,7 +2789,8 @@ export class AddressListContainer extends React.PureComponent {
       // return false;
     } else {
       showValidationAlert(
-        "Drop Location was not serviceable, Please change Address"
+        // "Drop Location was not serviceable, Please change Address"
+        "Delivery Partner not available, Please try later"
       );
     }
 
@@ -3687,6 +3803,7 @@ export default connect(
       selected_Res_Id: state.userOperations.selected_Res_Id,
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
+      slot_Master_details: state.userOperations.slot_Master_details,
     };
   },
   (dispatch) => {

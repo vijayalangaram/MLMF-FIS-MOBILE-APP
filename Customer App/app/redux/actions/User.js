@@ -166,6 +166,14 @@ export function save_delivery_dunzo__details(details) {
   };
 }
 
+export const TYPE_SLOT_MASTER_DETAILS = "TYPE_SLOT_MASTER_DETAILS";
+export function save_slot_Master_details(details) {
+  return {
+    type: TYPE_SLOT_MASTER_DETAILS,
+    value: details,
+  };
+}
+
 export const TYPE_SELECTED_RES_ID = "TYPE_SELECTED_RES_ID";
 export function save_selected_Res_ID(details) {
   return {
@@ -197,8 +205,6 @@ export function save_order_payload_req(details) {
     value: details,
   };
 }
-
-
 
 export const TYPE_SAVE_TABLE_ID = "TYPE_SAVE_TABLE_ID";
 export function saveTableIDInRedux(details) {
