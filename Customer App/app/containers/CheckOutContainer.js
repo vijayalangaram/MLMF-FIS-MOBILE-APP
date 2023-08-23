@@ -225,10 +225,10 @@ export class CheckOutContainer extends React.PureComponent {
     //   this.state.save_order_payload
     // );
 
-    // debugLog(
-    //   "****************************** Vijay ****************************** save_order_payload",
-    //   this.props.save_order_payload
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** save_selected_slot_Id",
+      this.props.save_selected_slot_Id
+    );
 
     // debugLog(
     //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
@@ -2424,6 +2424,7 @@ export class CheckOutContainer extends React.PureComponent {
 
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
+      addOrderParams.slotId = this.props.save_selected_slot_Id?.slotId;
 
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
@@ -3517,6 +3518,7 @@ export default connect(
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
       save_order_payload: state.userOperations.save_order_payload,
+      save_selected_slot_Id: state.userOperations.save_selected_slot_Id,
     };
   },
   (dispatch) => {

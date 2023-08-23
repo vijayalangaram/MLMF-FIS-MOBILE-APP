@@ -198,6 +198,14 @@ export function save_dunzodelivery_amount(details) {
   };
 }
 
+export const SELECTED_SLOT_ID = "SELECTED_SLOT_ID";
+export function save_selected_slot_Id(details) {
+  return {
+    type: SELECTED_SLOT_ID,
+    value: details,
+  };
+}
+
 export const SAVE_ORDER_PAYLOAD = "SAVE_ORDER_PAYLOAD";
 export function save_order_payload_req(details) {
   return {

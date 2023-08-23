@@ -82,6 +82,7 @@ import {
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
   save_order_payload_req,
+  save_selected_slot_Id,
 } from "../../app/redux/actions/User";
 
 export class AddressListContainer extends React.PureComponent {
@@ -287,6 +288,8 @@ export class AddressListContainer extends React.PureComponent {
     this.setState({
       slot_Master_against_category: filterstatesMastervalues || [],
     });
+
+    this.props.save_selected_slot_Id(filterstatesMastervalues[0]);
   };
 
   onSuccessFetchWallet = (onSuccess) => {
@@ -600,13 +603,16 @@ export class AddressListContainer extends React.PureComponent {
         return item;
       }
     );
+
     debugLog(
       "****************************** Vijay ****************************** filterstatesMastervalues",
-      filterstatesMastervalues
+      filterstatesMastervalues[value]
     );
+
     this.setState({
       slot_Master_against_category: filterstatesMastervalues,
     });
+    this.props.save_selected_slot_Id(filterstatesMastervalues[value]);
   };
 
   //#region
@@ -3825,6 +3831,9 @@ export default connect(
       },
       save_order_payload_req: (data) => {
         dispatch(save_order_payload_req(data));
+      },
+      save_selected_slot_Id: (data) => {
+        dispatch(save_selected_slot_Id(data));
       },
     };
   }
