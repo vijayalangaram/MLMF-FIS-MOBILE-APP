@@ -280,7 +280,6 @@ export class AddressListContainer extends React.PureComponent {
         })
       );
     } else {
-
       showValidationAlert("Delivery Slots not available, Please try later");
     }
 
@@ -1229,18 +1228,22 @@ export class AddressListContainer extends React.PureComponent {
                   color={EDColors.primary}
                   containerStyle={{ marginRight: 20 }}
                 />
-                <EDRTLText
-                  // title={`${this.props?.currentLocation?.address }`}
-                  title={`${this.props?.currentLocation?.address.slice(
-                    0,
-                    30
-                  )}.. `}
-                  // title={this.props?.currentLocation?.address.substring(
-                  //   this.props?.currentLocation?.address.indexOf(",") + 2
-                  // )}
-                  // style={style.currentLocationSubText}
-                  style={style.dunzoDeliveryHeader}
-                />
+
+                {this.props?.currentLocation?.address &&
+                this.props?.currentLocation?.address.length > 0 ? (
+                  <EDRTLText
+                    // title={`${this.props?.currentLocation?.address }`}
+                    title={`${this.props?.currentLocation?.address.slice(
+                      0,
+                      30
+                    )}.. `}
+                    // title={this.props?.currentLocation?.address.substring(
+                    //   this.props?.currentLocation?.address.indexOf(",") + 2
+                    // )}
+                    // style={style.currentLocationSubText}
+                    style={style.dunzoDeliveryHeader}
+                  />
+                ) : null}
               </EDRTLView>
             </EDRTLView>
             {/* ) : null} */}
@@ -1322,17 +1325,22 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  <EDRTLText
-                    title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
-                      0,
-                      20
-                    )} (₹ ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
-                    } K.M )`}
-                    style={style.dunzoDeliveryHeader}
-                  />
+                  {this.state?.dunzoPointDelivery?.selfPickUp?.name &&
+                  this.state?.dunzoPointDelivery?.selfPickUp?.name.length >
+                    0 ? (
+                    <EDRTLText
+                      title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
+                        0,
+                        20
+                      )} (₹ ${
+                        this.state?.dunzoPointDelivery?.selfPickUp?.amount
+                      } - ${
+                        this.state?.dunzoPointDelivery?.selfPickUp?.distance ||
+                        0
+                      } K.M )`}
+                      style={style.dunzoDeliveryHeader}
+                    />
+                  ) : null}
 
                   {/* <EDRTLText
                     title={`(₹ ${
@@ -1388,19 +1396,23 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  <EDRTLText
-                    title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.name.slice(
-                      0,
-                      20
-                    )} (₹ ${
-                      this.state?.dunzoPointDelivery?.directPointDelivery
-                        ?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.directPointDelivery
-                        ?.distance
-                    } K.M )`}
-                    style={style.dunzoDeliveryHeader}
-                  />
+                  {this.state?.dunzoPointDelivery?.directPointDelivery?.name &&
+                  this.state?.dunzoPointDelivery?.directPointDelivery?.name
+                    .length > 0 ? (
+                    <EDRTLText
+                      title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.name.slice(
+                        0,
+                        20
+                      )} (₹ ${
+                        this.state?.dunzoPointDelivery?.directPointDelivery
+                          ?.amount
+                      } - ${
+                        this.state?.dunzoPointDelivery?.directPointDelivery
+                          ?.distance
+                      } K.M )`}
+                      style={style.dunzoDeliveryHeader}
+                    />
+                  ) : null}
 
                   <Icon
                     name={
@@ -1459,21 +1471,26 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  <EDRTLText
-                    title={`${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
-                        0,
-                        20
-                      ) || "My Bhojan"
-                    } (₹ ${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                        ?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                        ?.distance
-                    } K.M )`}
-                    style={style.dunzoDeliveryHeader}
-                  />
+                  {this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                    ?.name &&
+                  this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name
+                    .length > 0 ? (
+                    <EDRTLText
+                      title={`${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
+                          0,
+                          20
+                        ) || "My Bhojan"
+                      } (₹ ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.amount
+                      } - ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.distance
+                      } K.M )`}
+                      style={style.dunzoDeliveryHeader}
+                    />
+                  ) : null}
 
                   {/* <EDRTLText
                     title={`Direct Restaurant Deliveryasdfasdfasdf \n `}
@@ -2398,11 +2415,16 @@ export class AddressListContainer extends React.PureComponent {
               ?.deliveryPointName.length > 12
           ) {
             let { dunzoPointDelivery } = this.state;
-            let nameSlice = `${getDeliveryChargeAPICall?.data?.directPointDelivery?.deliveryPointName.slice(
-              0,
-              12
-            )}...`;
-
+            let nameSlice =
+              getDeliveryChargeAPICall?.data?.directPointDelivery
+                ?.deliveryPointName &&
+              getDeliveryChargeAPICall?.data?.directPointDelivery
+                ?.deliveryPointName.length > 0
+                ? `${getDeliveryChargeAPICall?.data?.directPointDelivery?.deliveryPointName.slice(
+                    0,
+                    12
+                  )}...`
+                : "";
             // debugLog(
             //   "****************************** 22 this.props.dunzoPointDelivery?.directPointDelivery?.deliveryPointName",
             //   this.props?.dunzo_Delivery_Details?.directPointDelivery
@@ -3060,7 +3082,7 @@ export class AddressListContainer extends React.PureComponent {
         let temp = permitted_dates;
 
         if (this.isScheduleMandatory) {
-          temp = temp.slice(1, temp.length);
+          temp = temp && temp.slice(1, temp.length);
         }
         temp.map((data) => {
           this.allowedDates[data] = {
