@@ -225,10 +225,10 @@ export class CheckOutContainer extends React.PureComponent {
     //   this.state.save_order_payload
     // );
 
-    debugLog(
-      "****************************** Vijay ****************************** save_selected_slot_Id",
-      this.props.save_selected_slot_Id
-    );
+    // debugLog(
+    //   " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
+    //   this.props.selected_Slot_ID
+    // );
 
     // debugLog(
     //   "****************************** Vijay ****************************** dunzo_Delivery_Amount",
@@ -2269,6 +2269,10 @@ export class CheckOutContainer extends React.PureComponent {
   onSuccessAddOrder = async (onSuccess) => {
     // debugLog("ORDER SUCCESS ::::::::::::: ", onSuccess);
 
+    localStorage.removeItem("save_storeavailabilityData");
+    localStorage.removeItem("save_order_payload");
+    localStorage.removeItem("Slot_Master_Rest_Category");
+
     if (onSuccess.error != undefined) {
       showValidationAlert(
         onSuccess.error.message != undefined
@@ -2424,7 +2428,7 @@ export class CheckOutContainer extends React.PureComponent {
 
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
-      addOrderParams.slotId = this.props.save_selected_slot_Id?.slotId;
+      addOrderParams.slotId = this.props.selected_Slot_ID?.slotId;
 
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
@@ -3518,7 +3522,7 @@ export default connect(
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
       save_order_payload: state.userOperations.save_order_payload,
-      save_selected_slot_Id: state.userOperations.save_selected_slot_Id,
+      selected_Slot_ID: state.userOperations.selected_Slot_ID,
     };
   },
   (dispatch) => {

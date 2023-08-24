@@ -258,7 +258,7 @@ export class Restaurant extends React.Component {
     var cartData = {};
 
     // debugLog("this.state.cartData -----------------------------");
-    debugLog("this.state.cartData", this.state.cartData);
+    // debugLog("this.state.cartData", this.state.cartData);
 
     if (this.state.cartData != undefined && this.state.cartData.length == 0) {
       localStorage.removeItem("save_storeavailabilityData");
@@ -268,74 +268,42 @@ export class Restaurant extends React.Component {
       "save_storeavailabilityData"
     );
 
-    debugLog("00000000000000", storeavailabilityData);
+    // debugLog("00000000000000", storeavailabilityData);
 
     if (storeavailabilityData == null || storeavailabilityData == "") {
       localStorage.setItem("save_storeavailabilityData", data?.availability);
       let { category_Master } = this.state;
-      debugLog("444444444444444444444444444444444", category_Master);
+      // debugLog("444444444444444444444444444444444", category_Master);
       let get_category_Master =
         category_Master &&
         category_Master.filter((item) => {
           return data?.availability === item?.category_name;
         });
 
-      debugLog("555555555555555555555555", get_category_Master[0]?.category_id);
+      // debugLog("555555555555555555555555", get_category_Master[0]?.category_id);
       // this.props.navigation.state.params.restId
 
       let getDeliveryChargeAPICall = await axios.get(
         `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+        // `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${160}&menuCategoryId=${345454}`,
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      debugLog("666666666666666666666666666", getDeliveryChargeAPICall?.data);
-      let Slot_Master = [
-        {
-          compCode: "1000",
-          outletId: "160",
-          menuCategory: "1",
-          slotId: "1",
-          startTime: "09:00:00",
-          endTime: "10:00:00",
-          status: "A",
-        },
-        {
-          compCode: "1000",
-          outletId: "160",
-          menuCategory: "1",
-          slotId: "2",
-          startTime: "10:00:00",
-          endTime: "11:00:00",
-          status: "A",
-        },
-        {
-          compCode: "1000",
-          outletId: "160",
-          menuCategory: "1",
-          slotId: "3",
-          startTime: "11:00:00",
-          endTime: "12:00:00",
-          status: "A",
-        },
-        {
-          compCode: "1000",
-          outletId: "160",
-          menuCategory: "1",
-          slotId: "4",
-          startTime: "12:00:00",
-          endTime: "01:00:00",
-          status: "A",
-        },
-      ];
+      // debugLog(
+      //   "666666666666666666666666666",
+      //   getDeliveryChargeAPICall?.data?.data
+      // );
       // localStorage.setItem("Slot_Master_Rest_Category", Slot_Master);
       localStorage.setItem(
         "Slot_Master_Rest_Category",
-        JSON.stringify(Slot_Master)
+        JSON.stringify(getDeliveryChargeAPICall?.data?.data)
       );
-      this.props.save_slot_Master_details(Slot_Master);
+      this.props.save_slot_Master_details(
+        getDeliveryChargeAPICall?.data?.data || []
+      );
     }
 
     if (storeavailabilityData == null || storeavailabilityData == "") {
@@ -343,8 +311,8 @@ export class Restaurant extends React.Component {
       this.setState({ cartData: [{}] });
     }
 
-    debugLog("111111111111111111111", storeavailabilityData);
-    debugLog("333333333333333333333", data?.availability);
+    // debugLog("111111111111111111111", storeavailabilityData);
+    // debugLog("333333333333333333333", data?.availability);
 
     // debugLog(
     //   "2222222222222222222222222",

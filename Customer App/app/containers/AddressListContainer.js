@@ -279,14 +279,29 @@ export class AddressListContainer extends React.PureComponent {
           slotId,
         })
       );
+    } else {
+
+      showValidationAlert("Delivery Slots not available, Please try later");
     }
+
+    let filterstatesMastervalueszeroth = filterstatesMastervalues.map(
+      (item, i) => {
+        if (i == 0) {
+          item.flag = true;
+        } else {
+          item.flag = false;
+        }
+        return item;
+      }
+    );
+
     debugLog(
       "filterstatesMastervalues ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalues ",
-      filterstatesMastervalues
+      filterstatesMastervalueszeroth
     );
 
     this.setState({
-      slot_Master_against_category: filterstatesMastervalues || [],
+      slot_Master_against_category: filterstatesMastervalueszeroth || [],
     });
 
     this.props.save_selected_slot_Id(filterstatesMastervalues[0]);
@@ -655,6 +670,16 @@ export class AddressListContainer extends React.PureComponent {
     //   "this.state.dunzo_Point_DeliveryFlag *****************************   render  state 333  ******************** ",
     //   this?.state?.dunzo_Direct_Delivery_Amt >
     //     this.state?.dunzoPointDelivery?.directPointDelivery?.price
+    // );
+
+    // debugLog(
+    //   "this.state?.slot_Master_against_category.length **************************   render  this.state?.slot_Master_against_category.length **********************",
+    //   this.state?.slot_Master_against_category.length
+    // );
+
+    // debugLog(
+    //   "Object.keys(this.state?.dunzoPointDelivery).length  ************************** Object.keys(this.state?.dunzoPointDelivery).length **********************",
+    //   Object.keys(this.state?.dunzoPointDelivery).length
     // );
 
     return (
@@ -1632,8 +1657,10 @@ export class AddressListContainer extends React.PureComponent {
           </View>
         )} */}
 
-        {this.state.dunzo_Direct_Delivery_Amt >= 0 &&
-        this.state.dunzo_Direct_Delivery_Amt != undefined ? (
+        {this.state?.slot_Master_against_category.length > 0 &&
+        Object.keys(this.state?.dunzoPointDelivery).length > 0 ? (
+          // this.state.dunzo_Direct_Delivery_Amt >= 0 &&
+          // this.state.dunzo_Direct_Delivery_Amt != undefined
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
@@ -1655,7 +1682,7 @@ export class AddressListContainer extends React.PureComponent {
           <View style={{ marginHorizontal: 10 }}>
             <EDThemeButton
               isLoading={this.state.isLoading}
-              label="Temporarily Undeliverable Location"
+              label="Delivery Partner/Slot Unavailable"
               style={[
                 style.undeliverablethemeButton,
                 {
