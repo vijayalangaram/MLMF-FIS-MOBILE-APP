@@ -2979,7 +2979,10 @@ export class AddressListContainer extends React.PureComponent {
 
     this.setState({ isLoading: true, isPaymentLoading: true });
 
-    if (this.state.cartItems.map((data) => data.in_stock).includes("0"))
+    if (
+      this?.state?.cartItems != undefined &&
+      this?.state?.cartItems.map((data) => data.in_stock).includes("0")
+    )
       this.isScheduleMandatory = true;
     if (
       this.props.countryArray !== undefined &&
@@ -3169,9 +3172,10 @@ export class AddressListContainer extends React.PureComponent {
 
       let findmenucount = [
         ...new Set(
-          this.state.cartItems.map(
-            (item) => item.menu_avail || item.availability
-          )
+          this?.state?.cartItems != undefined &&
+            this?.state?.cartItems.map(
+              (item) => item.menu_avail || item.availability
+            )
         ),
       ];
 

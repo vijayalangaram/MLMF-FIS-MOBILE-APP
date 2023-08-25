@@ -261,8 +261,10 @@ export class Restaurant extends React.Component {
     // debugLog("this.state.cartData -----------------------------");
     // debugLog("this.state.cartData", this.state.cartData);
 
-    if (this.state.cartData != undefined && this.state.cartData.length == 0) {
+    if (this.state?.cartData && this.state?.cartData.length == 0) {
       localStorage.removeItem("save_storeavailabilityData");
+      let { cartData } = this.state;
+      this.setState({ cartData: [] });
     }
 
     let storeavailabilityData = localStorage.getItem(
@@ -1135,6 +1137,12 @@ export class Restaurant extends React.Component {
     //   "############################################################################ onProductPress",
     //   item
     // );
+
+    if (this.state?.cartData && this.state?.cartData.length == 0) {
+      localStorage.removeItem("save_storeavailabilityData");
+      let { cartData } = this.state;
+      this.setState({ cartData: [] });
+    }
 
     let storeavailabilityData = localStorage.getItem(
       "save_storeavailabilityData"

@@ -37,7 +37,7 @@ export default class ImageGrid extends React.Component {
         this.setState({
             cartData: this.props.cartData,
         })
-        this.props.cartData.map((value) => {
+        this.props?.cartData != undefined &&  this.props?.cartData.map((value) => {
             if (value.menu_id === this.props.item.menu_id && value.quantity >= 1) {
                 this.quantity = parseInt(this.quantity) + parseInt(value.quantity)
             }
