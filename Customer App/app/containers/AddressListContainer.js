@@ -167,18 +167,9 @@ export class AddressListContainer extends React.PureComponent {
     //   "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
     //   this.props.dunzo_Delivery_Amount
     // );
-    // debugLog(
-    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
-    //   this.props.dunzo_Delivery_Details
-    // );
-
-    this.props.save_order_payload_req(
-      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
-    );
-
-    localStorage.setItem(
-      "save_order_payload",
-      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
+    debugLog(
+      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
+      this.props.dunzo_Delivery_Details
     );
 
     // debugLog(
@@ -232,6 +223,15 @@ export class AddressListContainer extends React.PureComponent {
     this.getAddressList();
     this.dunzoApiCall();
     this.slot_masterCall();
+
+    this.props.save_order_payload_req(
+      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
+    );
+
+    localStorage.setItem(
+      "save_order_payload",
+      this.props.dunzo_Delivery_Details?.directRestaurantDelivery
+    );
   }
 
   getWalletHistoryAPIREQ = () => {
@@ -1326,7 +1326,7 @@ export class AddressListContainer extends React.PureComponent {
                   /> */}
 
                   {this.state?.dunzoPointDelivery?.selfPickUp?.name &&
-                  this.state?.dunzoPointDelivery?.selfPickUp?.name.length >
+                  this.state?.dunzoPointDelivery?.selfPickUp?.name.length >=
                     0 ? (
                     <EDRTLText
                       title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
@@ -1398,7 +1398,7 @@ export class AddressListContainer extends React.PureComponent {
 
                   {this.state?.dunzoPointDelivery?.directPointDelivery?.name &&
                   this.state?.dunzoPointDelivery?.directPointDelivery?.name
-                    .length > 0 ? (
+                    .length >= 0 ? (
                     <EDRTLText
                       title={`${this.state?.dunzoPointDelivery?.directPointDelivery?.name.slice(
                         0,
@@ -1471,26 +1471,26 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  {this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                  {/* {this.state?.dunzoPointDelivery?.directRestaurantDelivery
                     ?.name &&
                   this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name
-                    .length > 0 ? (
-                    <EDRTLText
-                      title={`${
-                        this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
-                          0,
-                          20
-                        ) || "My Bhojan"
-                      } (₹ ${
-                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                          ?.amount
-                      } - ${
-                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                          ?.distance
-                      } K.M )`}
-                      style={style.dunzoDeliveryHeader}
-                    />
-                  ) : null}
+                    .length >= 0 ? ( */}
+                  <EDRTLText
+                    title={`${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
+                        0,
+                        20
+                      ) || "Direct Restaurant Delivery"
+                    } (₹ ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.amount
+                    } - ${
+                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                        ?.distance
+                    } K.M )`}
+                    style={style.dunzoDeliveryHeader}
+                  />
+                  {/* ) : null} */}
 
                   {/* <EDRTLText
                     title={`Direct Restaurant Deliveryasdfasdfasdf \n `}
@@ -3218,8 +3218,6 @@ export class AddressListContainer extends React.PureComponent {
         dunzo_Delivery_Point_AmountbasedonMenucate +
         taxesintialcalc;
 
-      let PriceandSumTotalPrice = currentPriceTotal + taxesintialcalc;
-
       debugLog(
         "############################################################################ 222222",
         PriceandTotalPrice
@@ -3227,7 +3225,7 @@ export class AddressListContainer extends React.PureComponent {
 
       let { currentTotalSumValue } = this.state;
       this.setState({
-        currentTotalSumValue: Math.round(PriceandSumTotalPrice),
+        currentTotalSumValue: Math.round(currentPriceTotal),
       });
 
       if (

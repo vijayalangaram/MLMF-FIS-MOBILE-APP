@@ -269,9 +269,14 @@ export class Restaurant extends React.Component {
       "save_storeavailabilityData"
     );
 
+    // debugLog("data88888888888888888888888888888", data);
+    // debugLog("data?.availability", data?.availability);
     // debugLog("00000000000000", storeavailabilityData);
 
     if (storeavailabilityData == null || storeavailabilityData == "") {
+      let { cartData } = this.state;
+      this.setState({ cartData: [{}] });
+
       localStorage.setItem("save_storeavailabilityData", data?.availability);
       let { category_Master } = this.state;
       // debugLog("444444444444444444444444444444444", category_Master);
@@ -303,15 +308,9 @@ export class Restaurant extends React.Component {
         JSON.stringify(getDeliveryChargeAPICall?.data?.data)
       );
       this.props.save_slot_Master_details(
-        // getDeliveryChargeAPICall?.data?.data ||
-        []
+        getDeliveryChargeAPICall?.data?.data || []
       );
       this.props.save_selected_category(get_category_Master[0]?.category_id);
-    }
-
-    if (storeavailabilityData == null || storeavailabilityData == "") {
-      let { cartData } = this.state;
-      this.setState({ cartData: [{}] });
     }
 
     // debugLog("111111111111111111111", storeavailabilityData);
@@ -1132,6 +1131,27 @@ export class Restaurant extends React.Component {
   //#endregion
 
   onProductPress = (item) => {
+    // debugLog(
+    //   "############################################################################ onProductPress",
+    //   item
+    // );
+
+    let storeavailabilityData = localStorage.getItem(
+      "save_storeavailabilityData"
+    );
+
+    // debugLog("00000000000000", storeavailabilityData);
+    // debugLog("111111111111111111111", this.props.selected_Slot_ID);
+    // debugLog("222222222222222222222", this.props.selected_category_id);
+
+    if (storeavailabilityData != null && storeavailabilityData != "") {
+      storeavailabilityData != item?.availability;
+      showValidationAlert(
+        `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${item?.availability},`
+      );
+      return false;
+    }
+
     // this.selectedItem = data
     // this.setState({
     //     visible: true
@@ -1743,6 +1763,8 @@ export default connect(
       res_id: state.userOperations.res_id,
       type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
       slot_Master_details: state.userOperations.slot_Master_details,
+      selected_Slot_ID: state.userOperations.selected_Slot_ID,
+      selected_category_id: state.userOperations.selected_category_id,
     };
   },
   (dispatch) => {
