@@ -285,37 +285,77 @@ export class Restaurant extends React.Component {
       let get_category_Master =
         category_Master &&
         category_Master.filter((item) => {
-          return data?.availability === item?.category_name;
+          return (
+            data?.availability === item?.category_name ||
+            (item?.category_name &&
+              item?.category_name.includes(data?.availability))
+          );
         });
 
       // debugLog("555555555555555555555555", get_category_Master[0]?.category_id);
+      // debugLog(
+      //   "this.props?.navigation?.state?.params?.restId",
+      //   this.props?.navigation?.state?.params?.restId
+      // );
+
       // this.props.navigation.state.params.restId
 
-      let getDeliveryChargeAPICall = await axios.get(
-        `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
-        // `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${160}&menuCategoryId=${345454}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      // debugLog(
-      //   "666666666666666666666666666",
-      //   getDeliveryChargeAPICall?.data?.data
+      // let getDeliveryChargeAPICall = await axios.get(
+      //   `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
       // );
-      // localStorage.setItem("Slot_Master_Rest_Category", Slot_Master);
-      localStorage.setItem(
-        "Slot_Master_Rest_Category",
-        JSON.stringify(getDeliveryChargeAPICall?.data?.data)
-      );
-      this.props.save_slot_Master_details(
-        getDeliveryChargeAPICall?.data?.data || []
-      );
-      this.props.save_selected_category(get_category_Master[0]?.category_id);
+
+      let getDeliveryChargeAPICall = await axios
+        .get(
+          `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            // debugLog(
+            //   "888888888888888888888899999999999999999",
+            //   response?.data?.data
+            // );
+            localStorage.setItem(
+              "Slot_Master_Rest_Category",
+              JSON.stringify(response?.data?.data)
+            );
+            this.props.save_slot_Master_details(response?.data?.data);
+            this.props.save_selected_category(
+              get_category_Master[0]?.category_id
+            );
+          }
+        })
+        .then((data) => {})
+        .catch((error) => {
+          // debugLog("888888888888888888888899999999999999999 error ", error);
+          showValidationAlert(
+            `Delivery Slots Not Available for ${data?.availability} `
+          );
+
+          localStorage.setItem(
+            "Slot_Master_Rest_Category",
+            JSON.stringify(undefined)
+          );
+
+          this.props.save_slot_Master_details(undefined);
+          this.props.save_selected_category(undefined);
+          return false;
+        });
     }
 
-    // debugLog("111111111111111111111", storeavailabilityData);
+    // debugLog(
+    //   "6666666666666666666666666666666666666666666",
+    //   storeavailabilityData
+    // );
     // debugLog("333333333333333333333", data?.availability);
 
     // debugLog(
@@ -337,6 +377,14 @@ export class Restaurant extends React.Component {
       return false;
     }
 
+    let Slot_Master_Rest_CategoryCheking = localStorage.getItem(
+      "Slot_Master_Rest_Category"
+    );
+    // debugLog(
+    //   "Slot_Master_Rest_CategoryCheking777777777777777777777777777",
+    //   (Slot_Master_Rest_CategoryCheking != undefined) === true
+    // );
+
     if (this.props.table_id !== undefined && this.props.table_id !== "")
       this.takeToCheckout = true;
     else this.takeToCheckout = false;
@@ -347,14 +395,17 @@ export class Restaurant extends React.Component {
         this.takeToCheckout = false;
         this.storeData(data, qty);
       });
-    } else
+    } else if (Slot_Master_Rest_CategoryCheking != undefined) {
+      // debugLog("7575452452452452452452000000000000000000");
       getCartList(
         (success) => {
           console.log(":::::::::::", success);
           if (success != undefined) {
-            // cartArray = success.items;
-            cartArray = storeavailabilityData != null ? success.items : [];
-
+            cartArray = success.items;
+            // cartArray =
+            //   Slot_Master_Rest_CategoryCheking != undefined
+            //     ? success.items
+            //     : [];
             // debugLog(":::::::::::  cartArray.length   ", cartArray.length);
             // if (cartArray.length - 1 == 0) {
             //   debugLog("::::::::::: removeItem  ", cartArray.length);
@@ -493,6 +544,9 @@ export class Restaurant extends React.Component {
         },
         (error) => {}
       );
+    } else {
+      // debugLog("7575452452452452452452");
+    }
   };
 
   //#region
