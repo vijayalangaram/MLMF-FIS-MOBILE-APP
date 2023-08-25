@@ -57,6 +57,7 @@ import {
   saveMinOrderAmount,
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
+  save_slot_Master_details,
 } from "../../app/redux/actions/User";
 
 import {
@@ -121,14 +122,24 @@ export class CartContainer extends React.PureComponent {
     //   "****************************** Vijay ******************************  this.props.userID",
     //   this.props.selected_Res_Id
     // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+
+    // debugLog(
+    //   "********************************** CartContainer this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
+    //   this.props.selected_Res_Id
+    // );
+
     debugLog(
-      "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
-      this.props.dunzo_Delivery_Amount
+      " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
+      this.props.selected_Slot_ID
     );
 
     debugLog(
-      "********************************** CartContainer this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
-      this.props.selected_Res_Id
+      " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
+      this.props.selected_category_id
     );
 
     // debugLog(
@@ -141,8 +152,9 @@ export class CartContainer extends React.PureComponent {
     if (this.props.dunzo_Delivery_Amount == undefined) {
       this.getAddressList();
     }
-
-   
+    if (this.props.selected_Slot_ID == undefined) {
+      this.getSlotMAster();
+    }
   }
 
   cartTotalPrice = (price) => {};
@@ -151,6 +163,34 @@ export class CartContainer extends React.PureComponent {
       restId: this.res_id,
       content_id: this.content_id,
     });
+  };
+
+  getSlotMAster = async () => {
+    debugLog("666666666666666666666666666", this.props.selected_Res_Id);
+    debugLog("777777777777777777777777", this.props.selected_category_id);
+    let splitres_name =
+      this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
+
+    let getDeliveryChargeAPICall = await axios.get(
+      `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${splitres_name[0]}&menuCategoryId=${this.props.selected_category_id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    debugLog(
+      "666666666666666666666666666",
+      getDeliveryChargeAPICall?.data?.data
+    );
+    // localStorage.setItem("Slot_Master_Rest_Category", Slot_Master);
+    // localStorage.setItem(
+    //   "Slot_Master_Rest_Category",
+    //   JSON.stringify(getDeliveryChargeAPICall?.data?.data)
+    // );
+    this.props.save_slot_Master_details(
+      getDeliveryChargeAPICall?.data?.data || []
+    );
   };
 
   /** GET ADDRESS API */
@@ -814,6 +854,8 @@ export default connect(
       selected_Res_Id: state.userOperations.selected_Res_Id,
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
+      selected_Slot_ID: state.userOperations.selected_Slot_ID,
+      selected_category_id: state.userOperations.selected_category_id,
     };
   },
   (dispatch) => {
@@ -836,6 +878,9 @@ export default connect(
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));
+      },
+      save_slot_Master_details: (table_id) => {
+        dispatch(save_slot_Master_details(table_id));
       },
     };
   }

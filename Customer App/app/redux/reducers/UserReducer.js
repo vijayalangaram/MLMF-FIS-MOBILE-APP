@@ -10,6 +10,7 @@ import {
   TYPE_SAVE_MIN_ORDER_AMOUNT,
   TYPE_DELIVERY_DUNZO__DETAILS,
   TYPE_SLOT_MASTER_DETAILS,
+  TYPE_SELECTED_CATEGORY,
   TYPE_TODAY_TOMORROW__DATE,
   TYPE_SELECTED_RES_ID,
   TYPE_DUNZO_DELIVERY_AMT,
@@ -204,6 +205,11 @@ export function userOperations(state = initialStateUser, action) {
     case TYPE_SLOT_MASTER_DETAILS: {
       return Object.assign({}, state, {
         slot_Master_details: action.value,
+      });
+    }
+    case TYPE_SELECTED_CATEGORY: {
+      return Object.assign({}, state, {
+        selected_category_id: action.value,
       });
     }
 

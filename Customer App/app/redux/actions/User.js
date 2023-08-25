@@ -174,6 +174,15 @@ export function save_slot_Master_details(details) {
   };
 }
 
+
+export const TYPE_SELECTED_CATEGORY = "TYPE_SELECTED_CATEGORY";
+export function save_selected_category(details) {
+  return {
+    type: TYPE_SELECTED_CATEGORY,
+    value: details,
+  };
+}
+
 export const TYPE_SELECTED_RES_ID = "TYPE_SELECTED_RES_ID";
 export function save_selected_Res_ID(details) {
   return {

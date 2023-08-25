@@ -59,6 +59,7 @@ import {
   saveTableIDInRedux,
   saveResIDInRedux,
   save_slot_Master_details,
+  save_selected_category,
 } from "../redux/actions/User";
 import { FlatList } from "react-native";
 import EDRTLView from "../components/EDRTLView";
@@ -302,8 +303,10 @@ export class Restaurant extends React.Component {
         JSON.stringify(getDeliveryChargeAPICall?.data?.data)
       );
       this.props.save_slot_Master_details(
-        getDeliveryChargeAPICall?.data?.data || []
+        // getDeliveryChargeAPICall?.data?.data ||
+        []
       );
+      this.props.save_selected_category(get_category_Master[0]?.category_id);
     }
 
     if (storeavailabilityData == null || storeavailabilityData == "") {
@@ -1765,6 +1768,9 @@ export default connect(
 
       save_slot_Master_details: (table_id) => {
         dispatch(save_slot_Master_details(table_id));
+      },
+      save_selected_category: (table_id) => {
+        dispatch(save_selected_category(table_id));
       },
     };
   }
