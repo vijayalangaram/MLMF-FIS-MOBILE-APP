@@ -301,7 +301,7 @@ export class Restaurant extends React.Component {
       // this.props.navigation.state.params.restId
 
       // let getDeliveryChargeAPICall = await axios.get(
-      //   `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+      //   `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
       //   {
       //     headers: {
       //       "Content-Type": "application/json",
@@ -311,7 +311,7 @@ export class Restaurant extends React.Component {
 
       let getDeliveryChargeAPICall = await axios
         .get(
-          `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
           {
             headers: {
               "Content-Type": "application/json",

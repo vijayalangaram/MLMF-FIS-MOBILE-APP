@@ -1471,26 +1471,37 @@ export class AddressListContainer extends React.PureComponent {
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  {/* {this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                  {this.state?.dunzoPointDelivery?.directRestaurantDelivery
                     ?.name &&
                   this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name
-                    .length >= 0 ? ( */}
-                  <EDRTLText
-                    title={`${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
-                        0,
-                        20
-                      ) || "Direct Restaurant Delivery"
-                    } (₹ ${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                        ?.amount
-                    } - ${
-                      this.state?.dunzoPointDelivery?.directRestaurantDelivery
-                        ?.distance
-                    } K.M )`}
-                    style={style.dunzoDeliveryHeader}
-                  />
-                  {/* ) : null} */}
+                    .length >= 0 ? (
+                    <EDRTLText
+                      title={`${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery?.name.slice(
+                          0,
+                          20
+                        ) || "My Bhojan"
+                      } (₹ ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.amount
+                      } - ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.distance
+                      } K.M )`}
+                      style={style.dunzoDeliveryHeader}
+                    />
+                  ) : (
+                    <EDRTLText
+                      title={`${"My Bhojan"} (₹ ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.amount
+                      } - ${
+                        this.state?.dunzoPointDelivery?.directRestaurantDelivery
+                          ?.distance
+                      } K.M )`}
+                      style={style.dunzoDeliveryHeader}
+                    />
+                  )}
 
                   {/* <EDRTLText
                     title={`Direct Restaurant Deliveryasdfasdfasdf \n `}
@@ -2366,8 +2377,7 @@ export class AddressListContainer extends React.PureComponent {
     };
 
     let getDeliveryChargeAPICall = await axios.post(
-      // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
-      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+      "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
       datas,
       {
         headers: {
@@ -2861,7 +2871,6 @@ export class AddressListContainer extends React.PureComponent {
     };
 
     let getDeliveryChargeAPICall = await axios.post(
-      // "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
       "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
       data,
       {

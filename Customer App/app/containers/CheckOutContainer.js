@@ -2340,7 +2340,7 @@ export class CheckOutContainer extends React.PureComponent {
       // );
 
       let getDeliveryChargeAPICall = await axios.post(
-        "http://52.77.35.146:8080/FIS/api/auth/saveOrder",
+        "https://fis.clsslabs.com/FIS/api/auth/saveOrder",
         dataforsaveorder,
         {
           headers: {
@@ -2426,9 +2426,26 @@ export class CheckOutContainer extends React.PureComponent {
         }
       }
 
+      let startTimeendTime =
+        this.props?.selected_Slot_ID?.name &&
+        this.props?.selected_Slot_ID?.name.split("-");
+
+      let startTimes =      startTimeendTime &&  startTimeendTime[0] && startTimeendTime[0].replace(/[a-zA-Z]/g, "");
+      let endstartTimes =      startTimeendTime && startTimeendTime[1] && startTimeendTime[1].replace(/[a-zA-Z]/g, "");
+
+      let startTimestrimmed = startTimes && startTimes.trim();
+      let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
+
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
-      addOrderParams.slotId = this.props.selected_Slot_ID?.slotId;
+      addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
+      addOrderParams.slot_open_time = startTimestrimmed;
+      addOrderParams.slot_close_time = endstartTimestrimmed;
+
+      debugLog(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ this.props.selected_Slot_ID~~~~~~~~~~~~~~~",
+        this.props.selected_Slot_ID
+      );
 
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
