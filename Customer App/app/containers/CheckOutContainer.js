@@ -2430,8 +2430,14 @@ export class CheckOutContainer extends React.PureComponent {
         this.props?.selected_Slot_ID?.name &&
         this.props?.selected_Slot_ID?.name.split("-");
 
-      let startTimes =      startTimeendTime &&  startTimeendTime[0] && startTimeendTime[0].replace(/[a-zA-Z]/g, "");
-      let endstartTimes =      startTimeendTime && startTimeendTime[1] && startTimeendTime[1].replace(/[a-zA-Z]/g, "");
+      let startTimes =
+        startTimeendTime &&
+        startTimeendTime[0] &&
+        startTimeendTime[0].replace(/[a-zA-Z]/g, "");
+      let endstartTimes =
+        startTimeendTime &&
+        startTimeendTime[1] &&
+        startTimeendTime[1].replace(/[a-zA-Z]/g, "");
 
       let startTimestrimmed = startTimes && startTimes.trim();
       let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
@@ -2439,13 +2445,13 @@ export class CheckOutContainer extends React.PureComponent {
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
-      addOrderParams.slot_open_time = startTimestrimmed;
-      addOrderParams.slot_close_time = endstartTimestrimmed;
+      // addOrderParams.slot_open_time = startTimestrimmed;
+      // addOrderParams.slot_close_time = endstartTimestrimmed;
 
-      debugLog(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ this.props.selected_Slot_ID~~~~~~~~~~~~~~~",
-        this.props.selected_Slot_ID
-      );
+      // debugLog(
+      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ this.props.selected_Slot_ID~~~~~~~~~~~~~~~",
+      //   this.props.selected_Slot_ID
+      // );
 
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
@@ -2459,10 +2465,10 @@ export class CheckOutContainer extends React.PureComponent {
 
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
-      // debugLog(
-      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~",
-      //   addOrderParams
-      // );
+      debugLog(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~",
+        addOrderParams
+      );
       // return false;
 
       if (status) {

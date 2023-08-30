@@ -84,10 +84,12 @@ import {
   save_order_payload_req,
   save_selected_slot_Id,
 } from "../../app/redux/actions/User";
+import SelectDropdown from "react-native-select-dropdown";
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export class AddressListContainer extends React.PureComponent {
   //#region LIFE CYCLE METHODS
-
   constructor(props) {
     super(props);
     this.validationsHelper = new Validations();
@@ -154,6 +156,8 @@ export class AddressListContainer extends React.PureComponent {
       dunzo_Direct_Delivery_Amt: "",
       // loader_Flag_dunzo_CallResponse: false,
       slot_Master_against_category: [],
+      isFocus: false,
+      selected_Slot_value: "",
     };
     this.checkoutData = this.props.checkoutDetail;
   }
@@ -252,11 +256,8 @@ export class AddressListContainer extends React.PureComponent {
 
   slot_masterCall = () => {
     let localstrSlotMaster = localStorage.getItem("Slot_Master_Rest_Category");
-
     let { slot_Master_against_category } = this.state;
-
     let filterstatesMastervalues = [];
-
     // debugLog(
     //   "this.props.slot_Master_details ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
     //   this.props.slot_Master_details
@@ -274,9 +275,10 @@ export class AddressListContainer extends React.PureComponent {
 
       filterstatesMastervalues = this.props.slot_Master_details.map(
         ({ startTime, endTime, slotId }) => ({
-          name: ` ${" "}From ${startTime} - To: ${endTime}${" "}`,
+          name: ` ${" "} ${startTime} - ${endTime}${" "}`,
           flag: false,
           slotId,
+          value: slotId,
         })
       );
     } else {
@@ -301,6 +303,7 @@ export class AddressListContainer extends React.PureComponent {
 
     this.setState({
       slot_Master_against_category: filterstatesMastervalueszeroth || [],
+      selected_Slot_value: filterstatesMastervalues[0]?.value,
     });
 
     this.props.save_selected_slot_Id(filterstatesMastervalues[0]);
@@ -606,27 +609,38 @@ export class AddressListContainer extends React.PureComponent {
   };
 
   slot_Master_against_category_Call = (value) => {
-    let { slot_Master_against_category } = this.state;
-    let filterstatesMastervalues = slot_Master_against_category.map(
+    let { slot_Master_against_category, selected_Slot_value } = this.state;
+    // let filterstatesMastervalues = slot_Master_against_category.map(
+    //   (item, i) => {
+    //     if (i == value) {
+    //       item.flag = true;
+    //     } else {
+    //       item.flag = false;
+    //     }
+    //     return item;
+    //   }
+    // );
+    let filterstatesMastervalues = slot_Master_against_category.filter(
       (item, i) => {
-        if (i == value) {
-          item.flag = true;
-        } else {
-          item.flag = false;
+        if (item?.value == value?.value) {
+          return item;
         }
-        return item;
       }
     );
-
-    debugLog(
-      "****************************** Vijay ****************************** filterstatesMastervalues",
-      filterstatesMastervalues[value]
-    );
-
+    // debugLog(
+    //   "****************************** Vijay ****************************** filterstatesMastervalues",
+    //   filterstatesMastervalues
+    // );
+    // debugLog(
+    //   "****************************** Vijay ****************************** filterstatesMastervalues",
+    //   filterstatesMastervalues[value]
+    // );
     this.setState({
-      slot_Master_against_category: filterstatesMastervalues,
+      // slot_Master_against_category: filterstatesMastervalues,
+      selected_Slot_value: value?.value,
     });
-    this.props.save_selected_slot_Id(filterstatesMastervalues[value]);
+    // this.props.save_selected_slot_Id(filterstatesMastervalues[value]);
+    this.props.save_selected_slot_Id(filterstatesMastervalues[0]);
   };
 
   //#region
@@ -638,6 +652,8 @@ export class AddressListContainer extends React.PureComponent {
       isSelectAddress,
       dunzoPointDelivery,
       slot_Master_against_category,
+      isFocus,
+      selected_Slot_value,
       // loader_Flag_dunzo_CallResponse,
     } = this.state;
 
@@ -671,10 +687,10 @@ export class AddressListContainer extends React.PureComponent {
     //     this.state?.dunzoPointDelivery?.directPointDelivery?.price
     // );
 
-    // debugLog(
-    //   "this.state?.slot_Master_against_category.length **************************   render  this.state?.slot_Master_against_category.length **********************",
-    //   this.state?.slot_Master_against_category.length
-    // );
+    debugLog(
+      "this.state?.slot_Master_against_category.length **************************   render  this.state?.slot_Master_against_category.length **********************",
+      this.state?.slot_Master_against_category
+    );
 
     // debugLog(
     //   "Object.keys(this.state?.dunzoPointDelivery).length  ************************** Object.keys(this.state?.dunzoPointDelivery).length **********************",
@@ -1252,13 +1268,59 @@ export class AddressListContainer extends React.PureComponent {
             this.state?.slot_Master_against_category.length > 0 ? (
               <View style={{ flex: 1 }}>
                 <EDRTLText
-                  title={"Choose Delivery Slot"}
+                  title={`Choose Delivery Slot (${
+                    this.props?.type_today_tomorrow__date
+                      ? this.props?.type_today_tomorrow__date
+                          .split("-")
+                          .reverse()
+                          .join("-")
+                      : null
+                  })`}
                   style={style.paymentHeader}
                 />
               </View>
             ) : null}
 
-            {this.state?.slot_Master_against_category.length > 0 &&
+            <View style={styles.container}>
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={this.state?.slot_Master_against_category}
+                // search
+                maxHeight={300}
+                labelField="name"
+                valueField="value"
+                placeholder={!isFocus ? "Select Slots" : "..."}
+                searchPlaceholder="Search..."
+                value={selected_Slot_value}
+                // onFocus={() => setIsFocus(true)}
+                // onBlur={() => setIsFocus(false)}
+                onChange={(item, i) => {
+                  debugLog("item", item);
+                  debugLog("i", i);
+                  // setValue(item.value);
+                  this.slot_Master_against_category_Call(item);
+                  this.setState({
+                    selected_Slot_value: item?.value,
+                    isFocus: !isFocus,
+                  });
+                  // setIsFocus(false);
+                }}
+                renderLeftIcon={() => (
+                  <AntDesign
+                    style={styles.icon}
+                    color={isFocus ? "blue" : "black"}
+                    name="Safety"
+                    size={20}
+                  />
+                )}
+              />
+            </View>
+
+            {/* {this.state?.slot_Master_against_category.length > 0 &&
               this.state?.slot_Master_against_category.map(
                 (slot_Master_against_categoryitems, index) => {
                   return (
@@ -1297,7 +1359,7 @@ export class AddressListContainer extends React.PureComponent {
                     </EDRTLView>
                   );
                 }
-              )}
+              )} */}
 
             {this.state.dunzo_Direct_Delivery_Amt >= 0 ? (
               // ||
@@ -2773,14 +2835,14 @@ export class AddressListContainer extends React.PureComponent {
   dunzoApiCall = async () => {
     let { dunzoPointDelivery } = this.state;
 
-    debugLog(
-      "****************************** dunzoApiCall ******************** dunzo_Delivery_Amount *********************",
-      this.props.dunzo_Delivery_Amount
-    );
-    debugLog(
-      "****************************** dunzoApiCall **********************  this.props.dunzo_Delivery_Details  *********************",
-      this.props.dunzo_Delivery_Details
-    );
+    // debugLog(
+    //   "****************************** dunzoApiCall ******************** dunzo_Delivery_Amount *********************",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+    // debugLog(
+    //   "****************************** dunzoApiCall **********************  this.props.dunzo_Delivery_Details  *********************",
+    //   this.props.dunzo_Delivery_Details
+    // );
     // debugLog(
     //   "****************************** dunzoApiCall ****************************** dunzo_Delivery_Amount > 0 ******************************",
     //   this.props.dunzo_Delivery_Amount > 0
@@ -3851,6 +3913,46 @@ const style = StyleSheet.create({
     alignSelf: "center",
   },
 });
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
 //#endregion
 
 export default connect(
@@ -3870,6 +3972,7 @@ export default connect(
       dunzo_Delivery_Amount: state.userOperations.dunzo_Delivery_Amount,
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
       slot_Master_details: state.userOperations.slot_Master_details,
+      type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
     };
   },
   (dispatch) => {
