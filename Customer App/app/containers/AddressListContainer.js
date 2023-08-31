@@ -274,11 +274,13 @@ export class AddressListContainer extends React.PureComponent {
       // );
 
       filterstatesMastervalues = this.props.slot_Master_details.map(
-        ({ startTime, endTime, slotId }) => ({
+        ({ startTime, endTime, slotId, formatStartTime, formatEndTime }) => ({
           name: ` ${" "} ${startTime} - ${endTime}${" "}`,
           flag: false,
           slotId,
           value: slotId,
+          formatStartTime,
+          formatEndTime,
         })
       );
     } else {

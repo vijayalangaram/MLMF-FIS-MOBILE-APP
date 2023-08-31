@@ -1203,11 +1203,16 @@ export class Restaurant extends React.Component {
     );
 
     // debugLog("00000000000000", storeavailabilityData);
+    // debugLog("item?.availability", item?.availability);
+
     // debugLog("111111111111111111111", this.props.selected_Slot_ID);
     // debugLog("222222222222222222222", this.props.selected_category_id);
 
-    if (storeavailabilityData != null && storeavailabilityData != "") {
-      storeavailabilityData != item?.availability;
+    if (
+      storeavailabilityData != null &&
+      storeavailabilityData != "" &&
+      storeavailabilityData != item?.availability
+    ) {
       showValidationAlert(
         `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${item?.availability},`
       );

@@ -2330,14 +2330,14 @@ export class CheckOutContainer extends React.PureComponent {
 
       let dataforsaveorder = {
         order_id: onSuccess.order_id,
-        delivery_flag: this.props.save_order_payload?.flag,
-        address_id: this.props.save_order_payload?.id,
+        // delivery_flag: this.props.save_order_payload?.flag,
+        // address_id: this.props.save_order_payload?.id,
       };
 
-      // debugLog(
-      //   ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ::::::::::onSuccess.order_id",
-      //   dataforsaveorder
-      // );
+      debugLog(
+        ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ::::::::::onSuccess.order_id",
+        dataforsaveorder
+      );
 
       let getDeliveryChargeAPICall = await axios.post(
         "https://fis.clsslabs.com/FIS/api/auth/saveOrder",
@@ -2351,10 +2351,10 @@ export class CheckOutContainer extends React.PureComponent {
       );
 
       if (getDeliveryChargeAPICall.status === 200) {
-        // debugLog(
-        //   ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
-        //   getDeliveryChargeAPICall
-        // );
+        debugLog(
+          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
+          getDeliveryChargeAPICall.status
+        );
       } else {
       }
     }
@@ -2430,28 +2430,28 @@ export class CheckOutContainer extends React.PureComponent {
         this.props?.selected_Slot_ID?.name &&
         this.props?.selected_Slot_ID?.name.split("-");
 
-      let startTimes =
-        startTimeendTime &&
-        startTimeendTime[0] &&
-        startTimeendTime[0].replace(/[a-zA-Z]/g, "");
-      let endstartTimes =
-        startTimeendTime &&
-        startTimeendTime[1] &&
-        startTimeendTime[1].replace(/[a-zA-Z]/g, "");
+      // let startTimes =
+      //   startTimeendTime &&
+      //   startTimeendTime[0] &&
+      //   startTimeendTime[0].replace(/[a-zA-Z]/g, "");
+      // let endstartTimes =
+      //   startTimeendTime &&
+      //   startTimeendTime[1] &&
+      //   startTimeendTime[1].replace(/[a-zA-Z]/g, "");
 
-      let startTimestrimmed = startTimes && startTimes.trim();
-      let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
+      // let startTimestrimmed = startTimes && startTimes.trim();
+      // let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
 
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
-      // addOrderParams.slot_open_time = startTimestrimmed;
-      // addOrderParams.slot_close_time = endstartTimestrimmed;
+      addOrderParams.slot_open_time =        this.props.selected_Slot_ID?.formatStartTime;
+      addOrderParams.slot_close_time =        this.props.selected_Slot_ID?.formatEndTime;
 
-      // debugLog(
-      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ this.props.selected_Slot_ID~~~~~~~~~~~~~~~",
-      //   this.props.selected_Slot_ID
-      // );
+      debugLog(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ this.props.selected_Slot_ID~~~~~~~~~~~~~~~",
+        this.props.selected_Slot_ID
+      );
 
       // debugLog(
       //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~ 00",
