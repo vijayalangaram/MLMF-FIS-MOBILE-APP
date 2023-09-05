@@ -172,8 +172,8 @@ export class Restaurant extends React.Component {
     //   this.props.type_today_tomorrow__date
     // );
     debugLog(
-      "****************************** Vijay ****************************** Restaurant  this.props.res_id ******************************",
-      this.props.navigation.state.params.restId
+      "******************************  this.props.navigation.state.params ******************************",
+      this.props.navigation?.state?.params?.selected_restaurantCategory
     );
   };
 
@@ -1685,7 +1685,11 @@ export class Restaurant extends React.Component {
           price: "" + this.priceType,
           availability: this.availType,
           plan_date: this.props.type_today_tomorrow__date,
+          category: this.props.navigation?.state?.params?.selected_restaurantCategory
         };
+
+debugLog("objRestaurantData", objRestaurantData); 
+
 
         getRestaurantMenu(
           objRestaurantData,
