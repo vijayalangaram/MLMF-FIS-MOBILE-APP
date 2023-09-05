@@ -1,20 +1,9 @@
 import I18n from "i18n-js";
 import { Spinner } from "native-base";
 import React from "react";
-import {
-  AppState,
-  Linking,
-  Platform,
-  RefreshControl,
-  ScrollView,
-  SectionList,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
 import { RNCamera } from "react-native-camera";
 import deviceInfoModule from "react-native-device-info";
-import { Icon } from "react-native-elements";
+import { Card, ListItem, Icon } from "react-native-elements";
 import { PERMISSIONS, RESULTS } from "react-native-permissions";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import RNRestart from "react-native-restart";
@@ -98,9 +87,25 @@ import {
 import BaseContainer from "./BaseContainer";
 import axios from "axios";
 import EDThemeButton from "../components/EDThemeButton";
+import Modal from "react-native-modal";
+import {
+  Button,
+  AppState,
+  Linking,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  SectionList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  TextInput,
+} from "react-native";
 
 class MainContainer extends React.Component {
-  debugger;
   distance = "";
   distanceForPickUp = "";
   foodTypes = [];
@@ -165,6 +170,11 @@ class MainContainer extends React.Component {
     tomorrow: new Date() + 1,
     today_tomorrow_Flag: false,
     restaurant_restaurantName: "",
+    modal_Pop_Up: false,
+    userOption: null,
+    restaurantCategoryMAster: [],
+    selected_restaurantCategory: "",
+    restObjModelvalue: "",
   };
 
   /** DID MOUNT */
@@ -1220,8 +1230,9 @@ class MainContainer extends React.Component {
   };
   //#endregion
 
+  onClose = () => this.setState({ modal_Pop_Up: false });
   /** ON POPULAR RES EVENT */
-  onPopularResEvent = (restObjModel) => {
+  onPopularResEvent = async (restObjModel) => {
     let { getintialAddress, today_tomorrow_Flag, restaurant_restaurantName } =
       this.state;
     this.intialDunzoCall(
@@ -1238,14 +1249,84 @@ class MainContainer extends React.Component {
       restaurant_restaurantName: `${restObjModel.restuarant_id}-${restObjModel.name}`,
     });
 
-    this.props.navigation.navigate("RestaurantContainer", {
-      restId: restObjModel.restuarant_id,
-      content_id: restObjModel.content_id,
-      currency: restObjModel.currency_symbol,
+    let planDate = !this.state.today_tomorrow_Flag
+      ? this.state.today
+      : this.state.tomorrow;
+
+    // debugLog("planDate", planDate);
+
+    let reversedate = planDate && planDate.split("-").reverse().join("-");
+    let getRestaurantCategoryAPI = await axios
+      .get(
+        `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          // debugLog(
+          //   "888888888888888888888899999999999999999",
+          //   response?.data?.data
+          // );
+          let { restaurantCategoryMAster } = this.state;
+          this.setState({
+            restaurantCategoryMAster: response?.data?.data,
+          });
+        }
+      })
+      .then((data) => {})
+      .catch((error) => {
+        // debugLog("888888888888888888888899999999999999999 error ", error);
+        // showValidationAlert(`Category not available`);
+        let { restaurantCategoryMAster } = this.state;
+        this.setState({
+          restaurantCategoryMAster: [],
+        });
+        // this.props.save_slot_Master_details(undefined);
+        // this.props.save_selected_category(undefined);
+        // return false;
+      });
+
+    let { modal_Pop_Up, restObjModelvalue } = this.state;
+
+    this.setState({
+      modal_Pop_Up: !this.state.modal_Pop_Up,
+      restObjModelvalue: restObjModel,
+    });
+
+    // this.props.navigation.navigate("RestaurantContainer", {
+    //   restId:restObjModel.restuarant_id,
+    //   content_id: restObjModel.content_id,
+    //   currency: restObjModel.currency_symbol,
+    //   isDineIn: false,
+    //   isShowReview: this.state.isShowReview,
+    //   resObj:restObjModel,
+    //   today_tomorrow_Flag: this.state.today_tomorrow_Flag,
+    //   // selected_restaurantCategory: this.state.selected_restaurantCategory,
+    // });
+  };
+
+  callRes_container = async (resiobje) => {
+
+    // debugLog("888888888888888888888899999999999999999 resiobje ", resiobje?.category );
+    debugLog("this.state?.restObjModelvalue this.state?.restObjModelvalue ", this.state?.restObjModelvalue);
+
+    let { modal_Pop_Up, restObjModelvalue, selected_restaurantCategory } =      this.state;
+      this.setState({
+        modal_Pop_Up: !this.state.modal_Pop_Up
+      });      
+      this.props.navigation.navigate("RestaurantContainer", {
+      selected_restaurantCategory: resiobje?.category,
+      restId: this.state?.restObjModelvalue?.restuarant_id,
+      content_id: this.state?.restObjModelvalue?.content_id,
+      currency: this.state?.restObjModelvalue?.currency_symbol,
       isDineIn: false,
       isShowReview: this.state.isShowReview,
-      resObj: restObjModel,
-      today_tomorrow_Flag: this.state.today_tomorrow_Flag,
+      resObj: this.state?.restObjModelvalue,
+      today_tomorrow_Flag: this.state.today_tomorrow_Flag,      
     });
   };
 
@@ -1487,6 +1568,7 @@ class MainContainer extends React.Component {
               title={strings("nearByRestaurant")}
               style={styles.title}
             />
+
             <EDRestaurantDeatilsFlatList
               arrayRestaurants={this.arrayRestaurants}
               social_links={
@@ -1925,97 +2007,215 @@ class MainContainer extends React.Component {
     });
   };
 
+  toggleModal = () => {
+    this.setState({ modal_Pop_Up: !this.state.modal_Pop_Up });
+  };
+
+  selectHandler = (value) => {
+    this.setState({ modal_Pop_Up: false });
+    onSelect(value);
+  };
+
+  _hideModal() {
+    this.setState({
+      modal_Pop_Up: false,
+    });
+  }
   //#endregion
   render() {
-    let { today, tomorrow, today_tomorrow_Flag } = this.state;
+    let {
+      today,
+      tomorrow,
+      today_tomorrow_Flag,
+      modal_Pop_Up,
+      selctedCategory,
+      userOption,
+      restaurantCategoryMAster,
+      selected_restaurantCategory,
+      restObjModelvalue,
+    } = this.state;
 
     return (
-      <BaseContainer
-        title={"home"}
-        isTitleIcon
-        left={"menu"}
-        // tabs={[strings("deliveryOrder"), strings("pickUpOrder")]}
-        tabs={[strings("deliveryOrder")]}
-        selectedIndex={this.props.orderModeInRedux}
-        onSegmentIndexChangeHandler={this.onOrderModeSelect}
-        // onLeftFC={this._onChangeLanguagePressed}
-        // isLeftFC={this.state.isShowLanguageIcon}
-        right={
-          this.state.locationError && this.currentCity == undefined
-            ? []
-            : this.props.cartCount > 0
-            ? [
-                this.state.isShowLanguageIcon
-                  ? { url: "language", name: "language", type: "material" }
-                  : {},
-                { url: "filter", name: "filter", type: "ant-design" },
-                {
-                  url: "shopping-cart",
-                  name: "Cart",
-                  value: this.props.cartCount,
-                  type: "ant-design",
-                },
-              ]
-            : [
-                this.state.isShowLanguageIcon
-                  ? { url: "language", name: "language", type: "material" }
-                  : {},
-                { url: "filter", name: "filter", type: "ant-design" },
-              ]
-        }
-        onLeft={this._onSideMenuPressed}
-        onRight={this.renderRightTopHeader}
-        onConnectionChangeHandler={this.networkConnectivityStatus}
-        isQRLoading={this.state.isQRLoading}
-        loading={this.state.isLoading}
-      >
-        {/* NAVIGATION EVENTS */}
-        <NavigationEvents onDidFocus={this.onDidFocusMainContainer} />
+      <>
+        {modal_Pop_Up && (
+          <View style={{ flex: 1 }}>
+            <Modal
+              isVisible={this.state.modal_Pop_Up}
+              hasBackdrop={true}
+              backdropOpacity={10}
+              backdropColor={"#65242e"}
+              transparent={true}
+            >
+              <View>
+                <Text style={styles.option}> Choose your menu category</Text>
+              </View>
 
-        {/* LANGUAGE SELECTION DIALOG */}
-        {this.renderLanguageSelectDialogue()}
+              <View style={{ ...styles.card, ...this.props.styles }}>
+                {this.props.children}
+              </View>
+              {/* <Card containerStyle={{ padding: 0 }}> */}
 
-        {/* CAMERA FOR DIGITAL DINE IN */}
-        {/* {this.state.floatVisible ? this.renderScanButton() : null}
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                {restaurantCategoryMAster &&
+                  restaurantCategoryMAster.map((items) => {
+                    debugLog("cardviiiw", items);
+                    return (                        <EDThemeButton
+                          label={`${items?.categoryName}`}
+                          style={{
+                            width: "40%",
+                            backgroundColor: "grey",
+                            // marginLeft: 15,
+                          }}
+                          textStyle={{
+                            fontSize: getProportionalFontSize(14),
+                            paddingLeft: 7,
+                            paddingRight: 7,
+                          }}
+                          // onPress={this.callRes_container(items)}
+                          onPress={() => {
+                            this.callRes_container(items)
+                          }}
+                        />  
+                    );               
+                    // return (
+                    //   <ListItem
+                    //     //key={items}
+                    //     roundAvatar
+                    //     title={items}
+                    //    //leftAvatar={{ source: { uri: u.avatar } }}
+                    //   />
+                    // );
+                  })}
+              </EDRTLView>
+
+              {/* </Card> */}
+
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                {/* <EDThemeButton
+                  label={`Order now `}
+                  style={{
+                    width: "40%",
+                    backgroundColor: "green",
+                    marginLeft: 15,
+                  }}
+                  textStyle={{
+                    fontSize: getProportionalFontSize(14),
+                    paddingLeft: 7,
+                    paddingRight: 7,
+                  }}
+                   onPress={this.callRes_container}                   
+                /> */}
+                <EDThemeButton
+                  label={`back`}
+                  style={{
+                    width: "40%",
+                    backgroundColor: "orange",
+                    // marginLeft: 15,
+                  }}
+                  textStyle={{
+                    fontSize: getProportionalFontSize(14),
+                    paddingLeft: 7,
+                    paddingRight: 7,
+                  }}
+                  onPress={() => {
+                    this.setState({ modal_Pop_Up: false });
+                  }}
+                />
+              </EDRTLView>
+
+              {/* {restaurantCategoryMAster &&  restaurantCategoryMAster.map((items) => {
+                return                
+              } */}
+            </Modal>
+          </View>
+        )}
+
+        <BaseContainer
+          title={"home"}
+          isTitleIcon
+          left={"menu"}
+          // tabs={[strings("deliveryOrder"), strings("pickUpOrder")]}
+          tabs={[strings("deliveryOrder")]}
+          selectedIndex={this.props.orderModeInRedux}
+          onSegmentIndexChangeHandler={this.onOrderModeSelect}
+          // onLeftFC={this._onChangeLanguagePressed}
+          // isLeftFC={this.state.isShowLanguageIcon}
+          right={
+            this.state.locationError && this.currentCity == undefined
+              ? []
+              : this.props.cartCount > 0
+              ? [
+                  this.state.isShowLanguageIcon
+                    ? { url: "language", name: "language", type: "material" }
+                    : {},
+                  { url: "filter", name: "filter", type: "ant-design" },
+                  {
+                    url: "shopping-cart",
+                    name: "Cart",
+                    value: this.props.cartCount,
+                    type: "ant-design",
+                  },
+                ]
+              : [
+                  this.state.isShowLanguageIcon
+                    ? { url: "language", name: "language", type: "material" }
+                    : {},
+                  { url: "filter", name: "filter", type: "ant-design" },
+                ]
+          }
+          onLeft={this._onSideMenuPressed}
+          onRight={this.renderRightTopHeader}
+          onConnectionChangeHandler={this.networkConnectivityStatus}
+          isQRLoading={this.state.isQRLoading}
+          loading={this.state.isLoading}
+        >
+          {/* NAVIGATION EVENTS */}
+          <NavigationEvents onDidFocus={this.onDidFocusMainContainer} />
+
+          {/* LANGUAGE SELECTION DIALOG */}
+          {this.renderLanguageSelectDialogue()}
+
+          {/* CAMERA FOR DIGITAL DINE IN */}
+          {/* {this.state.floatVisible ? this.renderScanButton() : null}
         {this.renderQRCameraDialogue()} */}
 
-        {/* LOCATION STRIP */}
-        {this.state.locationError && this.currentCity == undefined ? (
-          <View style={{ flex: 1, backgroundColor: EDColors.primary }}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={this.onLocationBtnPressed}
-            >
-              <EDRTLView
-                style={[
-                  styles.locationStrap,
-                  { alignItems: "center", marginVertical: 10 },
-                ]}
+          {/* LOCATION STRIP */}
+          {this.state.locationError && this.currentCity == undefined ? (
+            <View style={{ flex: 1, backgroundColor: EDColors.primary }}>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={this.onLocationBtnPressed}
               >
-                <Icon
-                  name={"location-pin"}
-                  type={"simple-line-icon"}
-                  size={getProportionalFontSize(18)}
-                  color={EDColors.black}
-                />
-                <View
-                  style={{
-                    width: "55%",
-                    marginHorizontal: 5,
-                    alignItems: "center",
-                  }}
+                <EDRTLView
+                  style={[
+                    styles.locationStrap,
+                    { alignItems: "center", marginVertical: 10 },
+                  ]}
                 >
-                  <EDRTLText
-                    style={{
-                      color: EDColors.black,
-                      fontFamily: EDFonts.regular,
-                      fontSize: getProportionalFontSize(13),
-                      textAlign: "center",
-                    }}
-                    title={strings("locationNotDetected")}
-                    onPress={this.onLocationBtnPressed}
+                  <Icon
+                    name={"location-pin"}
+                    type={"simple-line-icon"}
+                    size={getProportionalFontSize(18)}
+                    color={EDColors.black}
                   />
-                  {/* <EDRTLText
+                  <View
+                    style={{
+                      width: "55%",
+                      marginHorizontal: 5,
+                      alignItems: "center",
+                    }}
+                  >
+                    <EDRTLText
+                      style={{
+                        color: EDColors.black,
+                        fontFamily: EDFonts.regular,
+                        fontSize: getProportionalFontSize(13),
+                        textAlign: "center",
+                      }}
+                      title={strings("locationNotDetected")}
+                      onPress={this.onLocationBtnPressed}
+                    />
+                    {/* <EDRTLText
                                         numberOfLines={2}
                                         style={{
                                             color: EDColors.black,
@@ -2027,45 +2227,66 @@ class MainContainer extends React.Component {
                                         onPress={this.onLocationBtnPressed}
                                         title={strings('manuallyChooseLocation')}
                                     /> */}
-                </View>
-                <Icon
-                  name={"gps-fixed"}
-                  size={getProportionalFontSize(20)}
-                  onPress={this.onGPSPressed}
-                  color={EDColors.black}
-                  containerStyle={{ alignSelf: "center" }}
-                />
-              </EDRTLView>
-            </TouchableOpacity>
-            <EDLocationModel
-              isLoadingPermission={this.state.isPermissionLoading}
-              onLocationEventHandler={this.onLocationEventHandler}
-            />
-          </View>
-        ) : (
-          <SectionList
-            sections={this.homeSectionData}
-            extraData={this.arrayRestaurants}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.refreshing || false}
-                colors={[EDColors.primary]}
-                onRefresh={this.onPullToRefreshHandler}
+                  </View>
+                  <Icon
+                    name={"gps-fixed"}
+                    size={getProportionalFontSize(20)}
+                    onPress={this.onGPSPressed}
+                    color={EDColors.black}
+                    containerStyle={{ alignSelf: "center" }}
+                  />
+                </EDRTLView>
+              </TouchableOpacity>
+              <EDLocationModel
+                isLoadingPermission={this.state.isPermissionLoading}
+                onLocationEventHandler={this.onLocationEventHandler}
               />
-            }
-            renderItem={this.renderBody}
-            renderSectionHeader={this.renderSectionHeader}
-            ListFooterComponent={this.renderLoader}
-            stickySectionHeadersEnabled={false}
-          />
-        )}
-      </BaseContainer>
+            </View>
+          ) : (
+            <SectionList
+              sections={this.homeSectionData}
+              extraData={this.arrayRestaurants}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.refreshing || false}
+                  colors={[EDColors.primary]}
+                  onRefresh={this.onPullToRefreshHandler}
+                />
+              }
+              renderItem={this.renderBody}
+              renderSectionHeader={this.renderSectionHeader}
+              ListFooterComponent={this.renderLoader}
+              stickySectionHeadersEnabled={false}
+            />
+          )}
+        </BaseContainer>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "400",
+    textAlign: "center",
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: "80%",
+  },
+
   loaderStyle: {
     backgroundColor: "white",
     marginHorizontal: 10,
@@ -2159,6 +2380,22 @@ const styles = StyleSheet.create({
     margin: 0,
     backgroundColor: EDColors.primary,
     borderRadius: 0,
+  },
+
+  option: {
+    fontSize: 20,
+    color: "white",
+    textAlign: "center",
+  },
+  unselected: {
+    backgroundColor: "red",
+    margin: 5,
+  },
+  selected: {
+    backgroundColor: "blue",
+    margin: 6,
+    padding: 10,
+    borderRadius: 10,
   },
 });
 
