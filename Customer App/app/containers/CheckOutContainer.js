@@ -2820,15 +2820,30 @@ export class CheckOutContainer extends React.PureComponent {
           }
 
           // push individual Delivery Charge
+
           let findmenucount = [
             ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
           ];
           let findmenucount222 = [
             ...new Set(findmenucount.flatMap((s) => s.split(","))),
           ];
+
+          // old  delivery balane based on indivdual order
+
+          // findmenucount222 &&
+          //   findmenucount222.map((items) => {
+          //     onSuccess.price &&
+          //       onSuccess.price.push({
+          //         label: `${items} Delivery Charge`,
+          //         label_key: `${items} Delivery Charge`,
+          //         value: this.props.dunzo_Delivery_Amount,
+          //       });
+          //   });
+
           findmenucount222 &&
-            findmenucount222.map((items) => {
-              onSuccess.price &&
+            findmenucount222.map((items, i) => {
+              i == 0 &&
+                onSuccess.price &&
                 onSuccess.price.push({
                   label: `${items} Delivery Charge`,
                   label_key: `${items} Delivery Charge`,
@@ -2863,22 +2878,26 @@ export class CheckOutContainer extends React.PureComponent {
               "****************************** Vijay ****************************** if block this.props.dunzo_Delivery_Amount",
               this.props.dunzo_Delivery_Amount
             );
+
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
-                  menuAvailabilityArray.length
+                  // menuAvailabilityArray.length
+                  1
                 : this.props.dunzo_Delivery_Amount;
 
             deliveryJson["delivery_charge"] =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
-                  menuAvailabilityArray.length
+                  // menuAvailabilityArray.length
+                  1
                 : this.props.dunzo_Delivery_Amount;
 
             this.delivery_charges =
               menuAvailabilityArray.length > 0
                 ? this.props.dunzo_Delivery_Amount *
-                  menuAvailabilityArray.length
+                  // menuAvailabilityArray.length
+                  1
                 : this.props.dunzo_Delivery_Amount;
 
             // deliveryJson?.delivery_charge =   menuAvailabilityArray.length > 0
@@ -2886,15 +2905,18 @@ export class CheckOutContainer extends React.PureComponent {
             //   menuAvailabilityArray.length
             // : this.props.dunzo_Delivery_Amount;
           } else {
-            // debugLog(
-            //   "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
-            //   price_delivery_charge
-            // );
+            debugLog(
+              "****************************** Vijay ****************************** else .dunzo_Delivery_Amount",
+              price_delivery_charge
+            );
+
             price_delivery_charge[0].value =
               menuAvailabilityArray.length > 0
-                ? price_delivery_charge[0].value * menuAvailabilityArray.length
-                : price_delivery_charge[0].value;
+                ? price_delivery_charge[0].value * 1
+                : //  menuAvailabilityArray.length
+                  price_delivery_charge[0].value;
           }
+
           // total[0].value =
           //   subtotal[0].value +
           //   ServiceTaxtotal[0].value +

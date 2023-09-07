@@ -297,9 +297,7 @@ export class Restaurant extends React.Component {
       //   "this.props?.navigation?.state?.params?.restId",
       //   this.props?.navigation?.state?.params?.restId
       // );
-
       // this.props.navigation.state.params.restId
-
       // let getDeliveryChargeAPICall = await axios.get(
       //   `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
       //   {
@@ -308,6 +306,11 @@ export class Restaurant extends React.Component {
       //     },
       //   }
       // );
+
+      // let getstoredCatemaster = localStorage.getItem(
+      //   "Slot_Master_Rest_Category"
+      // );
+      // debugLog("getstoredCatemaster", getstoredCatemaster);
 
       let getDeliveryChargeAPICall = await axios
         .get(
@@ -336,16 +339,13 @@ export class Restaurant extends React.Component {
         })
         .then((data) => {})
         .catch((error) => {
-          // debugLog("888888888888888888888899999999999999999 error ", error);
           showValidationAlert(
             `Delivery Slots Not Available for ${data?.availability} `
           );
-
           localStorage.setItem(
             "Slot_Master_Rest_Category",
             JSON.stringify(undefined)
           );
-
           this.props.save_slot_Master_details(undefined);
           this.props.save_selected_category(undefined);
           return false;
@@ -357,25 +357,20 @@ export class Restaurant extends React.Component {
     //   storeavailabilityData
     // );
     // debugLog("333333333333333333333", data?.availability);
-
-    // debugLog(
-    //   "2222222222222222222222222",
-    //   storeavailabilityData == data?.availability
-    // );
     // debugLog(
     //   "2222222222222222222222222",
     //   storeavailabilityData !== data?.availability
     // );
 
-    if (
-      storeavailabilityData != null &&
-      storeavailabilityData != data?.availability
-    ) {
-      showValidationAlert(
-        `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${data?.availability},`
-      );
-      return false;
-    }
+    // if (
+    //   storeavailabilityData != null &&
+    //   storeavailabilityData != data?.availability
+    // ) {
+    //   showValidationAlert(
+    //     `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${data?.availability},`
+    //   );
+    //   return false;
+    // }
 
     let Slot_Master_Rest_CategoryCheking = localStorage.getItem(
       "Slot_Master_Rest_Category"
@@ -1198,9 +1193,9 @@ export class Restaurant extends React.Component {
       this.setState({ cartData: [] });
     }
 
-    let storeavailabilityData = localStorage.getItem(
-      "save_storeavailabilityData"
-    );
+    // let storeavailabilityData = localStorage.getItem(
+    //   "save_storeavailabilityData"
+    // );
 
     // debugLog("00000000000000", storeavailabilityData);
     // debugLog("item?.availability", item?.availability);
@@ -1208,16 +1203,16 @@ export class Restaurant extends React.Component {
     // debugLog("111111111111111111111", this.props.selected_Slot_ID);
     // debugLog("222222222222222222222", this.props.selected_category_id);
 
-    if (
-      storeavailabilityData != null &&
-      storeavailabilityData != "" &&
-      storeavailabilityData != item?.availability
-    ) {
-      showValidationAlert(
-        `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${item?.availability},`
-      );
-      return false;
-    }
+    // if (
+    //   storeavailabilityData != null &&
+    //   storeavailabilityData != "" &&
+    //   storeavailabilityData != item?.availability
+    // ) {
+    //   showValidationAlert(
+    //     `Category  ${storeavailabilityData}, already available,\n Please, remove from cart and add  ${item?.availability},`
+    //   );
+    //   return false;
+    // }
 
     // this.selectedItem = data
     // this.setState({
@@ -1685,11 +1680,11 @@ export class Restaurant extends React.Component {
           price: "" + this.priceType,
           availability: this.availType,
           plan_date: this.props.type_today_tomorrow__date,
-          category: this.props.navigation?.state?.params?.selected_restaurantCategory
+          category_id:
+            this.props.navigation?.state?.params?.selected_restaurantCategory,
         };
 
-debugLog("objRestaurantData", objRestaurantData); 
-
+        debugLog("objRestaurantData", objRestaurantData);
 
         getRestaurantMenu(
           objRestaurantData,

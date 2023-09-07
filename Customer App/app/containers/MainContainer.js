@@ -1275,6 +1275,50 @@ class MainContainer extends React.Component {
           this.setState({
             restaurantCategoryMAster: response?.data?.data,
           });
+          // this.setState({
+          //   restaurantCategoryMAster: [
+          //     {
+          //       category: "191",
+          //       categoryName: "Breakfast",
+          //     },
+          //     {
+          //       category: "188",
+          //       categoryName: "Lunch",
+          //     },
+          //     {
+          //       category: "189",
+          //       categoryName: "Dinner",
+          //     },
+          //     {
+          //       category: "192",
+          //       categoryName: "Snacks and Chats",
+          //     },
+          //     {
+          //       category: "188",
+          //       categoryName: "Lunch",
+          //     },
+          //     {
+          //       category: "189",
+          //       categoryName: "Dinner",
+          //     },
+          //     {
+          //       category: "192",
+          //       categoryName: "Snacks and Chats",
+          //     },
+          //     {
+          //       category: "188",
+          //       categoryName: "Lunch",
+          //     },
+          //     {
+          //       category: "189",
+          //       categoryName: "Dinner",
+          //     },
+          //     {
+          //       category: "192",
+          //       categoryName: "Snacks and Chats",
+          //     },
+          //   ],
+          // });
         }
       })
       .then((data) => {})
@@ -1310,15 +1354,18 @@ class MainContainer extends React.Component {
   };
 
   callRes_container = async (resiobje) => {
-
     // debugLog("888888888888888888888899999999999999999 resiobje ", resiobje?.category );
-    debugLog("this.state?.restObjModelvalue this.state?.restObjModelvalue ", this.state?.restObjModelvalue);
+    debugLog(
+      "this.state?.restObjModelvalue this.state?.restObjModelvalue ",
+      this.state?.restObjModelvalue
+    );
 
-    let { modal_Pop_Up, restObjModelvalue, selected_restaurantCategory } =      this.state;
-      this.setState({
-        modal_Pop_Up: !this.state.modal_Pop_Up
-      });      
-      this.props.navigation.navigate("RestaurantContainer", {
+    let { modal_Pop_Up, restObjModelvalue, selected_restaurantCategory } =
+      this.state;
+    this.setState({
+      modal_Pop_Up: !this.state.modal_Pop_Up,
+    });
+    this.props.navigation.navigate("RestaurantContainer", {
       selected_restaurantCategory: resiobje?.category,
       restId: this.state?.restObjModelvalue?.restuarant_id,
       content_id: this.state?.restObjModelvalue?.content_id,
@@ -1326,7 +1373,7 @@ class MainContainer extends React.Component {
       isDineIn: false,
       isShowReview: this.state.isShowReview,
       resObj: this.state?.restObjModelvalue,
-      today_tomorrow_Flag: this.state.today_tomorrow_Flag,      
+      today_tomorrow_Flag: this.state.today_tomorrow_Flag,
     });
   };
 
@@ -1517,7 +1564,7 @@ class MainContainer extends React.Component {
       <View style={{ flex: 1 }}>
         {/* POPULAR RESTAURANT LIST */}
 
-        <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+        {/* <EDRTLView style={{ alignItems: "center", padding: 10 }}>
           <EDThemeButton
             label={`Today \n${this.state.today}`}
             style={{
@@ -1558,7 +1605,7 @@ class MainContainer extends React.Component {
             }}
             onPress={this.onChange_today_tomorrow_Flag}
           />
-        </EDRTLView>
+        </EDRTLView> */}
 
         {this.arrayRestaurants != undefined &&
         this.arrayRestaurants != null &&
@@ -1991,19 +2038,52 @@ class MainContainer extends React.Component {
   };
   //#endregion
 
-  onChange_today_tomorrow_Flag = () => {
+  onChange_today_tomorrow_Flag = async () => {
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
-    this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag }, () => {
-      let { today, tomorrow, today_tomorrow_Flag } = this.state;
 
+    this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag }, async () => {
+      let { today, tomorrow, today_tomorrow_Flag } = this.state;
       let todayrever = today && today.split("-").reverse().join("-");
       let tomorrowrev = tomorrow && tomorrow.split("-").reverse().join("-");
-
       if (today_tomorrow_Flag === false) {
         this.props.save_today_tomorrow_details(todayrever);
       } else {
         this.props.save_today_tomorrow_details(tomorrowrev);
       }
+
+      let planDate = !this.state.today_tomorrow_Flag
+        ? this.state.today
+        : this.state.tomorrow;
+
+      let restaurant_restaurantNamevalue =
+        this.state.restaurant_restaurantName &&
+        this.state.restaurant_restaurantName.split("-");
+
+      let reversedate = planDate && planDate.split("-").reverse().join("-");
+      let getRestaurantCategoryAPI = await axios
+        .get(
+          `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            let { restaurantCategoryMAster } = this.state;
+            this.setState({
+              restaurantCategoryMAster: response?.data?.data,
+            });
+          }
+        })
+        .then((data) => {})
+        .catch((error) => {
+          let { restaurantCategoryMAster } = this.state;
+          this.setState({
+            restaurantCategoryMAster: [],
+          });
+        });
     });
   };
 
@@ -2035,6 +2115,11 @@ class MainContainer extends React.Component {
       restObjModelvalue,
     } = this.state;
 
+    debugLog(
+      "this.state.restaurantCategoryMAster",
+      this.state.restaurantCategoryMAster
+    );
+
     return (
       <>
         {modal_Pop_Up && (
@@ -2047,36 +2132,113 @@ class MainContainer extends React.Component {
               transparent={true}
             >
               <View>
-                <Text style={styles.option}> Choose your menu category</Text>
+                <Text style={styles.option}> Choose Menu Date </Text>
               </View>
 
-              <View style={{ ...styles.card, ...this.props.styles }}>
-                {this.props.children}
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                <EDThemeButton
+                  label={`Today \n${this.state.today}`}
+                  style={{
+                    width: "40%",
+                    backgroundColor: !this.state.today_tomorrow_Flag
+                      ? "green"
+                      : "grey",
+                    marginLeft: 15,
+                  }}
+                  textStyle={{
+                    fontSize: getProportionalFontSize(14),
+                    paddingLeft: 7,
+                    paddingRight: 7,
+                  }}
+                  onPress={this.onChange_today_tomorrow_Flag}
+                />
+                <EDThemeButton
+                  label={`Tomorrow ${this.state.tomorrow}`}
+                  style={{
+                    width: "45%",
+                    backgroundColor: this.state.today_tomorrow_Flag
+                      ? "green"
+                      : "grey",
+                    marginLeft: 15,
+                  }}
+                  onPress={this.onChange_today_tomorrow_Flag}
+                />
+              </EDRTLView>
+
+              <View>
+                <Text style={styles.option}> Choose Menu Category </Text>
+              </View>
+
+              {/* <View style={{ ...styles.card, ...this.props.styles }}> */}
+
+              <View style={styles.cart_container_option}>
+                {restaurantCategoryMAster &&
+                restaurantCategoryMAster.length > 0 ? (
+                  restaurantCategoryMAster.map((items) => {
+                    // debugLog("cardviiiw", items);
+                    return (
+                      <Card style={styles.nestedcart_option}>
+                        {/* <Card.Divider /> */}
+                        {/* <Card.Image source={require("../images/pic2.jpg")} /> */}
+                        {/* <Button
+                          // style={{ backgroundColor: "grey", color: "red" }}
+                          // icon={<Icon name="code" color="red" style={{ backgroundColor: "grey", color: "red" }} />}
+                          // buttonStyle={{
+                          //   borderRadius: 0,
+                          //   marginLeft: 0,
+                          //   marginRight: 0,
+                          //   marginBottom: 0,
+                          // }}
+                          title={items?.categoryName}
+                          onPress={() => {
+                            this.callRes_container(items);
+                          }}
+                        /> */}
+                        <Text
+                          style={styles.font_text_option}
+                          onPress={() => {
+                            this.callRes_container(items);
+                          }}
+                        >
+                          {" "}
+                          {items?.categoryName}{" "}
+                        </Text>
+                      </Card>
+                    );
+                  })
+                ) : (
+                  <View>
+                    <Text style={{ color: "orange", marginLeft: 95 }}>
+                      {" "}
+                      Menu not found{" "}
+                    </Text>
+                  </View>
+                )}
               </View>
               {/* <Card containerStyle={{ padding: 0 }}> */}
 
-              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+              {/* <EDRTLView style={{ alignItems: "center", padding: 10 }}>
                 {restaurantCategoryMAster &&
                   restaurantCategoryMAster.map((items) => {
-                    debugLog("cardviiiw", items);
-                    return (                        <EDThemeButton
-                          label={`${items?.categoryName}`}
-                          style={{
-                            width: "40%",
-                            backgroundColor: "grey",
-                            // marginLeft: 15,
-                          }}
-                          textStyle={{
-                            fontSize: getProportionalFontSize(14),
-                            paddingLeft: 7,
-                            paddingRight: 7,
-                          }}
-                          // onPress={this.callRes_container(items)}
-                          onPress={() => {
-                            this.callRes_container(items)
-                          }}
-                        />  
-                    );               
+                    // return (
+                    //     <EDThemeButton
+                    //       label={`${items?.categoryName}`}
+                    //       style={{
+                    //         width: "40%",
+                    //         backgroundColor: "grey",
+                    //         // marginLeft: 15,
+                    //       }}
+                    //       textStyle={{
+                    //         fontSize: getProportionalFontSize(14),
+                    //         paddingLeft: 7,
+                    //         paddingRight: 7,
+                    //       }}
+                    //       // onPress={this.callRes_container(items)}
+                    //       onPress={() => {
+                    //         this.callRes_container(items)
+                    //       }}
+                    //     />
+                    // );
                     // return (
                     //   <ListItem
                     //     //key={items}
@@ -2086,11 +2248,17 @@ class MainContainer extends React.Component {
                     //   />
                     // );
                   })}
-              </EDRTLView>
+              </EDRTLView> */}
 
               {/* </Card> */}
 
-              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+              <EDRTLView
+                style={{
+                  alignItems: "center",
+                  padding: 10,
+                  justifyContent: "flex-end",
+                }}
+              >
                 {/* <EDThemeButton
                   label={`Order now `}
                   style={{
@@ -2106,10 +2274,10 @@ class MainContainer extends React.Component {
                    onPress={this.callRes_container}                   
                 /> */}
                 <EDThemeButton
-                  label={`back`}
+                  label={`Back`}
                   style={{
                     width: "40%",
-                    backgroundColor: "orange",
+                    backgroundColor: "#a58580",
                     // marginLeft: 15,
                   }}
                   textStyle={{
@@ -2281,6 +2449,11 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     textAlign: "center",
   },
+  font_text_option: {
+    fontSize: 16,
+    fontWeight: "400",
+    textAlign: "center",
+  },
   separator: {
     marginVertical: 30,
     height: 1,
@@ -2381,12 +2554,32 @@ const styles = StyleSheet.create({
     backgroundColor: EDColors.primary,
     borderRadius: 0,
   },
-
   option: {
     fontSize: 20,
     color: "white",
     textAlign: "center",
   },
+  cart_container_option: {
+    // backgroundColor: "red",
+    // color: "red",
+    // bgcolor: "red",
+    // display: "flex",
+    // flexWrap: "nowrap",
+    alignItems: "stretch",
+    display: "flex",
+    flexDirection: "column",
+    // overflow: "auto",
+    flexWrap: "nowrap",
+    overflow: "hidden",
+  },
+  nestedcart_option: {
+    backgroundColor: "red",
+    // color: "red",
+    // bgcolor: "red",
+  },
+  // flex-wrap: nowrap;
+  // overflow-x: ;
+  // overflow-y: hidden;
   unselected: {
     backgroundColor: "red",
     margin: 5,

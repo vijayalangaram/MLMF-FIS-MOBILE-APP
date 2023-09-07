@@ -125,7 +125,7 @@ export default class ProductComponent extends React.Component {
                     style={style.foodType}
                   />
                 ) : null}
-                {this.props.data.availability !== undefined &&
+                {/* {this.props.data.availability !== undefined &&
                 this.props.data.availability !== null &&
                 this.props.data.availability !== "" ? (
                   <EDRTLText
@@ -136,7 +136,7 @@ export default class ProductComponent extends React.Component {
                     }
                     style={style.foodType}
                   />
-                ) : null}
+                ) : null} */}
                 {/* <EDRTLText style={style.nestedDesc} title={this.props.data.menu_detail} /> */}
                 {this.props.data.is_customize === "1" ? (
                   <View>
