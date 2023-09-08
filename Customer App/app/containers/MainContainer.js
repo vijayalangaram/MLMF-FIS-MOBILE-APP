@@ -46,6 +46,7 @@ import {
   save_dunzodelivery_amount,
   save_selected_Res_ID,
   save_today_tomorrow_details,
+  save_selected_category_home_cont,
 } from "../redux/actions/User";
 import {
   clearCartData,
@@ -256,8 +257,11 @@ class MainContainer extends React.Component {
     this.getCartList();
     this.getAddressList();
     AppState.addEventListener("change", this._handleAppStateChange);
-
     this.dateIntialCall();
+    debugLog(
+      "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+      this.props.selected_category_id_home_cont?.category
+    );
   }
 
   dateIntialCall() {
@@ -1272,9 +1276,81 @@ class MainContainer extends React.Component {
           //   response?.data?.data
           // );
           let { restaurantCategoryMAster } = this.state;
-          this.setState({
-            restaurantCategoryMAster: response?.data?.data,
-          });
+          let apiresponseofcatemaster = response?.data?.data;
+
+          let filterstatesMastervalues =
+            apiresponseofcatemaster &&
+            apiresponseofcatemaster.map(({ category, categoryName }) => ({
+              category,
+              flag: false,
+              categoryName,
+            }));
+
+          let filterstatesMastervalueszeroth;
+
+          debugLog(
+            "77777777777777777777777777777777777777777777777",
+            filterstatesMastervalues
+          );
+
+          debugLog(
+            "8888888888888888888888888888888888888888888888888888888",
+            this?.props?.selected_category_id_home_cont
+          );
+
+          if (
+            this?.props?.selected_category_id_home_cont?.category == "" &&
+            this?.props?.selected_category_id_home_cont?.category == undefined
+          ) {
+            debugLog(
+              "77777777777777777  filterstatesMastervalues  777777777777777777777777777777",
+              filterstatesMastervalues
+            );
+
+            filterstatesMastervalueszeroth =
+              filterstatesMastervalues &&
+              filterstatesMastervalues.map((item, index) => {
+                if (index == 0) {
+                  item.flag = true;
+                } else {
+                  item.flag = false;
+                }
+                return item;
+              });
+          } else {
+            debugLog(
+              "9999999999999999999999999999999999999999999999999999999",
+              this.props.selected_category_id_home_cont?.category
+            );
+            filterstatesMastervalueszeroth =
+              filterstatesMastervalues &&
+              filterstatesMastervalues.map((item, i) => {
+                if (
+                  Number(item?.category) ==
+                  this.props.selected_category_id_home_cont?.category
+                ) {
+                  item.flag = true;
+                } else {
+                  item.flag = false;
+                }
+                return item;
+              });
+          }
+          // debugLog(
+          //   "lterstatesMastervalueszeroth[0]",
+          //   filterstatesMastervalueszeroth
+          // );
+          this.setState(
+            {
+              restaurantCategoryMAster: filterstatesMastervalueszeroth,
+            },
+            () => {
+              this.props.save_selected_category_home_cont(
+                filterstatesMastervalueszeroth[0]
+              );
+            }
+          );
+
           // this.setState({
           //   restaurantCategoryMAster: [
           //     {
@@ -1353,20 +1429,42 @@ class MainContainer extends React.Component {
     // });
   };
 
-  callRes_container = async (resiobje) => {
-    // debugLog("888888888888888888888899999999999999999 resiobje ", resiobje?.category );
-    debugLog(
-      "this.state?.restObjModelvalue this.state?.restObjModelvalue ",
-      this.state?.restObjModelvalue
-    );
+  callRes_container = async () => {
+    let {
+      modal_Pop_Up,
+      restObjModelvalue,
+      selected_restaurantCategory,
+      restaurantCategoryMAster,
+    } = this.state;
 
-    let { modal_Pop_Up, restObjModelvalue, selected_restaurantCategory } =
-      this.state;
     this.setState({
       modal_Pop_Up: !this.state.modal_Pop_Up,
     });
+
+    // debugLog(
+    //   "this.props.selected_category_id_home_cont error ",
+    //   this.props.selected_category_id_home_cont
+    // );
+    // return false;
+
+    let filterflagtrue =
+      restaurantCategoryMAster &&
+      restaurantCategoryMAster.filter((item, i) => {
+        if (item?.flag == true) {
+          return item;
+        }
+      });
+    debugLog("filterflagtrue[0]", filterflagtrue[0]);
+    debugLog(
+      "this.props.selected_category_id_home_cont?.category",
+      this.props.selected_category_id_home_cont?.category
+    );
+    // return false;
+    this.props.save_selected_category_home_cont(filterflagtrue[0]);
     this.props.navigation.navigate("RestaurantContainer", {
-      selected_restaurantCategory: resiobje?.category,
+      // selected_restaurantCategory:
+      //   this.props.selected_category_id_home_cont?.category,
+      selected_restaurantCategory: filterflagtrue[0]?.category,
       restId: this.state?.restObjModelvalue?.restuarant_id,
       content_id: this.state?.restObjModelvalue?.content_id,
       currency: this.state?.restObjModelvalue?.currency_symbol,
@@ -1375,6 +1473,72 @@ class MainContainer extends React.Component {
       resObj: this.state?.restObjModelvalue,
       today_tomorrow_Flag: this.state.today_tomorrow_Flag,
     });
+  };
+
+  changeflagcategorymenu = async (items) => {
+    debugLog(
+      "333333333333333333333333333333333333333333333333333333 changeflagcategorymenu",
+      items?.category
+    );
+
+    debugLog(
+      "22222222222222222222222222222222222222222222222222222222222222222222",
+      this?.props?.selected_category_id_home_cont
+    );
+
+    let { restaurantCategoryMAster, selected_restaurantCategory } = this.state;
+    let filterstatesMastervalues =
+      restaurantCategoryMAster &&
+      restaurantCategoryMAster.map((item, i) => {
+        if (item?.category == items?.category) {
+          item.flag = true;
+        } else {
+          item.flag = false;
+        }
+        return item;
+      });
+
+    let filterflagtrue =
+      restaurantCategoryMAster &&
+      restaurantCategoryMAster.filter((item, i) => {
+        if (item?.flag == true) {
+          return item;
+        }
+      });
+
+    // debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0]);
+
+    if (
+      this?.props?.selected_category_id_home_cont?.category != "" &&
+      this?.props?.selected_category_id_home_cont?.category != undefined
+    ) {
+      debugLog(
+        "22222222222222222222222222222222222222222222222222222222222222222222",
+        this?.props?.selected_category_id_home_cont?.category
+      );
+      debugLog(
+        "333333333333333333333333333333333333333333333333333333",
+        items?.category
+      );
+
+      if (
+        this?.props?.selected_category_id_home_cont?.category != items?.category
+      ) {
+        showValidationAlert(
+          `Are you sure want to proceed  with ${items?.categoryName}?,\nNote:All items from cart will be removed !`
+        );
+      }
+    }
+    this.setState(
+      {
+        restaurantCategoryMAster: filterstatesMastervalues,
+        selected_restaurantCategory: filterflagtrue[0],
+        // selected_restaurantCategory
+      },
+      () => {
+        // this.props.save_selected_category_home_cont(filterflagtrue[0]);
+      }
+    );
   };
 
   intialDunzoCall = async (
@@ -1411,12 +1575,10 @@ class MainContainer extends React.Component {
       //   " getDeliveryChargeAPICall?.data[0]  ************************** 2222222222222222222222222",
       //   getDeliveryChargeAPICall?.data[0]
       // );
-
       // debugLog(
       //   " getDeliveryChargeAPICall?.data[0] ************************** 2222222222222222222222222",
       //   getDeliveryChargeAPICall?.data[0]?.directPointDelivery?.amount
       // );
-
       this.props.save_delivery_dunzo__details(
         getDeliveryChargeAPICall?.data[0]
       );
@@ -1677,7 +1839,7 @@ class MainContainer extends React.Component {
         strCallURL = "https://" + strCallURL;
       if (Linking.canOpenURL(strCallURL)) {
         Linking.openURL(strCallURL).catch((error) => {
-          debugLog("ERROR :: ", error);
+          // debugLog("ERROR :: ", error);
           showValidationAlert(strings("urlNotSupport"));
         });
       } else {
@@ -1998,7 +2160,7 @@ class MainContainer extends React.Component {
 
   onSuccesQrRequest = (data) => {
     this.setState({ isQRLoading: false });
-    debugLog("SUCCESS DATA :::::", data);
+    // debugLog("SUCCESS DATA :::::", data);
     if (data.status !== undefined && data.status == RESPONSE_SUCCESS) {
       if (data.allow_dinein !== "1") {
         showDialogue(strings("dineInError"), [], "", () => {
@@ -2034,7 +2196,7 @@ class MainContainer extends React.Component {
   onFailureQrRequest = (data) => {
     this.setState({ isQRLoading: false });
     showValidationAlert(strings("generalWebServiceError"));
-    debugLog("FAILURE DATA :::::", data);
+    // debugLog("FAILURE DATA :::::", data);
   };
   //#endregion
 
@@ -2072,9 +2234,35 @@ class MainContainer extends React.Component {
         .then((response) => {
           if (response.status === 200) {
             let { restaurantCategoryMAster } = this.state;
-            this.setState({
-              restaurantCategoryMAster: response?.data?.data,
-            });
+            let apiresponseofcatemaster = response?.data?.data;
+
+            let filterstatesMastervalues =
+              apiresponseofcatemaster &&
+              apiresponseofcatemaster.map(({ category, categoryName }) => ({
+                category,
+                flag: false,
+                categoryName,
+              }));
+            let filterstatesMastervalueszeroth =
+              filterstatesMastervalues &&
+              filterstatesMastervalues.map((item, i) => {
+                if (i == 0) {
+                  item.flag = true;
+                } else {
+                  item.flag = false;
+                }
+                return item;
+              });
+            this.setState(
+              {
+                restaurantCategoryMAster: filterstatesMastervalueszeroth,
+              },
+              () => {
+                // this.props.save_selected_category_home_cont(
+                //   filterstatesMastervalueszeroth[0]
+                // );
+              }
+            );
           }
         })
         .then((data) => {})
@@ -2115,10 +2303,10 @@ class MainContainer extends React.Component {
       restObjModelvalue,
     } = this.state;
 
-    debugLog(
-      "this.state.restaurantCategoryMAster",
-      this.state.restaurantCategoryMAster
-    );
+    // debugLog(
+    //   "this.state.restaurantCategoryMAster",
+    //   this.state.restaurantCategoryMAster
+    // );
 
     return (
       <>
@@ -2173,11 +2361,15 @@ class MainContainer extends React.Component {
 
               <View style={styles.cart_container_option}>
                 {restaurantCategoryMAster &&
-                restaurantCategoryMAster.length > 0 ? (
+                  restaurantCategoryMAster.length > 0 &&
                   restaurantCategoryMAster.map((items) => {
                     // debugLog("cardviiiw", items);
                     return (
-                      <Card style={styles.nestedcart_option}>
+                      <Card
+                        style={{
+                          backgroundColor: items?.flag ? "red" : "white",
+                        }}
+                      >
                         {/* <Card.Divider /> */}
                         {/* <Card.Image source={require("../images/pic2.jpg")} /> */}
                         {/* <Button
@@ -2196,104 +2388,76 @@ class MainContainer extends React.Component {
                         /> */}
                         <Text
                           style={styles.font_text_option}
+                          // onPress={() => {
+                          //   this.callRes_container(items);
+                          // }}
                           onPress={() => {
-                            this.callRes_container(items);
+                            this.changeflagcategorymenu(items);
                           }}
                         >
                           {" "}
                           {items?.categoryName}{" "}
+                          <Icon
+                            name={"check"}
+                            color={items?.flag ? "green" : "white"}
+                            // style={{ margin: 10 }}
+                          />
                         </Text>
                       </Card>
                     );
-                  })
-                ) : (
-                  <View>
-                    <Text style={{ color: "orange", marginLeft: 95 }}>
-                      {" "}
-                      Menu not found{" "}
-                    </Text>
-                  </View>
-                )}
-              </View>
-              {/* <Card containerStyle={{ padding: 0 }}> */}
-
-              {/* <EDRTLView style={{ alignItems: "center", padding: 10 }}>
-                {restaurantCategoryMAster &&
-                  restaurantCategoryMAster.map((items) => {
-                    // return (
-                    //     <EDThemeButton
-                    //       label={`${items?.categoryName}`}
-                    //       style={{
-                    //         width: "40%",
-                    //         backgroundColor: "grey",
-                    //         // marginLeft: 15,
-                    //       }}
-                    //       textStyle={{
-                    //         fontSize: getProportionalFontSize(14),
-                    //         paddingLeft: 7,
-                    //         paddingRight: 7,
-                    //       }}
-                    //       // onPress={this.callRes_container(items)}
-                    //       onPress={() => {
-                    //         this.callRes_container(items)
-                    //       }}
-                    //     />
-                    // );
-                    // return (
-                    //   <ListItem
-                    //     //key={items}
-                    //     roundAvatar
-                    //     title={items}
-                    //    //leftAvatar={{ source: { uri: u.avatar } }}
-                    //   />
-                    // );
                   })}
-              </EDRTLView> */}
+              </View>
 
-              {/* </Card> */}
-
-              <EDRTLView
-                style={{
-                  alignItems: "center",
-                  padding: 10,
-                  justifyContent: "flex-end",
-                }}
-              >
-                {/* <EDThemeButton
-                  label={`Order now `}
-                  style={{
-                    width: "40%",
-                    backgroundColor: "green",
-                    marginLeft: 15,
-                  }}
-                  textStyle={{
-                    fontSize: getProportionalFontSize(14),
-                    paddingLeft: 7,
-                    paddingRight: 7,
-                  }}
-                   onPress={this.callRes_container}                   
-                /> */}
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
                 <EDThemeButton
                   label={`Back`}
                   style={{
-                    width: "40%",
-                    backgroundColor: "#a58580",
-                    // marginLeft: 15,
-                  }}
-                  textStyle={{
-                    fontSize: getProportionalFontSize(14),
-                    paddingLeft: 7,
-                    paddingRight: 7,
+                    width: "45%",
+                    backgroundColor: this.state.today_tomorrow_Flag
+                      ? "green"
+                      : "grey",
+                    marginLeft: 15,
                   }}
                   onPress={() => {
                     this.setState({ modal_Pop_Up: false });
                   }}
                 />
+                {restaurantCategoryMAster &&
+                restaurantCategoryMAster.length > 0 ? (
+                  <EDThemeButton
+                    label={`Proceed`}
+                    style={{
+                      width: "40%",
+                      backgroundColor: "#808000",
+                      marginLeft: 15,
+                      color: "black",
+                    }}
+                    textStyle={{
+                      fontSize: getProportionalFontSize(14),
+                      paddingLeft: 7,
+                      paddingRight: 7,
+                    }}
+                    onPress={() => {
+                      this.callRes_container();
+                    }}
+                  />
+                ) : (
+                  <EDThemeButton
+                    label={`No Data`}
+                    style={{
+                      width: "40%",
+                      backgroundColor: "orange",
+                      marginLeft: 15,
+                      color: "black",
+                    }}
+                    textStyle={{
+                      fontSize: getProportionalFontSize(14),
+                      paddingLeft: 7,
+                      paddingRight: 7,
+                    }}
+                  />
+                )}
               </EDRTLView>
-
-              {/* {restaurantCategoryMAster &&  restaurantCategoryMAster.map((items) => {
-                return                
-              } */}
             </Modal>
           </View>
         )}
@@ -2607,6 +2771,8 @@ export default connect(
       languageArray: state.userOperations.languageArray,
       orderModeInRedux: state.userOperations.orderMode,
       useMile: state.userOperations.useMile,
+      selected_category_id_home_cont:
+        state.userOperations.selected_category_id_home_cont,
     };
   },
   (dispatch) => {
@@ -2667,6 +2833,9 @@ export default connect(
       },
       save_today_tomorrow_details: (data) => {
         dispatch(save_today_tomorrow_details(data));
+      },
+      save_selected_category_home_cont: (data) => {
+        dispatch(save_selected_category_home_cont(data));
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));

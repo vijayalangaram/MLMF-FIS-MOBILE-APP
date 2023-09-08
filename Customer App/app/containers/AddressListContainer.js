@@ -622,13 +622,13 @@ export class AddressListContainer extends React.PureComponent {
     //     return item;
     //   }
     // );
-    let filterstatesMastervalues = slot_Master_against_category.filter(
-      (item, i) => {
+    let filterstatesMastervalues =
+      slot_Master_against_category &&
+      slot_Master_against_category.filter((item, i) => {
         if (item?.value == value?.value) {
           return item;
         }
-      }
-    );
+      });
     // debugLog(
     //   "****************************** Vijay ****************************** filterstatesMastervalues",
     //   filterstatesMastervalues

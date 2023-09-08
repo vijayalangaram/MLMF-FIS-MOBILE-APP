@@ -122,25 +122,41 @@ export class CartContainer extends React.PureComponent {
     //   "****************************** Vijay ******************************  this.props.userID",
     //   this.props.selected_Res_Id
     // );
+
+    // debugLog(
+    //   "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
+    //   this.props.dunzo_Delivery_Amount
+    // );
+
     debugLog(
-      "****************************** Vijay ****************************** CartContainer this.props.dunzo_Delivery_Amount",
-      this.props.dunzo_Delivery_Amount
+      "******************************  CartContainer this.state.cartData",
+      this.state.cartData
     );
+
+    debugLog(
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@******************************",
+      this.props.selected_category_id_home_cont
+    );
+
+    // debugLog(
+    //   "****************************** CartContainer this.state.cartData.items",
+    //   this.state.cartData.items
+    // );
 
     // debugLog(
     //   "********************************** CartContainer this.props.selected_Res_Id ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ",
     //   this.props.selected_Res_Id
     // );
 
-    debugLog(
-      " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
-      this.props.selected_Slot_ID
-    );
+    // debugLog(
+    //   " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
+    //   this.props.selected_Slot_ID
+    // );
 
-    debugLog(
-      " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
-      this.props.selected_category_id
-    );
+    // debugLog(
+    //   " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
+    //   this.props.selected_category_id
+    // );
 
     // debugLog(
     //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details)",
@@ -166,8 +182,8 @@ export class CartContainer extends React.PureComponent {
   };
 
   getSlotMAster = async () => {
-    debugLog("666666666666666666666666666", this.props.selected_Res_Id);
-    debugLog("777777777777777777777777", this.props.selected_category_id);
+    // debugLog("666666666666666666666666666", this.props.selected_Res_Id);
+    // debugLog("777777777777777777777777", this.props.selected_category_id);
     let splitres_name =
       this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
 
@@ -179,10 +195,10 @@ export class CartContainer extends React.PureComponent {
         },
       }
     );
-    debugLog(
-      "666666666666666666666666666",
-      getDeliveryChargeAPICall?.data?.data
-    );
+    // debugLog(
+    //   "666666666666666666666666666",
+    //   getDeliveryChargeAPICall?.data?.data
+    // );
     // localStorage.setItem("Slot_Master_Rest_Category", Slot_Master);
     // localStorage.setItem(
     //   "Slot_Master_Rest_Category",
@@ -295,6 +311,12 @@ export class CartContainer extends React.PureComponent {
 
   // RENDER METHOD
   render() {
+    let { cartData } = this.state;
+    debugLog(
+      "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      this.state.cartData
+    );
+
     return (
       <BaseContainer
         title={this.resName || ""}
@@ -855,6 +877,8 @@ export default connect(
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
       selected_Slot_ID: state.userOperations.selected_Slot_ID,
       selected_category_id: state.userOperations.selected_category_id,
+      selected_category_id_home_cont:
+        state.userOperations.selected_category_id_home_cont,
     };
   },
   (dispatch) => {

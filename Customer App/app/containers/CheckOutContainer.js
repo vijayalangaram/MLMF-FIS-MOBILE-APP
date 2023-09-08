@@ -43,6 +43,7 @@ import {
   saveCartPrice,
   saveCheckoutDetails,
   saveIsCheckoutScreen,
+  save_selected_category_home_cont,
 } from "../redux/actions/Checkout";
 import {
   clearCartData,
@@ -2355,6 +2356,7 @@ export class CheckOutContainer extends React.PureComponent {
           ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
           getDeliveryChargeAPICall.status
         );
+        this.props.save_selected_category_home_cont(undefined);
       } else {
       }
     }
@@ -2801,19 +2803,27 @@ export class CheckOutContainer extends React.PureComponent {
         if (deliveryJson) {
           let deliveryPrice = deliveryJson.price;
 
-          let total = deliveryPrice.filter((item) => {
-            return item.label_key == "Total";
-          });
-          let subtotal = deliveryPrice.filter((item) => {
-            return item.label_key == "Sub Total";
-          });
-          let ServiceTaxtotal = deliveryPrice.filter((item) => {
-            return item.label_key == "Service Tax";
-          });
+          let total =
+            deliveryPrice &&
+            deliveryPrice.filter((item) => {
+              return item.label_key == "Total";
+            });
+          let subtotal =
+            deliveryPrice &&
+            deliveryPrice.filter((item) => {
+              return item.label_key == "Sub Total";
+            });
+          let ServiceTaxtotal =
+            deliveryPrice &&
+            deliveryPrice.filter((item) => {
+              return item.label_key == "Service Tax";
+            });
 
-          let price_delivery_charge = deliveryPrice.filter((item) => {
-            return item.label_key == "Delivery Charge";
-          });
+          let price_delivery_charge =
+            deliveryPrice &&
+            deliveryPrice.filter((item) => {
+              return item?.label_key == "Delivery Charge";
+            });
 
           if (ServiceTaxtotal && ServiceTaxtotal.length > 0) {
             ServiceTaxtotal[0].value = Math.round(ServiceTaxtotal[0].value);
@@ -2845,9 +2855,11 @@ export class CheckOutContainer extends React.PureComponent {
               i == 0 &&
                 onSuccess.price &&
                 onSuccess.price.push({
-                  label: `${items} Delivery Charge`,
-                  label_key: `${items} Delivery Charge`,
-                  value: this.props.dunzo_Delivery_Amount,
+                  label: `${this?.props?.selected_category_id_home_cont?.categoryName} Delivery Charge`,
+                  label_key: `${this?.props?.selected_category_id_home_cont?.categoryName} Delivery Charge`,
+                  // label: "Delivery Charge",
+                  // label_key: "Delivery Charge",
+                  value: this?.props?.dunzo_Delivery_Amount,
                 });
             });
 
@@ -2857,7 +2869,7 @@ export class CheckOutContainer extends React.PureComponent {
           // );
 
           let menuAvailabilityArray = [
-            ...new Set(deliveryJson.items.map((item) => item.menu_avail)),
+            ...new Set(deliveryJson.items.map((item) => item?.menu_avail)),
           ];
 
           // array string to object
@@ -3570,6 +3582,8 @@ export default connect(
       dunzo_Delivery_Details: state.userOperations.dunzo_Delivery_Details,
       save_order_payload: state.userOperations.save_order_payload,
       selected_Slot_ID: state.userOperations.selected_Slot_ID,
+      selected_category_id_home_cont:
+        state.userOperations.selected_category_id_home_cont,
     };
   },
   (dispatch) => {
@@ -3585,6 +3599,10 @@ export default connect(
       },
       saveCartPrice: (data) => {
         dispatch(saveCartPrice(data));
+      },
+
+      save_selected_category_home_cont: (data) => {
+        dispatch(save_selected_category_home_cont(data));
       },
     };
   }
