@@ -176,6 +176,7 @@ class MainContainer extends React.Component {
     restaurantCategoryMAster: [],
     selected_restaurantCategory: "",
     restObjModelvalue: "",
+    cartDatafromstore: [],
   };
 
   /** DID MOUNT */
@@ -258,11 +259,34 @@ class MainContainer extends React.Component {
     this.getAddressList();
     AppState.addEventListener("change", this._handleAppStateChange);
     this.dateIntialCall();
-    debugLog(
-      "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
-      this.props.selected_category_id_home_cont?.category
-    );
+    this.getCartDataList();
+    // debugLog(
+    //   "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+    //   this.props.selected_category_id_home_cont?.category
+    // );
   }
+
+  getCartDataList = () => {
+    let { cartDatafromstore } = this.state;
+    getCartList((success) => {
+      var cartArray = success;
+      // this.promoCode = success.coupon_name;
+      // this.promoArray = success.coupon_array;
+      // debugLog("PROMO ARRAY :::::", this.promoArray);
+      // this.res_id = success.resId;
+      // this.content_id = success.content_id;
+      // this.cart_id = success.cart_id;
+      // this.resName = success.resName;
+      // this.state.isAsyncSync = true;
+      // debugLog(
+      //   "44444444444444444444444444444 cartArray?.items 44444444444444",
+      //   cartArray?.items
+      // );
+      this.setState({
+        cartDatafromstore: cartArray,
+      });
+    });
+  };
 
   dateIntialCall() {
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
@@ -1237,6 +1261,7 @@ class MainContainer extends React.Component {
   onClose = () => this.setState({ modal_Pop_Up: false });
   /** ON POPULAR RES EVENT */
   onPopularResEvent = async (restObjModel) => {
+    this.getCartDataList();
     let { getintialAddress, today_tomorrow_Flag, restaurant_restaurantName } =
       this.state;
     this.intialDunzoCall(
@@ -1520,8 +1545,9 @@ class MainContainer extends React.Component {
         "333333333333333333333333333333333333333333333333333333",
         items?.category
       );
-
       if (
+        this.state.cartDatafromstore?.items &&
+        this.state.cartDatafromstore?.items.length > 0 &&
         this?.props?.selected_category_id_home_cont?.category != items?.category
       ) {
         showValidationAlert(
@@ -2301,8 +2327,12 @@ class MainContainer extends React.Component {
       restaurantCategoryMAster,
       selected_restaurantCategory,
       restObjModelvalue,
+      cartDatafromstore,
     } = this.state;
-
+    debugLog(
+      "33333333333333333333333333 cartDatafromstore 3333333333333333333333333333",
+      cartDatafromstore?.items
+    );
     // debugLog(
     //   "this.state.restaurantCategoryMAster",
     //   this.state.restaurantCategoryMAster

@@ -1257,15 +1257,13 @@ export class CheckOutContainer extends React.PureComponent {
                 ) : null}
               </View>
             </ScrollView>
-
             {/* <TouchableOpacity
                             onPress={this.toggleDescription}
                             style={{ backgroundColor: EDColors.offWhite,  margin: 10, borderRadius: 16, marginTop: 0 }}> */}
-
             {/* <EDRTLText style={{ color: EDColors.black, fontSize: getProportionalFontSize(13), marginVertical: 5, marginHorizontal: 5, fontFamily: EDFonts.medium, }}
                                 title={strings("note") + " "} /> */}
             {/* <EDRTLText */}
-            <View
+            {/* <View
               style={{
                 marginTop: 10,
                 marginHorizontal: 10,
@@ -1283,13 +1281,11 @@ export class CheckOutContainer extends React.PureComponent {
                   },
                 ]}
               >
-                {strings("orderDisclaimer")}
-              </SeeMore>
-            </View>
-
+                {/* {strings("orderDisclaimer")} */}
+            {/* </SeeMore> */}
+            {/* </View> */}
             {/* 
                         </TouchableOpacity> */}
-
             {/* CHECK OUT VIEW */}
             {/* <EDRTLView style={style.checkOutContainer}> */}
             {/* <EDRTLText style={style.totalPrice}
