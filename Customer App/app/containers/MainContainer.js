@@ -172,11 +172,13 @@ class MainContainer extends React.Component {
     today_tomorrow_Flag: false,
     restaurant_restaurantName: "",
     modal_Pop_Up: false,
+    modal_Pop_Up_added_item: false,
     userOption: null,
     restaurantCategoryMAster: [],
     selected_restaurantCategory: "",
     restObjModelvalue: "",
     cartDatafromstore: [],
+    selected_awaited_item: "",
   };
 
   /** DID MOUNT */
@@ -1479,11 +1481,11 @@ class MainContainer extends React.Component {
           return item;
         }
       });
-    debugLog("filterflagtrue[0]", filterflagtrue[0]);
-    debugLog(
-      "this.props.selected_category_id_home_cont?.category",
-      this.props.selected_category_id_home_cont?.category
-    );
+    // debugLog("filterflagtrue[0]", filterflagtrue[0]);
+    // debugLog(
+    //   "this.props.selected_category_id_home_cont?.category",
+    //   this.props.selected_category_id_home_cont?.category
+    // );
     // return false;
     this.props.save_selected_category_home_cont(filterflagtrue[0]);
     this.props.navigation.navigate("RestaurantContainer", {
@@ -1501,15 +1503,15 @@ class MainContainer extends React.Component {
   };
 
   changeflagcategorymenu = async (items) => {
-    debugLog(
-      "333333333333333333333333333333333333333333333333333333 changeflagcategorymenu",
-      items?.category
-    );
+    // debugLog(
+    //   "333333333333333333333333333333333333333333333333333333 changeflagcategorymenu",
+    //   items?.category
+    // );
 
-    debugLog(
-      "22222222222222222222222222222222222222222222222222222222222222222222",
-      this?.props?.selected_category_id_home_cont
-    );
+    // debugLog(
+    //   "22222222222222222222222222222222222222222222222222222222222222222222",
+    //   this?.props?.selected_category_id_home_cont
+    // );
 
     let { restaurantCategoryMAster, selected_restaurantCategory } = this.state;
     let filterstatesMastervalues =
@@ -1531,30 +1533,30 @@ class MainContainer extends React.Component {
         }
       });
 
-    // debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0]);
+    debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0]);
 
-    if (
-      this?.props?.selected_category_id_home_cont?.category != "" &&
-      this?.props?.selected_category_id_home_cont?.category != undefined
-    ) {
-      debugLog(
-        "22222222222222222222222222222222222222222222222222222222222222222222",
-        this?.props?.selected_category_id_home_cont?.category
-      );
-      debugLog(
-        "333333333333333333333333333333333333333333333333333333",
-        items?.category
-      );
-      if (
-        this.state.cartDatafromstore?.items &&
-        this.state.cartDatafromstore?.items.length > 0 &&
-        this?.props?.selected_category_id_home_cont?.category != items?.category
-      ) {
-        showValidationAlert(
-          `Are you sure want to proceed  with ${items?.categoryName}?,\nNote:All items from cart will be removed !`
-        );
-      }
-    }
+    // if (
+    //   this?.props?.selected_category_id_home_cont?.category != "" &&
+    //   this?.props?.selected_category_id_home_cont?.category != undefined
+    // ) {
+    // debugLog(
+    //   "22222222222222222222222222222222222222222222222222222222222222222222",
+    //   this?.props?.selected_category_id_home_cont?.category
+    // );
+    // debugLog(
+    //   "333333333333333333333333333333333333333333333333333333",
+    //   items?.category
+    // );
+    //   if (
+    //     this.state.cartDatafromstore?.items &&
+    //     this.state.cartDatafromstore?.items.length > 0 &&
+    //     this?.props?.selected_category_id_home_cont?.category != items?.category
+    //   ) {
+    //     showValidationAlert(
+    //       `Are you sure want to proceed  with ${items?.categoryName}?,\nNote:All items from cart will be removed !`
+    //     );
+    //   }
+    // }
     this.setState(
       {
         restaurantCategoryMAster: filterstatesMastervalues,
@@ -2328,11 +2330,13 @@ class MainContainer extends React.Component {
       selected_restaurantCategory,
       restObjModelvalue,
       cartDatafromstore,
+      modal_Pop_Up_added_item,
+      selected_awaited_item,
     } = this.state;
-    debugLog(
-      "33333333333333333333333333 cartDatafromstore 3333333333333333333333333333",
-      cartDatafromstore?.items
-    );
+    // debugLog(
+    //   "33333333333333333333333333 cartDatafromstore 3333333333333333333333333333",
+    //   cartDatafromstore?.items
+    // );
     // debugLog(
     //   "this.state.restaurantCategoryMAster",
     //   this.state.restaurantCategoryMAster
@@ -2347,7 +2351,17 @@ class MainContainer extends React.Component {
               hasBackdrop={true}
               backdropOpacity={10}
               backdropColor={"#65242e"}
+              // backdropColor={"grey"}
               transparent={true}
+              // size={"lg"}
+              // style={{
+              //   // maxWidth: 355,
+              //   // maxHeight: 355,
+              //   alignItems: "center",
+              //   alignContent: "center",
+              //   // marginLeft: 15,
+              // }}
+              // backdrop="static"
             >
               <View>
                 <Text style={styles.option}> Choose Menu Date </Text>
@@ -2387,8 +2401,6 @@ class MainContainer extends React.Component {
                 <Text style={styles.option}> Choose Menu Category </Text>
               </View>
 
-              {/* <View style={{ ...styles.card, ...this.props.styles }}> */}
-
               <View style={styles.cart_container_option}>
                 {restaurantCategoryMAster &&
                   restaurantCategoryMAster.length > 0 &&
@@ -2400,29 +2412,29 @@ class MainContainer extends React.Component {
                           backgroundColor: items?.flag ? "red" : "white",
                         }}
                       >
-                        {/* <Card.Divider /> */}
-                        {/* <Card.Image source={require("../images/pic2.jpg")} /> */}
-                        {/* <Button
-                          // style={{ backgroundColor: "grey", color: "red" }}
-                          // icon={<Icon name="code" color="red" style={{ backgroundColor: "grey", color: "red" }} />}
-                          // buttonStyle={{
-                          //   borderRadius: 0,
-                          //   marginLeft: 0,
-                          //   marginRight: 0,
-                          //   marginBottom: 0,
-                          // }}
-                          title={items?.categoryName}
-                          onPress={() => {
-                            this.callRes_container(items);
-                          }}
-                        /> */}
                         <Text
                           style={styles.font_text_option}
-                          // onPress={() => {
-                          //   this.callRes_container(items);
-                          // }}
                           onPress={() => {
-                            this.changeflagcategorymenu(items);
+                            // this.changeflagcategorymenu(items);
+
+                            if (
+                              this?.props?.selected_category_id_home_cont
+                                ?.category != "" &&
+                              this?.props?.selected_category_id_home_cont
+                                ?.category != undefined &&
+                              this.state.cartDatafromstore?.items &&
+                              this.state.cartDatafromstore?.items.length > 0 &&
+                              this?.props?.selected_category_id_home_cont
+                                ?.category != items?.category
+                            ) {
+                              this.setState({
+                                modal_Pop_Up_added_item: true,
+                                selected_awaited_item: items,
+                              });
+                            } else {
+                              this.setState({ modal_Pop_Up_added_item: false });
+                              this.changeflagcategorymenu(items);
+                            }
                           }}
                         >
                           {" "}
@@ -2430,7 +2442,6 @@ class MainContainer extends React.Component {
                           <Icon
                             name={"check"}
                             color={items?.flag ? "green" : "white"}
-                            // style={{ margin: 10 }}
                           />
                         </Text>
                       </Card>
@@ -2487,6 +2498,70 @@ class MainContainer extends React.Component {
                     }}
                   />
                 )}
+              </EDRTLView>
+            </Modal>
+          </View>
+        )}
+
+        {modal_Pop_Up_added_item && (
+          <View style={{ flex: 1 }}>
+            <Modal
+              isVisible={this.state.modal_Pop_Up}
+              hasBackdrop={true}
+              backdropOpacity={10}
+              backdropColor={"#65242e"}
+              transparent={true}
+            >
+              <View>
+                <Text style={styles.option}>
+                  {`Are you sure want to proceed ? \n Note: All items from cart will be removed`}
+                </Text>
+              </View>
+
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                <EDThemeButton
+                  label={`Cancel`}
+                  style={{
+                    width: "45%",
+                    backgroundColor: this.state.today_tomorrow_Flag
+                      ? "green"
+                      : "grey",
+                    marginLeft: 15,
+                  }}
+                  onPress={() => {
+                    this.setState({
+                      modal_Pop_Up_added_item: false,
+                      modal_Pop_Up: true,
+                    });
+                  }}
+                />
+                <EDThemeButton
+                  label={`Confirm`}
+                  style={{
+                    width: "40%",
+                    backgroundColor: "#808000",
+                    marginLeft: 15,
+                    color: "black",
+                  }}
+                  textStyle={{
+                    fontSize: getProportionalFontSize(14),
+                    paddingLeft: 7,
+                    paddingRight: 7,
+                  }}
+                  onPress={() => {
+                    this.setState(
+                      {
+                        modal_Pop_Up_added_item: false,
+                        modal_Pop_Up: true,
+                      },
+                      () => {
+                        this.changeflagcategorymenu(
+                          this.state.selected_awaited_item
+                        );
+                      }
+                    );
+                  }}
+                />
               </EDRTLView>
             </Modal>
           </View>
