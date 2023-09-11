@@ -1487,11 +1487,19 @@ class MainContainer extends React.Component {
     //   this.props.selected_category_id_home_cont?.category
     // );
     // return false;
+
+    let _planDate = !this.state.today_tomorrow_Flag
+      ? this.state.today
+      : this.state.tomorrow;
+    let selected_planDate =
+      _planDate && _planDate.split("-").reverse().join("-");
+
     this.props.save_selected_category_home_cont(filterflagtrue[0]);
     this.props.navigation.navigate("RestaurantContainer", {
       // selected_restaurantCategory:
       //   this.props.selected_category_id_home_cont?.category,
       selected_restaurantCategory: filterflagtrue[0]?.category,
+      selected_planDate: selected_planDate,
       restId: this.state?.restObjModelvalue?.restuarant_id,
       content_id: this.state?.restObjModelvalue?.content_id,
       currency: this.state?.restObjModelvalue?.currency_symbol,
@@ -2415,8 +2423,6 @@ class MainContainer extends React.Component {
                         <Text
                           style={styles.font_text_option}
                           onPress={() => {
-                            // this.changeflagcategorymenu(items);
-
                             if (
                               this?.props?.selected_category_id_home_cont
                                 ?.category != "" &&

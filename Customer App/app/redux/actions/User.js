@@ -200,6 +200,15 @@ export function save_received_category_from_homecont(details) {
   };
 }
 
+export const TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT =
+  "TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT";
+export function save_received_plan_date_from_homecont(details) {
+  return {
+    type: TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT,
+    value: details,
+  };
+}
+
 export const TYPE_SELECTED_RES_ID = "TYPE_SELECTED_RES_ID";
 export function save_selected_Res_ID(details) {
   return {

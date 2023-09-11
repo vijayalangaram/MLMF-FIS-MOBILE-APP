@@ -11,6 +11,7 @@ import {
   TYPE_DELIVERY_DUNZO__DETAILS,
   TYPE_SELECTED_CATEGORY_ID_HOME_CONT,
   TYPE_RECEIVED_CATEGORY_ID_FROM_HOME_CONT,
+  TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT,
   TYPE_SLOT_MASTER_DETAILS,
   TYPE_SELECTED_CATEGORY,
   TYPE_TODAY_TOMORROW__DATE,
@@ -224,6 +225,12 @@ export function userOperations(state = initialStateUser, action) {
     case TYPE_RECEIVED_CATEGORY_ID_FROM_HOME_CONT: {
       return Object.assign({}, state, {
         received_category_id_from_home_cont: action.value,
+      });
+    }
+
+    case TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT: {
+      return Object.assign({}, state, {
+        received_plan_date_from_home_cont: action.value,
       });
     }
 

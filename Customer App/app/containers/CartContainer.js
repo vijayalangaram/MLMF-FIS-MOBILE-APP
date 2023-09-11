@@ -188,7 +188,7 @@ export class CartContainer extends React.PureComponent {
       this.props?.selected_Res_Id && this.props?.selected_Res_Id.split("-");
 
     let getDeliveryChargeAPICall = await axios.get(
-      `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${splitres_name[0]}&menuCategoryId=${this.props.selected_category_id}`,
+      `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${splitres_name[0]}&menuCategoryId=${this.props.selected_category_id}&deliveryDate=${this.props.type_today_tomorrow__date}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -879,6 +879,7 @@ export default connect(
       selected_category_id: state.userOperations.selected_category_id,
       selected_category_id_home_cont:
         state.userOperations.selected_category_id_home_cont,
+      type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
     };
   },
   (dispatch) => {

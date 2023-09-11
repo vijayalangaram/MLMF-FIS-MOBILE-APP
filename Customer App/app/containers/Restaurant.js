@@ -61,6 +61,7 @@ import {
   save_slot_Master_details,
   save_selected_category,
   save_received_category_from_homecont,
+  save_received_plan_date_from_homecont,
 } from "../redux/actions/User";
 import { FlatList } from "react-native";
 import EDRTLView from "../components/EDRTLView";
@@ -171,15 +172,53 @@ export class Restaurant extends React.Component {
       localStorage.removeItem("save_storeavailabilityData");
     }
 
-    debugLog(
-      "******************************selected_restaurantCategory ******************************",
-      this.props.navigation?.state?.params?.selected_restaurantCategory
-    );
+    // debugLog(
+    //   "******************************selected_restaurantCategory ******************************",
+    //   this.props.navigation?.state?.params?.selected_restaurantCategory
+    // );
 
-    debugLog(
-      "this.props.received_category_id_from_home_cont",
-      this.props.received_category_id_from_home_cont
-    );
+    if (this.props.received_plan_date_from_home_cont != undefined) {
+      // debugLog(
+      //   "****************************** this.props.type_today_tomorrow__date ******************************",
+      //   this.props.received_plan_date_from_home_cont
+      // );
+      // debugLog(
+      //   "******************************  this.props.navigation?.state?.params?.selected_planDate******************************",
+      //   this.props.navigation?.state?.params?.selected_planDate
+      // );
+
+      let comparecall =
+        this.props.received_plan_date_from_home_cont.localeCompare(
+          this.props.navigation?.state?.params?.selected_planDate
+        );
+
+      // debugLog(
+      //   "******************************  selected_planDate******************************",
+      //   comparecall == -1
+      // );
+
+      if (comparecall == -1) {
+        let cartData = {
+          resId: this.resId,
+          content_id: this.content_id,
+          items: [],
+          coupon_name: "",
+          cart_id: 0,
+          resName: this?.restaurantDetails?.name,
+          coupon_array: [],
+        };
+        // let { cartData } = this.state;
+        this.updateCount([], false);
+        this.saveData(cartData);
+        this.setState({
+          cartData: [],
+          key: this.state.key + 1,
+        });
+        this.props.save_received_category_from_homecont(
+          this.props.navigation?.state?.params?.selected_restaurantCategory
+        );
+      }
+    }
 
     if (
       this.props.received_category_id_from_home_cont == "" ||
@@ -219,6 +258,10 @@ export class Restaurant extends React.Component {
         this.props.navigation?.state?.params?.selected_restaurantCategory
       );
     }
+
+    this.props.save_received_plan_date_from_homecont(
+      this.props.navigation?.state?.params?.selected_planDate
+    );
 
     // debugLog(
     //   "componentDidMount @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@******************************",
@@ -370,23 +413,9 @@ export class Restaurant extends React.Component {
       // );
       // debugLog("getstoredCatemaster", getstoredCatemaster);
 
-      debugLog(
-        "fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletI ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-        this.props?.navigation?.state?.params?.restId
-      );
-      debugLog(
-        "fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletI ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ",
-        this.props.navigation?.state?.params?.selected_restaurantCategory
-      );
-
       let getDeliveryChargeAPICall = await axios
         .get(
-          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${
-            this.props?.navigation?.state?.params?.restId
-          }&menuCategoryId=${
-            // get_category_Master && get_category_Master[0]?.category_id
-            this.props.navigation?.state?.params?.selected_restaurantCategory
-          }`,
+          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${this.props.type_today_tomorrow__date}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -1987,6 +2016,8 @@ export default connect(
         state.userOperations.selected_category_id_home_cont,
       received_category_id_from_home_cont:
         state.userOperations.received_category_id_from_home_cont,
+      received_plan_date_from_home_cont:
+        state.userOperations.received_plan_date_from_home_cont,
     };
   },
   (dispatch) => {
@@ -2018,6 +2049,9 @@ export default connect(
       },
       save_received_category_from_homecont: (table_id) => {
         dispatch(save_received_category_from_homecont(table_id));
+      },
+      save_received_plan_date_from_homecont: (table_id) => {
+        dispatch(save_received_plan_date_from_homecont(table_id));
       },
     };
   }
