@@ -164,40 +164,34 @@ export class Restaurant extends React.Component {
   //#endregion
 
   componentDidMount = () => {
-    this.networkConnectivityStatus();
-    if (
-      this?.state?.cartData != undefined &&
-      this?.state?.cartData?.length == 0
-    ) {
-      localStorage.removeItem("save_storeavailabilityData");
-    }
+    // debugLog(
+    //   "****************************** this.props.type_today_tomorrow__date ******************************",
+    //   this.props.received_plan_date_from_home_cont
+    // );
 
     // debugLog(
-    //   "******************************selected_restaurantCategory ******************************",
-    //   this.props.navigation?.state?.params?.selected_restaurantCategory
+    //   "******************************  this.props.navigation?.state?.params?.selected_planDate******************************",
+    //   this.props.navigation?.state?.params?.selected_planDate
     // );
 
     if (this.props.received_plan_date_from_home_cont != undefined) {
-      // debugLog(
-      //   "****************************** this.props.type_today_tomorrow__date ******************************",
-      //   this.props.received_plan_date_from_home_cont
-      // );
-      // debugLog(
-      //   "******************************  this.props.navigation?.state?.params?.selected_planDate******************************",
-      //   this.props.navigation?.state?.params?.selected_planDate
-      // );
-
       let comparecall =
         this.props.received_plan_date_from_home_cont.localeCompare(
           this.props.navigation?.state?.params?.selected_planDate
         );
 
       // debugLog(
-      //   "******************************  selected_planDate******************************",
-      //   comparecall == -1
+      //   "******************************  this.props.navigation?.state?.params?.selected_planDate******************************",
+      //   this.props.received_plan_date_from_home_cont.localeCompare(
+      //     this.props.navigation?.state?.params?.selected_planDate
+      //   )
       // );
 
-      if (comparecall == -1) {
+      if (
+        this.props.received_plan_date_from_home_cont !=
+          this.props.navigation?.state?.params?.selected_planDate ||
+        comparecall == -1
+      ) {
         let cartData = {
           resId: this.resId,
           content_id: this.content_id,
@@ -219,6 +213,19 @@ export class Restaurant extends React.Component {
         );
       }
     }
+
+    this.networkConnectivityStatus();
+    if (
+      this?.state?.cartData != undefined &&
+      this?.state?.cartData?.length == 0
+    ) {
+      localStorage.removeItem("save_storeavailabilityData");
+    }
+
+    // debugLog(
+    //   "******************************selected_restaurantCategory ******************************",
+    //   this.props.navigation?.state?.params?.selected_restaurantCategory
+    // );
 
     if (
       this.props.received_category_id_from_home_cont == "" ||
