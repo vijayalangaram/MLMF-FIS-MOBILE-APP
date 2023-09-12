@@ -1391,7 +1391,6 @@ class MainContainer extends React.Component {
           //   "lterstatesMastervalueszeroth[0]",
           //   filterstatesMastervalueszeroth
           // );
-
           let trueitemflag =
             filterstatesMastervalueszeroth &&
             filterstatesMastervalueszeroth.filter((item) => {
@@ -2404,6 +2403,7 @@ class MainContainer extends React.Component {
               backdropColor={"#65242e"}
               // backdropColor={"grey"}
               transparent={true}
+              propagateSwipe={true}
               // size={"lg"}
               // style={{
               //   // maxWidth: 355,
@@ -2414,210 +2414,229 @@ class MainContainer extends React.Component {
               // }}
               // backdrop="static"
             >
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  {" "}
-                  {restaurant_selected_Name}{" "}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: "yellow",
-                    textAlign: "center",
-                  }}
-                  // style={styles.option}
-                >
-                  {" "}
-                  Choose Menu Date{" "}
-                </Text>
-              </View>
+              <ScrollView>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    {" "}
+                    {restaurant_selected_Name}{" "}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "yellow",
+                      textAlign: "center",
+                    }}
+                    // style={styles.option}
+                  >
+                    {" "}
+                    Choose Menu Date{" "}
+                  </Text>
+                </View>
 
-              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
-                <EDThemeButton
-                  label={`Today \n${this.state.today}`}
-                  style={{
-                    width: "40%",
-                    backgroundColor: !this.state.today_tomorrow_Flag
-                      ? "green"
-                      : "grey",
-                    marginLeft: 15,
-                  }}
-                  textStyle={{
-                    fontSize: getProportionalFontSize(14),
-                    paddingLeft: 7,
-                    paddingRight: 7,
-                  }}
-                  onPress={this.onChange_today_tomorrow_Flag}
-                />
-                <EDThemeButton
-                  label={`Tomorrow ${this.state.tomorrow}`}
-                  style={{
-                    width: "45%",
-                    backgroundColor: this.state.today_tomorrow_Flag
-                      ? "green"
-                      : "grey",
-                    marginLeft: 15,
-                  }}
-                  onPress={this.onChange_today_tomorrow_Flag}
-                />
-              </EDRTLView>
+                <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                  <EDThemeButton
+                    label={`Today \n${this.state.today}`}
+                    style={{
+                      width: "40%",
+                      backgroundColor: !this.state.today_tomorrow_Flag
+                        ? "green"
+                        : "grey",
+                      marginLeft: 15,
+                    }}
+                    textStyle={{
+                      fontSize: getProportionalFontSize(14),
+                      paddingLeft: 7,
+                      paddingRight: 7,
+                    }}
+                    onPress={this.onChange_today_tomorrow_Flag}
+                  />
+                  <EDThemeButton
+                    label={`Tomorrow ${this.state.tomorrow}`}
+                    style={{
+                      width: "45%",
+                      backgroundColor: this.state.today_tomorrow_Flag
+                        ? "green"
+                        : "grey",
+                      marginLeft: 15,
+                    }}
+                    onPress={this.onChange_today_tomorrow_Flag}
+                  />
+                </EDRTLView>
 
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: "yellow",
-                    textAlign: "center",
-                  }}
-                  // style={styles.option}
-                >
-                  {" "}
-                  Choose Menu Category{" "}
-                </Text>
-              </View>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "yellow",
+                      textAlign: "center",
+                    }}
+                    // style={styles.option}
+                  >
+                    {" "}
+                    Choose Menu Category{" "}
+                  </Text>
+                </View>
 
-              <View style={styles.cart_container_option}>
-                {restaurantCategoryMAster &&
-                  restaurantCategoryMAster.length > 0 &&
-                  restaurantCategoryMAster.map((items) => {
-                    // debugLog("cardviiiw", items);
-                    return (
-                      <Card
-                        style={{
-                          backgroundColor: items?.flag ? "red" : "white",
-                        }}
-                      >
-                        <Text
-                          style={styles.font_text_option}
-                          onPress={() => {
-                            let todayrever =
-                              this.state?.today &&
-                              this.state?.today.split("-").reverse().join("-");
-                            let tomorrowrev =
-                              this.state?.tomorrow &&
-                              this.state?.tomorrow
-                                .split("-")
-                                .reverse()
-                                .join("-");
+                <View>
+                  {restaurantCategoryMAster &&
+                    restaurantCategoryMAster.length > 0 &&
+                    restaurantCategoryMAster.map((items) => {
+                      // debugLog("cardviiiw", items);
+                      return (
+                        <Card
+                        // style={{
+                        //   backgroundColor: items?.flag ? "#f542e9" : "white",
+                        // }}
+                        >
+                          <Text
+                            // style={styles.font_text_option}
+                            style={{
+                              fontSize: 18,
+                              color: "black",
+                              fontWeight: "400",
+                              // fontWeight: "bold",
+                              textAlign: "center",
+                              // backgroundColor: "skyblue",
+                              backgroundColor: items?.flag
+                                ? "green"
+                                : "white",
+                            }}
+                            onPress={() => {
+                              let todayrever =
+                                this.state?.today &&
+                                this.state?.today
+                                  .split("-")
+                                  .reverse()
+                                  .join("-");
+                              let tomorrowrev =
+                                this.state?.tomorrow &&
+                                this.state?.tomorrow
+                                  .split("-")
+                                  .reverse()
+                                  .join("-");
 
-                            let localdatecheck =
-                              today_tomorrow_Flag === false
-                                ? todayrever
-                                : tomorrowrev;
+                              let localdatecheck =
+                                today_tomorrow_Flag === false
+                                  ? todayrever
+                                  : tomorrowrev;
 
-                            if (
-                              this?.props?.selected_category_id_home_cont
-                                ?.category != "" &&
-                              this?.props?.selected_category_id_home_cont
-                                ?.category != undefined &&
-                              this.state.cartDatafromstore?.items &&
-                              this.state.cartDatafromstore?.items.length > 0 &&
-                              this?.props?.selected_category_id_home_cont
-                                ?.category != items?.category
-                            ) {
-                              this.setState({
-                                modal_Pop_Up_added_item: true,
-                                selected_awaited_item: items,
-                              });
-                            } else if (
-                              this.props.received_plan_date_from_home_cont !=
-                                undefined &&
-                              localdatecheck !=
-                                this.props.received_plan_date_from_home_cont
-                            ) {
-                              this.setState({
-                                modal_Pop_Up_added_item: true,
-                                selected_awaited_item: items,
-                              });
-                            } else if (
-                              propsfromcatecontainervalue?.categoryName !=
-                                undefined &&
-                              this.state.cartDatafromstore?.items &&
-                              this.state.cartDatafromstore?.items.length > 0
-                            ) {
                               if (
-                                propsfromcatecontainervalue?.categoryName !=
-                                items?.categoryName
-                              )
+                                this?.props?.selected_category_id_home_cont
+                                  ?.category != "" &&
+                                this?.props?.selected_category_id_home_cont
+                                  ?.category != undefined &&
+                                this.state.cartDatafromstore?.items &&
+                                this.state.cartDatafromstore?.items.length >
+                                  0 &&
+                                this?.props?.selected_category_id_home_cont
+                                  ?.category != items?.category
+                              ) {
                                 this.setState({
                                   modal_Pop_Up_added_item: true,
                                   selected_awaited_item: items,
                                 });
-                            } else {
-                              this.setState({ modal_Pop_Up_added_item: false });
-                              this.changeflagcategorymenu(items);
-                            }
-                          }}
-                        >
-                          {" "}
-                          {items?.categoryName}{" "}
-                          <Icon
-                            name={"check"}
-                            color={items?.flag ? "green" : "white"}
-                          />
-                        </Text>
-                      </Card>
-                    );
-                  })}
-              </View>
+                              } else if (
+                                this.props.received_plan_date_from_home_cont !=
+                                  undefined &&
+                                localdatecheck !=
+                                  this.props.received_plan_date_from_home_cont
+                              ) {
+                                this.setState({
+                                  modal_Pop_Up_added_item: true,
+                                  selected_awaited_item: items,
+                                });
+                              } else if (
+                                propsfromcatecontainervalue?.categoryName !=
+                                  undefined &&
+                                this.state.cartDatafromstore?.items &&
+                                this.state.cartDatafromstore?.items.length > 0
+                              ) {
+                                if (
+                                  propsfromcatecontainervalue?.categoryName !=
+                                  items?.categoryName
+                                )
+                                  this.setState({
+                                    modal_Pop_Up_added_item: true,
+                                    selected_awaited_item: items,
+                                  });
+                              } else {
+                                this.setState({
+                                  modal_Pop_Up_added_item: false,
+                                });
+                                this.changeflagcategorymenu(items);
+                              }
+                            }}
+                          >
+                            {" "}
+                            {items?.categoryName}{" "}
+                            {/* <Icon
+                              name={"check"}
+                              color={items?.flag ? "green" : "white"}
+                            /> */}
+                          </Text>
+                        </Card>
+                      );
+                    })}
+                </View>
 
-              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
-                <EDThemeButton
-                  label={`Back`}
-                  style={{
-                    width: "45%",
-                    backgroundColor: "grey",
-                    //  this.state.today_tomorrow_Flag
-                    //   ? "green"
-                    //   : "grey",
-                    marginLeft: 15,
-                  }}
-                  onPress={() => {
-                    this.setState({ modal_Pop_Up: false });
-                  }}
-                />
-                {restaurantCategoryMAster &&
-                restaurantCategoryMAster.length > 0 ? (
+                <EDRTLView style={{ alignItems: "center", padding: 10 }}>
                   <EDThemeButton
-                    label={`Proceed`}
+                    label={`Back`}
                     style={{
-                      width: "40%",
-                      backgroundColor: "#808000",
+                      width: "45%",
+                      backgroundColor: "grey",
+                      //  this.state.today_tomorrow_Flag
+                      //   ? "green"
+                      //   : "grey",
                       marginLeft: 15,
-                      color: "black",
-                    }}
-                    textStyle={{
-                      fontSize: getProportionalFontSize(14),
-                      paddingLeft: 7,
-                      paddingRight: 7,
                     }}
                     onPress={() => {
-                      this.callRes_container();
+                      this.setState({ modal_Pop_Up: false });
                     }}
                   />
-                ) : (
-                  <EDThemeButton
-                    label={`No Data`}
-                    style={{
-                      width: "40%",
-                      backgroundColor: "orange",
-                      marginLeft: 15,
-                      color: "black",
-                    }}
-                    textStyle={{
-                      fontSize: getProportionalFontSize(14),
-                      paddingLeft: 7,
-                      paddingRight: 7,
-                    }}
-                  />
-                )}
-              </EDRTLView>
+                  {restaurantCategoryMAster &&
+                  restaurantCategoryMAster.length > 0 ? (
+                    <EDThemeButton
+                      label={`Proceed`}
+                      style={{
+                        width: "40%",
+                        backgroundColor: "#808000",
+                        marginLeft: 15,
+                        color: "black",
+                      }}
+                      textStyle={{
+                        fontSize: getProportionalFontSize(14),
+                        paddingLeft: 7,
+                        paddingRight: 7,
+                      }}
+                      onPress={() => {
+                        this.callRes_container();
+                      }}
+                    />
+                  ) : (
+                    <EDThemeButton
+                      label={`No Data`}
+                      style={{
+                        width: "40%",
+                        backgroundColor: "orange",
+                        marginLeft: 15,
+                        color: "black",
+                      }}
+                      textStyle={{
+                        fontSize: getProportionalFontSize(14),
+                        paddingLeft: 7,
+                        paddingRight: 7,
+                      }}
+                    />
+                  )}
+                </EDRTLView>
+              </ScrollView>
             </Modal>
           </View>
         )}
@@ -2841,6 +2860,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     textAlign: "center",
+    backgroundColor: "skyblue",
   },
   separator: {
     marginVertical: 30,
