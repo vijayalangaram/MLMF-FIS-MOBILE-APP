@@ -175,6 +175,7 @@ class MainContainer extends React.Component {
     modal_Pop_Up_added_item: false,
     userOption: null,
     restaurantCategoryMAster: [],
+    propsfromcatecontainervalue: "",
     selected_restaurantCategory: "",
     restObjModelvalue: "",
     cartDatafromstore: [],
@@ -1326,7 +1327,7 @@ class MainContainer extends React.Component {
           );
 
           if (
-            this?.props?.selected_category_id_home_cont?.category == "" &&
+            this?.props?.selected_category_id_home_cont?.category == "" ||
             this?.props?.selected_category_id_home_cont?.category == undefined
           ) {
             debugLog(
@@ -1349,6 +1350,12 @@ class MainContainer extends React.Component {
               "9999999999999999999999999999999999999999999999999999999",
               this.props.selected_category_id_home_cont?.category
             );
+            let { propsfromcatecontainervalue } = this.state;
+            this.setState({
+              propsfromcatecontainervalue:
+                this.props.selected_category_id_home_cont,
+            });
+
             filterstatesMastervalueszeroth =
               filterstatesMastervalues &&
               filterstatesMastervalues.map((item, i) => {
@@ -1362,19 +1369,42 @@ class MainContainer extends React.Component {
                 }
                 return item;
               });
+            // let enable boolean for contains items and date
+            // let trueitemflag =
+            //   filterstatesMastervalueszeroth &&
+            //   filterstatesMastervalueszeroth.filter((item) => {
+            //     return item.flag === true;
+            //   });
+            // let { modal_Pop_Up } = this.state;
+            // this.setState({
+            //   modal_Pop_Up: true,
+            //   // selected_awaited_item: trueitemflag,
+            // });
           }
           // debugLog(
           //   "lterstatesMastervalueszeroth[0]",
           //   filterstatesMastervalueszeroth
           // );
+
+          let trueitemflag =
+            filterstatesMastervalueszeroth &&
+            filterstatesMastervalueszeroth.filter((item) => {
+              return item.flag === true;
+            });
+
+          let { propsfromcatecontainervalue } = this.state;
+
           this.setState(
             {
               restaurantCategoryMAster: filterstatesMastervalueszeroth,
+              // propsfromcatecontainervalue:
+              //   this.props.selected_category_id_home_cont?.category,
             },
             () => {
-              this.props.save_selected_category_home_cont(
-                filterstatesMastervalueszeroth[0]
-              );
+              // this.props.save_selected_category_home_cont(
+              //   filterstatesMastervalueszeroth[0]
+              // );
+              this.props.save_selected_category_home_cont(trueitemflag);
             }
           );
 
@@ -1428,9 +1458,11 @@ class MainContainer extends React.Component {
       .catch((error) => {
         // debugLog("888888888888888888888899999999999999999 error ", error);
         // showValidationAlert(`Category not available`);
-        let { restaurantCategoryMAster } = this.state;
+        let { restaurantCategoryMAster, propsfromcatecontainervalue } =
+          this.state;
         this.setState({
           restaurantCategoryMAster: [],
+          propsfromcatecontainervalue: "",
         });
         // this.props.save_slot_Master_details(undefined);
         // this.props.save_selected_category(undefined);
@@ -2340,14 +2372,17 @@ class MainContainer extends React.Component {
       cartDatafromstore,
       modal_Pop_Up_added_item,
       selected_awaited_item,
+      propsfromcatecontainervalue,
     } = this.state;
+
     // debugLog(
-    //   "33333333333333333333333333 cartDatafromstore 3333333333333333333333333333",
-    //   cartDatafromstore?.items
+    //   "33333333333333333333333333 propsfromcatecontainervalue 3333333333333333333333333333",
+    //   propsfromcatecontainervalue?.categoryName
     // );
+
     // debugLog(
-    //   "this.state.restaurantCategoryMAster",
-    //   this.state.restaurantCategoryMAster
+    //   " this?.props?.selected_category_id_home_cont render",
+    //   this?.props?.selected_category_id_home_cont
     // );
 
     return (
@@ -2423,6 +2458,21 @@ class MainContainer extends React.Component {
                         <Text
                           style={styles.font_text_option}
                           onPress={() => {
+                            let todayrever =
+                              this.state?.today &&
+                              this.state?.today.split("-").reverse().join("-");
+                            let tomorrowrev =
+                              this.state?.tomorrow &&
+                              this.state?.tomorrow
+                                .split("-")
+                                .reverse()
+                                .join("-");
+
+                            let localdatecheck =
+                              today_tomorrow_Flag === false
+                                ? todayrever
+                                : tomorrowrev;
+
                             if (
                               this?.props?.selected_category_id_home_cont
                                 ?.category != "" &&
@@ -2437,6 +2487,30 @@ class MainContainer extends React.Component {
                                 modal_Pop_Up_added_item: true,
                                 selected_awaited_item: items,
                               });
+                            } else if (
+                              this.props.received_plan_date_from_home_cont !=
+                                undefined &&
+                              localdatecheck !=
+                                this.props.received_plan_date_from_home_cont
+                            ) {
+                              this.setState({
+                                modal_Pop_Up_added_item: true,
+                                selected_awaited_item: items,
+                              });
+                            } else if (
+                              propsfromcatecontainervalue?.categoryName !=
+                                undefined &&
+                              this.state.cartDatafromstore?.items &&
+                              this.state.cartDatafromstore?.items.length > 0
+                            ) {
+                              if (
+                                propsfromcatecontainervalue?.categoryName !=
+                                items?.categoryName
+                              )
+                                this.setState({
+                                  modal_Pop_Up_added_item: true,
+                                  selected_awaited_item: items,
+                                });
                             } else {
                               this.setState({ modal_Pop_Up_added_item: false });
                               this.changeflagcategorymenu(items);
@@ -2884,6 +2958,8 @@ export default connect(
       useMile: state.userOperations.useMile,
       selected_category_id_home_cont:
         state.userOperations.selected_category_id_home_cont,
+      received_plan_date_from_home_cont:
+        state.userOperations.received_plan_date_from_home_cont,
     };
   },
   (dispatch) => {
