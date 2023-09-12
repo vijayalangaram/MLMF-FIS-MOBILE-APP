@@ -171,6 +171,7 @@ class MainContainer extends React.Component {
     tomorrow: new Date() + 1,
     today_tomorrow_Flag: false,
     restaurant_restaurantName: "",
+    restaurant_selected_Name: "",
     modal_Pop_Up: false,
     modal_Pop_Up_added_item: false,
     userOption: null,
@@ -1265,8 +1266,12 @@ class MainContainer extends React.Component {
   /** ON POPULAR RES EVENT */
   onPopularResEvent = async (restObjModel) => {
     this.getCartDataList();
-    let { getintialAddress, today_tomorrow_Flag, restaurant_restaurantName } =
-      this.state;
+    let {
+      getintialAddress,
+      today_tomorrow_Flag,
+      restaurant_restaurantName,
+      restaurant_selected_Name,
+    } = this.state;
     this.intialDunzoCall(
       restObjModel.restuarant_id,
       this.props.userIdFromRedux,
@@ -1279,6 +1284,7 @@ class MainContainer extends React.Component {
 
     this.setState({
       restaurant_restaurantName: `${restObjModel.restuarant_id}-${restObjModel.name}`,
+      restaurant_selected_Name: restObjModel.name,
     });
 
     let planDate = !this.state.today_tomorrow_Flag
@@ -2373,6 +2379,8 @@ class MainContainer extends React.Component {
       modal_Pop_Up_added_item,
       selected_awaited_item,
       propsfromcatecontainervalue,
+      restaurant_restaurantName,
+      restaurant_selected_Name,
     } = this.state;
 
     // debugLog(
@@ -2407,7 +2415,27 @@ class MainContainer extends React.Component {
               // backdrop="static"
             >
               <View>
-                <Text style={styles.option}> Choose Menu Date </Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: "white",
+                    textAlign: "center",
+                  }}
+                >
+                  {" "}
+                  {restaurant_selected_Name}{" "}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: "yellow",
+                    textAlign: "center",
+                  }}
+                  // style={styles.option}
+                >
+                  {" "}
+                  Choose Menu Date{" "}
+                </Text>
               </View>
 
               <EDRTLView style={{ alignItems: "center", padding: 10 }}>
@@ -2441,7 +2469,17 @@ class MainContainer extends React.Component {
               </EDRTLView>
 
               <View>
-                <Text style={styles.option}> Choose Menu Category </Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: "yellow",
+                    textAlign: "center",
+                  }}
+                  // style={styles.option}
+                >
+                  {" "}
+                  Choose Menu Category{" "}
+                </Text>
               </View>
 
               <View style={styles.cart_container_option}>
@@ -2534,9 +2572,10 @@ class MainContainer extends React.Component {
                   label={`Back`}
                   style={{
                     width: "45%",
-                    backgroundColor: this.state.today_tomorrow_Flag
-                      ? "green"
-                      : "grey",
+                    backgroundColor: "grey",
+                    //  this.state.today_tomorrow_Flag
+                    //   ? "green"
+                    //   : "grey",
                     marginLeft: 15,
                   }}
                   onPress={() => {
@@ -2960,6 +2999,7 @@ export default connect(
         state.userOperations.selected_category_id_home_cont,
       received_plan_date_from_home_cont:
         state.userOperations.received_plan_date_from_home_cont,
+      selected_Res_Id: state.userOperations.selected_Res_Id,
     };
   },
   (dispatch) => {
