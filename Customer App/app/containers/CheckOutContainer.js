@@ -43,8 +43,29 @@ import {
   saveCartPrice,
   saveCheckoutDetails,
   saveIsCheckoutScreen,
-  save_selected_category_home_cont,
 } from "../redux/actions/Checkout";
+
+import {
+  saveCurrentLocation,
+  saveFoodType,
+  saveLanguageInRedux,
+  saveMapKeyInRedux,
+  saveMinOrderAmount,
+  saveOrderMode,
+  savePaymentDetailsInRedux,
+  saveResIDInRedux,
+  saveSocialURL,
+  saveStoreURL,
+  saveTableIDInRedux,
+  saveUserFCMInRedux,
+  saveWalletMoneyInRedux,
+  save_delivery_dunzo__details,
+  save_dunzodelivery_amount,
+  save_selected_Res_ID,
+  save_today_tomorrow_details,
+  save_selected_category_home_cont,
+} from "../redux/actions/User";
+
 import {
   clearCartData,
   clearCurrency_Symbol,
@@ -1960,8 +1981,10 @@ export class CheckOutContainer extends React.PureComponent {
         };
 
         if (this.isPreOrder == true) {
-          checkoutData.scheduled_date =
-            this.props.navigation.state.params.scheduled_date;
+          // checkoutData.scheduled_date =
+          //   this.props.navigation.state.params.scheduled_date;
+          checkoutData.scheduled_date = this.props.type_today_tomorrow__date;
+          // this.props.navigation.state.params.scheduled_date;
           checkoutData.slot_open_time =
             this.props.navigation.state.params.slot_open_time;
           checkoutData.slot_close_time =
@@ -2333,7 +2356,7 @@ export class CheckOutContainer extends React.PureComponent {
 
       debugLog(
         ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ::::::::::onSuccess.order_id",
-        dataforsaveorder
+        onSuccess.order_id
       );
 
       let getDeliveryChargeAPICall = await axios.post(
@@ -2376,10 +2399,19 @@ export class CheckOutContainer extends React.PureComponent {
       let addOrderParams = this.props.checkoutDetail;
       // addOrderParams.extra_comment = this.comment
       // addOrderParams.delivery_instructions = this.driver_comment
+      // addOrderParams.order_date = moment(
+      //   new Date().toLocaleString("en-US", {
+      //     timeZone: RNLocalize.getTimeZone(),
+      //   })
+      // ).format("DD-MM-YYYY hh:mm A");
+
       addOrderParams.order_date = moment(
-        new Date().toLocaleString("en-US", {
-          timeZone: RNLocalize.getTimeZone(),
-        })
+        new Date(this?.props?.type_today_tomorrow__date).toLocaleString(
+          "en-US",
+          {
+            timeZone: RNLocalize.getTimeZone(),
+          }
+        )
       ).format("DD-MM-YYYY hh:mm A");
 
       if (payment_option == "razorpay") {
@@ -2443,6 +2475,56 @@ export class CheckOutContainer extends React.PureComponent {
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
+
+      // Input String
+      let origString = this?.props?.type_today_tomorrow__date;
+      // String to be added
+      let stringToAdd = "0";
+      // Position to add string
+      let indexPosition = 5;
+
+      let eletwemonthcheck =
+        this?.props?.type_today_tomorrow__date &&
+        this?.props?.type_today_tomorrow__date.substring(5, 6);
+
+      debugLog(
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    newString ~~~~~~~~~~~~~~~",
+        eletwemonthcheck,
+        typeof eletwemonthcheck
+      );
+
+      let newString;
+      // Using substring method to split string
+      if (
+        eletwemonthcheck != "10" &&
+        eletwemonthcheck != "11" &&
+        eletwemonthcheck != "12"
+      )
+        newString =
+          origString.substring(0, indexPosition) +
+          stringToAdd +
+          origString.substring(indexPosition);
+      else {
+        newString = this?.props?.type_today_tomorrow__date;
+      }
+
+      // debugLog(
+      //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    newString ~~~~~~~~~~~~~~~",
+      //   newString
+      // );
+
+      let splivalues =
+        this.props.type_today_tomorrow__date &&
+        this.props.type_today_tomorrow__date.split("-");
+
+      // splivalues[1] = `0${splivalues[1]}`;
+      var today = new Date();
+      var time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      let comncate = `${newString} ${time}`;
+      addOrderParams.order_date = comncate;
+      addOrderParams.scheduled_date = newString;
+
       // addOrderParams.slot_open_time =
       //   this.props.selected_Slot_ID?.formatStartTime;
       // addOrderParams.slot_close_time =
@@ -3580,6 +3662,7 @@ export default connect(
       selected_Slot_ID: state.userOperations.selected_Slot_ID,
       selected_category_id_home_cont:
         state.userOperations.selected_category_id_home_cont,
+      type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
     };
   },
   (dispatch) => {

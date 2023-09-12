@@ -336,15 +336,15 @@ export class CartContainer extends React.PureComponent {
               data={this.state.cartData != "" ? this.state.cartData.items : []}
               keyExtractor={(item, index) => item + index}
               showsVerticalScrollIndicator={false}
-              ListFooterComponent={() => {
-                return (
-                  <EDRTLText
-                    title={strings("addMore")}
-                    style={style.addMoreText}
-                    onPress={this.navigateToRestaurant}
-                  />
-                );
-              }}
+              // ListFooterComponent={() => {
+              //   return (
+              //     <EDRTLText
+              //       title={strings("addMore")}
+              //       style={style.addMoreText}
+              //       onPress={this.navigateToRestaurant}
+              //     />
+              //   );
+              // }}
               renderItem={({ item, index }) => {
                 return (
                   <CartItem
