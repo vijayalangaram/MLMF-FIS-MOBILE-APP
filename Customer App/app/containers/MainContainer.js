@@ -2421,6 +2421,7 @@ class MainContainer extends React.Component {
                       fontSize: 20,
                       color: "white",
                       textAlign: "center",
+                      marginTop: 20,
                     }}
                   >
                     {" "}
@@ -2490,9 +2491,9 @@ class MainContainer extends React.Component {
                       // debugLog("cardviiiw", items);
                       return (
                         <Card
-                        // style={{
-                        //   backgroundColor: items?.flag ? "#f542e9" : "white",
-                        // }}
+                          containerStyle={{
+                            backgroundColor: items?.flag ? "#75e68d" : "white",
+                          }}
                         >
                           <Text
                             // style={styles.font_text_option}
@@ -2503,9 +2504,9 @@ class MainContainer extends React.Component {
                               // fontWeight: "bold",
                               textAlign: "center",
                               // backgroundColor: "skyblue",
-                              backgroundColor: items?.flag
-                                ? "green"
-                                : "white",
+                              // backgroundColor: items?.flag
+                              //   ? "#90EE90"
+                              //   : "white",
                             }}
                             onPress={() => {
                               let todayrever =
@@ -2723,7 +2724,7 @@ class MainContainer extends React.Component {
                   this.state.isShowLanguageIcon
                     ? { url: "language", name: "language", type: "material" }
                     : {},
-                  { url: "filter", name: "filter", type: "ant-design" },
+                  // { url: "filter", name: "filter", type: "ant-design" },
                   {
                     url: "shopping-cart",
                     name: "Cart",
@@ -2735,7 +2736,7 @@ class MainContainer extends React.Component {
                   this.state.isShowLanguageIcon
                     ? { url: "language", name: "language", type: "material" }
                     : {},
-                  { url: "filter", name: "filter", type: "ant-design" },
+                  // { url: "filter", name: "filter", type: "ant-design" },
                 ]
           }
           onLeft={this._onSideMenuPressed}

@@ -73,9 +73,9 @@ const MAIN_NAVIGATOR = createStackNavigator(
         ChangePasswordContainer: {
             screen: ChangePasswordContainer
         },
-        Filter: {
-            screen: FilterContainer
-        },
+        // Filter: {
+        //     screen: FilterContainer
+        // },
         CartContainer: {
             screen: CartContainer
         },
@@ -140,18 +140,18 @@ const RECIPE_NAVIGATOR = createStackNavigator(
         CategoryFromRecipe: {
             screen: CategoryDetailContainer
         },
-        FilterContainer: {
-            screen: Restaurant
-        },
+        // FilterContainer: {
+        //     screen: Restaurant
+        // },
         aboutStore: {
             screen: AboutStoreContainer
         },
         RecipeDetail: {
             screen: RecipeDetail
         },
-        Filter: {
-            screen: FilterContainer
-        }
+        // Filter: {
+        //     screen: FilterContainer
+        // }
     },
     {
         initialRouteName: "RecipeContainer",
