@@ -327,7 +327,7 @@ class SideBar extends React.PureComponent {
               />
               {/* <Icon name="versions" type="octicon" size={getProportionalFontSize(18)}/> */}
               {/* <Text style={style.iconText} >{strings("version") + " " + deviceInfoModule.getVersion()}</Text> */}
-              <Text style={style.iconText}>{"Version 1.1 12-09-23 "}</Text>
+              <Text style={style.iconText}>{"Version 1.1 13-09-23 "}</Text>
             </EDRTLView>
             {this.arrSocialApps !== undefined &&
             this.arrSocialApps !== null &&

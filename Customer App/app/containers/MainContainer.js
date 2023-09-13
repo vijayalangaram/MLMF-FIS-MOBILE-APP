@@ -174,6 +174,7 @@ class MainContainer extends React.Component {
     restaurant_selected_Name: "",
     modal_Pop_Up: false,
     modal_Pop_Up_added_item: false,
+    modalpopupplandate: false,
     userOption: null,
     restaurantCategoryMAster: [],
     propsfromcatecontainervalue: "",
@@ -264,10 +265,10 @@ class MainContainer extends React.Component {
     AppState.addEventListener("change", this._handleAppStateChange);
     this.dateIntialCall();
     this.getCartDataList();
-    // debugLog(
-    //   "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
-    //   this.props.selected_category_id_home_cont?.category
-    // );
+    debugLog(
+      "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+      this.props.received_category_id_from_home_cont
+    );
   }
 
   getCartDataList = () => {
@@ -1090,6 +1091,20 @@ class MainContainer extends React.Component {
   onFailureGetAddress = (onFailure) => {};
 
   onDidFocusMainContainer = () => {
+    // debugLog(
+    //   "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+    //   this.props.received_category_id_from_home_cont
+    // );
+    let { modal_Pop_Up } = this.state;
+    if (
+      this.props.received_category_id_from_home_cont != undefined &&
+      this.props.received_category_id_from_home_cont != ""
+    ) {
+      this.setState({
+        modal_Pop_Up: true,
+      });
+    }
+
     this.orderMode = this.props.orderMode == 1 ? 1 : 0;
     if (
       this.props.userIdFromRedux !== undefined &&
@@ -2380,6 +2395,7 @@ class MainContainer extends React.Component {
       propsfromcatecontainervalue,
       restaurant_restaurantName,
       restaurant_selected_Name,
+      modalpopupplandate,
     } = this.state;
 
     // debugLog(
@@ -2455,7 +2471,10 @@ class MainContainer extends React.Component {
                       paddingLeft: 7,
                       paddingRight: 7,
                     }}
-                    onPress={this.onChange_today_tomorrow_Flag}
+                    onPress={() => {
+                      this.setState({ modalpopupplandate: true });
+                    }}
+                    // onPress={this.onChange_today_tomorrow_Flag}
                   />
                   <EDThemeButton
                     label={`Tomorrow ${this.state.tomorrow}`}
@@ -2466,7 +2485,10 @@ class MainContainer extends React.Component {
                         : "grey",
                       marginLeft: 15,
                     }}
-                    onPress={this.onChange_today_tomorrow_Flag}
+                    onPress={() => {
+                      this.setState({ modalpopupplandate: true });
+                    }}
+                    // onPress={this.onChange_today_tomorrow_Flag}
                   />
                 </EDRTLView>
 
@@ -2642,6 +2664,70 @@ class MainContainer extends React.Component {
           </View>
         )}
 
+        {modalpopupplandate && (
+          <View style={{ flex: 1 }}>
+            <Modal
+              isVisible={this.state.modal_Pop_Up}
+              hasBackdrop={true}
+              backdropOpacity={10}
+              backdropColor={"#65242e"}
+              transparent={true}
+            >
+              <View>
+                <Text style={styles.option}>
+                  {`Are you sure want to  change date ?`}
+                </Text>
+              </View>
+
+              <EDRTLView style={{ alignItems: "center", padding: 10 }}>
+                <EDThemeButton
+                  label={`Cancel`}
+                  style={{
+                    width: "45%",
+                    backgroundColor: "grey",
+                    marginLeft: 15,
+                  }}
+                  // onPress={this.onChange_today_tomorrow_Flag}
+                  onPress={() => {
+                    this.setState({
+                      modalpopupplandate: false,
+                      modal_Pop_Up: true,
+                    });
+                  }}
+                />
+                <EDThemeButton
+                  label={`Confirm`}
+                  style={{
+                    width: "40%",
+                    backgroundColor: "#808000",
+                    marginLeft: 15,
+                    color: "black",
+                  }}
+                  textStyle={{
+                    fontSize: getProportionalFontSize(14),
+                    paddingLeft: 7,
+                    paddingRight: 7,
+                  }}
+                  onPress={() => {
+                    this.onChange_today_tomorrow_Flag();
+                    this.setState(
+                      {
+                        modalpopupplandate: false,
+                        modal_Pop_Up: true,
+                      }
+                      // () => {
+                      //   this.changeflagcategorymenu(
+                      //     this.state.selected_awaited_item
+                      //   );
+                      // }
+                    );
+                  }}
+                />
+              </EDRTLView>
+            </Modal>
+          </View>
+        )}
+
         {modal_Pop_Up_added_item && (
           <View style={{ flex: 1 }}>
             <Modal
@@ -2662,9 +2748,11 @@ class MainContainer extends React.Component {
                   label={`Cancel`}
                   style={{
                     width: "45%",
-                    backgroundColor: this.state.today_tomorrow_Flag
-                      ? "green"
-                      : "grey",
+                    backgroundColor:
+                      // this.state.today_tomorrow_Flag
+                      //   ? "green"
+                      // :
+                      "grey",
                     marginLeft: 15,
                   }}
                   onPress={() => {
@@ -3021,6 +3109,9 @@ export default connect(
       received_plan_date_from_home_cont:
         state.userOperations.received_plan_date_from_home_cont,
       selected_Res_Id: state.userOperations.selected_Res_Id,
+
+      received_category_id_from_home_cont:
+        state.userOperations.received_category_id_from_home_cont,
     };
   },
   (dispatch) => {
