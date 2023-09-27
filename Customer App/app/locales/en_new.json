@@ -427,6 +427,7 @@
     "paymentFail": "Payment failed, Please try again.",
     "stopPayment2": "Are you sure you want to cancel the ongoing transaction ?",
     "myWallet": "My Wallet",
+    "Subscription": "My Subscription",
     "noTransactions": "No transactions found !",
     "yourWalletBalance": "Your wallet balance",
     "transactions": "Transactions",

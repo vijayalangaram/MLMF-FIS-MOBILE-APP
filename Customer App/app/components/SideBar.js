@@ -107,12 +107,12 @@ class SideBar extends React.PureComponent {
       //   icon: "restaurant-outline",
       //   type: "ionicon",
       // },
-      // {
-      //   route: "Event",
-      //   screenName: strings("bookingsOnline"),
-      //   icon: "calendar",
-      //   type: "ant-design",
-      // },
+      {
+        route: "Subscription",
+        screenName:"Subscription",
+        icon: "calendar",
+        type: "ant-design",
+      },
       // {
       //   route: "MyBooking",
       //   screenName: strings("myReservations"),

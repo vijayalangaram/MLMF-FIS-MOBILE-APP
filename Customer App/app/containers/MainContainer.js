@@ -681,8 +681,8 @@ class MainContainer extends React.Component {
   saveAddressFromList = (address) => {
     let { getintialAddress } = this.state;
     let addressData = {
-      latitude: address.latitude,
-      longitude: address.longitude,
+      latitude: "13.0189311",
+      longitude: "80.2066223",
       areaName:
         address.address_label !== undefined &&
         address.address_label !== null &&
@@ -734,8 +734,8 @@ class MainContainer extends React.Component {
           let param = {
             user_id: this.props.userIdFromRedux,
             language_slug: this.props.lan,
-            latitude: this.props.currentLocation.latitude,
-            longitude: this.props.currentLocation.longitude,
+            latitude: "13.0189311",
+            longitude: "80.2066223",
             itemSearch: searchData || this.state.strSearch,
             category_id: "" + this.selectedCategories.join(),
             orderMode: this.props.orderModeInRedux,
@@ -798,8 +798,8 @@ class MainContainer extends React.Component {
                   let param = {
                     user_id: this.props.userIdFromRedux,
                     language_slug: this.props.lan,
-                    latitude: onSucces.latitude,
-                    longitude: onSucces.longitude,
+                    latitude: "13.0189311",
+                    longitude: "80.2066223",
                     itemSearch: searchData || this.state.strSearch,
                     category_id: "" + this.selectedCategories.join(),
                     orderMode: this.props.orderModeInRedux,
@@ -1076,8 +1076,8 @@ class MainContainer extends React.Component {
         this.currentAddress = onSuccess.localArea;
         this.currentCity = onSuccess.strAddress;
         let addressData = {
-          latitude: lat,
-          longitude: long,
+          latitude: "13.0189311",
+          longitude: "80.2066223",
           areaName: onSuccess.strAddress,
           address: onSuccess.localArea,
         };
@@ -2236,8 +2236,8 @@ class MainContainer extends React.Component {
         table_id: data.data.trim(),
         // table_id : 7,
         language_slug: this.props.lan,
-        latitude: this.props.currentLocation.latitude,
-        longitude: this.props.currentLocation.longitude,
+        latitude: "13.0189311",
+        longitude: "80.2066223",
       };
       addRequestQR(params, this.onSuccesQrRequest, this.onFailureQrRequest);
     } else showValidationAlert(strings("qrcodeError"));

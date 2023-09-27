@@ -50,6 +50,7 @@ import EDButton from "../components/EDButton";
 import { TextInput } from "react-native";
 import EDRTLTextInput from "../components/EDRTLTextInput";
 
+
 class MyWalletContainer extends React.Component {
   shouldLoadMore = false;
   refreshing = false;
@@ -64,6 +65,7 @@ class MyWalletContainer extends React.Component {
     earningModal: false,
     rechargePopUp: false,
     rechargeAmount: "",
+    
   };
 
   /**
@@ -521,6 +523,9 @@ class MyWalletContainer extends React.Component {
                       type={"ionicon"}
                       reverse
                       size={getProportionalFontSize(30)}
+                      // onPress={() => {
+                      //   this.props.navigation.navigate("Subscription");
+                      // }}
                       color={"#EFEFEF"}
                       reverseColor={EDColors.black}
                     />
