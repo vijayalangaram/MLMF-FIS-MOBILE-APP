@@ -2813,12 +2813,12 @@ class MainContainer extends React.Component {
                     ? { url: "language", name: "language", type: "material" }
                     : {},
                   // { url: "filter", name: "filter", type: "ant-design" },
-                  // {
-                  //   url: "shopping-cart",
-                  //   name: "Cart",
-                  //   value: this.props.cartCount,
-                  //   type: "ant-design",
-                  // },
+                  {
+                    url: "shopping-cart",
+                    name: "Cart",
+                    value: this.props.cartCount,
+                    type: "ant-design",
+                  },
                 ]
               : [
                   this.state.isShowLanguageIcon

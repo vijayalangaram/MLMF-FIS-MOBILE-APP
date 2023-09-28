@@ -1138,7 +1138,7 @@ export class Restaurant extends React.Component {
           this.menuArray.length !== 0
             ? { url: "search1", name: "Search", type: "ant-design" }
             : {},
-          // { url: "filter", name: "filter", type: "ant-design" },
+          { url: "filter", name: "filter", type: "ant-design" },
           {
             url: "shopping-cart",
             name: "Cart",
