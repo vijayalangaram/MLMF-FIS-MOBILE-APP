@@ -142,6 +142,11 @@ class MyWalletContainer extends React.Component {
    * On success fetch wallet
    */
   onSuccessFetchWallet = (onSuccess) => {
+    debugLog(
+      "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+      onSuccess.wallet_history
+    );
+
     if (this.state.arrayTransactions == undefined)
       this.state.arrayTransactions = [];
     if (onSuccess != undefined && onSuccess.status == RESPONSE_SUCCESS) {
