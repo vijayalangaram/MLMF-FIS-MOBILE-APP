@@ -1648,8 +1648,7 @@ class MainContainer extends React.Component {
     // );
 
     let getDeliveryChargeAPICall = await axios.post(
-      // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
-      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+      "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
       datas,
       {
         headers: {

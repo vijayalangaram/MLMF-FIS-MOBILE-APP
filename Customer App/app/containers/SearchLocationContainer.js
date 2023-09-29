@@ -422,7 +422,6 @@ class SearchLocationContainer extends React.PureComponent {
 
     let getDeliveryChargeAPICall = await axios
       .post(
-        // "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
         "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
         datas,
         {
