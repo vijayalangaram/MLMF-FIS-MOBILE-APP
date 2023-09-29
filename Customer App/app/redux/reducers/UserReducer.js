@@ -10,6 +10,7 @@ import {
   TYPE_SAVE_MIN_ORDER_AMOUNT,
   TYPE_DELIVERY_DUNZO__DETAILS,
   TYPE_SELECTED_CATEGORY_ID_HOME_CONT,
+  TYPE_SELECTED_PLAN_ID_HOME_CONT,
   TYPE_RECEIVED_CATEGORY_ID_FROM_HOME_CONT,
   TYPE_RECEIVED_PLAN_DATE_FROM_HOME_CONT,
   TYPE_SLOT_MASTER_DETAILS,
@@ -219,6 +220,12 @@ export function userOperations(state = initialStateUser, action) {
     case TYPE_SELECTED_CATEGORY_ID_HOME_CONT: {
       return Object.assign({}, state, {
         selected_category_id_home_cont: action.value,
+      });
+    }
+
+    case TYPE_SELECTED_PLAN_ID_HOME_CONT: {
+      return Object.assign({}, state, {
+        selected_plan_id_home_cont: action.value,
       });
     }
 

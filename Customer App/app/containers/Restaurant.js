@@ -407,7 +407,7 @@ export class Restaurant extends React.Component {
       // );
       // this.props.navigation.state.params.restId
       // let getDeliveryChargeAPICall = await axios.get(
-      //   `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+      //   `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
       //   {
       //     headers: {
       //       "Content-Type": "application/json",
@@ -422,7 +422,7 @@ export class Restaurant extends React.Component {
 
       let getDeliveryChargeAPICall = await axios
         .get(
-          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${this.props.type_today_tomorrow__date}`,
+          `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${this.props.type_today_tomorrow__date}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -1860,6 +1860,26 @@ export class Restaurant extends React.Component {
       if (status) {
         this.setState({ isMenuLoading: true });
 
+        // debugLog(
+        //   " this.props.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
+        //   this.props  , this.props.selected_plan_id_home_cont
+        // );
+
+        // debugLog(
+        //   " this.props.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
+        //   this.props  , this.props.selected_plan_id_home_cont
+        // );
+
+        debugLog(
+          "this.props.navigation.state.params?.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
+          this.props.navigation.state.params?.selected_Plan_id_of_User
+        );
+
+        debugLog(
+          " this.props.selected_plan_id_home_cont ***************************************************************** 3333333333 ====>",
+          this.props.selected_plan_id_home_cont
+        );
+
         let objRestaurantData = {
           language_slug: this.props.lan,
           restaurant_id: parseInt(this.resId),
@@ -1868,11 +1888,19 @@ export class Restaurant extends React.Component {
           price: "" + this.priceType,
           availability: this.availType,
           plan_date: this.props.type_today_tomorrow__date,
+          plan_id: this.props.navigation.state.params?.selected_Plan_id_of_User || this.props.selected_plan_id_home_cont || 0,
           category_id:
             this.props.navigation?.state?.params?.selected_restaurantCategory ||
             this.props?.selected_category_id_home_cont ||
             0,
         };
+
+        debugLog(
+          "objRestaurantData  ***************************************************************** 3333333333 ====>",
+          objRestaurantData
+        );
+
+        // return false;
 
         getRestaurantMenu(
           objRestaurantData,
@@ -2025,6 +2053,8 @@ export default connect(
         state.userOperations.received_category_id_from_home_cont,
       received_plan_date_from_home_cont:
         state.userOperations.received_plan_date_from_home_cont,
+      selected_plan_id_home_cont:
+        state.userOperations.selected_plan_id_home_cont,
     };
   },
   (dispatch) => {

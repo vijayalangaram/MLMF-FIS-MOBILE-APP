@@ -45,6 +45,7 @@ import {
   save_delivery_dunzo__details,
   save_dunzodelivery_amount,
   save_selected_Res_ID,
+  save_selected_planid_home_cont,
   save_today_tomorrow_details,
   save_selected_category_home_cont,
 } from "../redux/actions/User";
@@ -182,6 +183,7 @@ class MainContainer extends React.Component {
     restObjModelvalue: "",
     cartDatafromstore: [],
     selected_awaited_item: "",
+    selected_Plan_id_of_User: "",
   };
 
   /** DID MOUNT */
@@ -683,6 +685,8 @@ class MainContainer extends React.Component {
     let addressData = {
       latitude: address.latitude,
       longitude: address.longitude,
+      // latitude: "13.0827",
+      // longitude:  "80.2707",
       areaName:
         address.address_label !== undefined &&
         address.address_label !== null &&
@@ -736,6 +740,8 @@ class MainContainer extends React.Component {
             language_slug: this.props.lan,
             latitude: this.props.currentLocation.latitude,
             longitude: this.props.currentLocation.longitude,
+            // latitude: "13.0827",
+            // longitude:  "80.2707",
             itemSearch: searchData || this.state.strSearch,
             category_id: "" + this.selectedCategories.join(),
             orderMode: this.props.orderModeInRedux,
@@ -800,6 +806,8 @@ class MainContainer extends React.Component {
                     language_slug: this.props.lan,
                     latitude: onSucces.latitude,
                     longitude: onSucces.longitude,
+                    // latitude: "13.0827",
+                    // longitude:  "80.2707",
                     itemSearch: searchData || this.state.strSearch,
                     category_id: "" + this.selectedCategories.join(),
                     orderMode: this.props.orderModeInRedux,
@@ -1078,6 +1086,8 @@ class MainContainer extends React.Component {
         let addressData = {
           latitude: lat,
           longitude: long,
+          // latitude: "13.0827",
+          // longitude:  "80.2707",
           areaName: onSuccess.strAddress,
           address: onSuccess.localArea,
         };
@@ -1308,10 +1318,18 @@ class MainContainer extends React.Component {
 
     // debugLog("planDate", planDate);
 
+    // debugLog(
+    //   "888888888888888888888899999999999999999",
+    //   this.props.userIdFromRedux
+    // );
+
     let reversedate = planDate && planDate.split("-").reverse().join("-");
     let getRestaurantCategoryAPI = await axios
       .get(
-        `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}`,
+        // `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategory?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}`,
+
+        `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
+
         {
           headers: {
             "Content-Type": "application/json",
@@ -1337,14 +1355,26 @@ class MainContainer extends React.Component {
 
           let filterstatesMastervalueszeroth;
 
-          debugLog(
-            "77777777777777777777777777777777777777777777777",
-            filterstatesMastervalues
-          );
+          // debugLog(
+          //   "77777777777777777777777777777777777777777777777",
+          //   filterstatesMastervalues
+          // );
 
           debugLog(
             "8888888888888888888888888888888888888888888888888888888",
-            this?.props?.selected_category_id_home_cont
+            // this?.props?.selected_category_id_home_cont
+            response?.data?.planId
+          );
+
+          this.props.save_selected_planid_home_cont(response?.data?.planId);
+
+          let { selected_Plan_id_of_User } = this.state;
+
+          this.setState(
+            {
+              selected_Plan_id_of_User: response?.data?.planId,
+            },
+            () => {}
           );
 
           if (
@@ -1417,6 +1447,8 @@ class MainContainer extends React.Component {
           this.setState(
             {
               restaurantCategoryMAster: filterstatesMastervalueszeroth,
+              selected_Plan_id_of_User: response?.data?.planId,
+
               // propsfromcatecontainervalue:
               //   this.props.selected_category_id_home_cont?.category,
             },
@@ -1559,6 +1591,7 @@ class MainContainer extends React.Component {
       isShowReview: this.state.isShowReview,
       resObj: this.state?.restObjModelvalue,
       today_tomorrow_Flag: this.state.today_tomorrow_Flag,
+      selected_Plan_id_of_User: this.state.selected_Plan_id_of_User,
     });
   };
 
@@ -1648,7 +1681,7 @@ class MainContainer extends React.Component {
     // );
 
     let getDeliveryChargeAPICall = await axios.post(
-      "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
+      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
       datas,
       {
         headers: {
@@ -2237,6 +2270,8 @@ class MainContainer extends React.Component {
         language_slug: this.props.lan,
         latitude: this.props.currentLocation.latitude,
         longitude: this.props.currentLocation.longitude,
+        // latitude: "13.0827",
+        // longitude:  "80.2707",
       };
       addRequestQR(params, this.onSuccesQrRequest, this.onFailureQrRequest);
     } else showValidationAlert(strings("qrcodeError"));
@@ -2269,6 +2304,7 @@ class MainContainer extends React.Component {
           isDineIn: true,
           isShowReview: this.state.isShowReview,
           today_tomorrow_Flag: this.state.today_tomorrow_Flag,
+          selected_Plan_id_of_User: this.state.selected_Plan_id_of_User,
         });
         this.props.saveTableID(data.table_id);
         this.props.saveResID(data.restuarant_id);
@@ -2311,7 +2347,8 @@ class MainContainer extends React.Component {
       let reversedate = planDate && planDate.split("-").reverse().join("-");
       let getRestaurantCategoryAPI = await axios
         .get(
-          `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
+          // `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
+          `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -2322,6 +2359,23 @@ class MainContainer extends React.Component {
           if (response.status === 200) {
             let { restaurantCategoryMAster } = this.state;
             let apiresponseofcatemaster = response?.data?.data;
+
+            debugLog(
+              "8888888888888888888888888888888888888888888888888888888",
+              // this?.props?.selected_category_id_home_cont
+              response?.data?.planId
+            );
+
+            this.props.save_selected_planid_home_cont(response?.data?.planId);
+
+            let { selected_Plan_id_of_User } = this.state;
+
+            this.setState(
+              {
+                selected_Plan_id_of_User: response?.data?.planId,
+              },
+              () => {}
+            );
 
             let filterstatesMastervalues =
               apiresponseofcatemaster &&
@@ -2343,6 +2397,7 @@ class MainContainer extends React.Component {
             this.setState(
               {
                 restaurantCategoryMAster: filterstatesMastervalueszeroth,
+                selected_Plan_id_of_User: response?.data?.planId,
               },
               () => {
                 // this.props.save_selected_category_home_cont(
@@ -3180,6 +3235,9 @@ export default connect(
       },
       save_selected_Res_ID: (data) => {
         dispatch(save_selected_Res_ID(data));
+      },
+      save_selected_planid_home_cont: (data) => {
+        dispatch(save_selected_planid_home_cont(data));
       },
     };
   }

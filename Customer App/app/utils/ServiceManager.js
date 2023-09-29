@@ -511,10 +511,10 @@ export function getRestaurantMenu(
   //   restaurant_user
   // );
   resParams["restaurant_id"] = restaurant_user;
-  // debugLog(
-  //   "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
-  //   resParams
-  // );
+  debugLog(
+    "vijaygetRestaurantMenu  ***************************************************************** 4444444444444 ",
+    resParams
+  );
   callAPI(
     GET_RESTAURANT_MENU,
     resParams,
