@@ -2324,9 +2324,9 @@ class MainContainer extends React.Component {
   //#endregion
 
   onChange_today_tomorrow_Flag = async () => {
-    debugLog(
-      "onChange_today_tomorrow_Flag  8888888888888888888888888    888888888888888888888888888888"
-    );
+    // debugLog(
+    //   "onChange_today_tomorrow_Flag  8888888888888888888888888    888888888888888888888888888888"
+    // );
 
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
 
@@ -2528,8 +2528,8 @@ class MainContainer extends React.Component {
                       paddingRight: 7,
                     }}
                     onPress={() => {
-                      this.onChange_today_tomorrow_Flag();
-                      // this.setState({ modalpopupplandate: true });
+                      // this.onChange_today_tomorrow_Flag();
+                      this.setState({ modalpopupplandate: true });
                     }}
                     // onPress={this.onChange_today_tomorrow_Flag}
                   />
@@ -2543,8 +2543,8 @@ class MainContainer extends React.Component {
                       marginLeft: 15,
                     }}
                     onPress={() => {
-                      this.onChange_today_tomorrow_Flag();
-                      // this.setState({ modalpopupplandate: true });
+                      // this.onChange_today_tomorrow_Flag();
+                      this.setState({ modalpopupplandate: true });
                     }}
                     // onPress={this.onChange_today_tomorrow_Flag}
                   />
