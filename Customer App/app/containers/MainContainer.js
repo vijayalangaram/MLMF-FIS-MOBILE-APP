@@ -1298,10 +1298,10 @@ class MainContainer extends React.Component {
       restaurant_selected_Name,
     } = this.state;
     this.intialDunzoCall(
-      restObjModel.restuarant_id,
+      restObjModel?.restuarant_id,
       this.props.userIdFromRedux,
       getintialAddress,
-      restObjModel.name
+      restObjModel?.name
     );
     this.props.save_selected_Res_ID(
       `${restObjModel.restuarant_id}-${restObjModel.name}`
@@ -2324,6 +2324,10 @@ class MainContainer extends React.Component {
   //#endregion
 
   onChange_today_tomorrow_Flag = async () => {
+    debugLog(
+      "onChange_today_tomorrow_Flag  8888888888888888888888888    888888888888888888888888888888"
+    );
+
     let { today, tomorrow, today_tomorrow_Flag } = this.state;
 
     this.setState({ today_tomorrow_Flag: !today_tomorrow_Flag }, async () => {
@@ -2348,7 +2352,7 @@ class MainContainer extends React.Component {
       let getRestaurantCategoryAPI = await axios
         .get(
           // `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
-          `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
+          `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -2359,13 +2363,11 @@ class MainContainer extends React.Component {
           if (response.status === 200) {
             let { restaurantCategoryMAster } = this.state;
             let apiresponseofcatemaster = response?.data?.data;
-
             debugLog(
-              "8888888888888888888888888888888888888888888888888888888",
+              "88888888888888888  response 2000000000000 88888888888888888888888888888888888888",
               // this?.props?.selected_category_id_home_cont
-              response?.data?.planId
+              response?.data
             );
-
             this.props.save_selected_planid_home_cont(response?.data?.planId);
 
             let { selected_Plan_id_of_User } = this.state;
@@ -2452,10 +2454,10 @@ class MainContainer extends React.Component {
       modalpopupplandate,
     } = this.state;
 
-    // debugLog(
-    //   "33333333333333333333333333 propsfromcatecontainervalue 3333333333333333333333333333",
-    //   propsfromcatecontainervalue?.categoryName
-    // );
+    debugLog(
+      "33333333333333333333333333 restaurantCategoryMAster 3333333333333333333333333333",
+      restaurantCategoryMAster
+    );
 
     // debugLog(
     //   " this?.props?.selected_category_id_home_cont render",
@@ -2526,7 +2528,8 @@ class MainContainer extends React.Component {
                       paddingRight: 7,
                     }}
                     onPress={() => {
-                      this.setState({ modalpopupplandate: true });
+                      this.onChange_today_tomorrow_Flag();
+                      // this.setState({ modalpopupplandate: true });
                     }}
                     // onPress={this.onChange_today_tomorrow_Flag}
                   />
@@ -2540,7 +2543,8 @@ class MainContainer extends React.Component {
                       marginLeft: 15,
                     }}
                     onPress={() => {
-                      this.setState({ modalpopupplandate: true });
+                      this.onChange_today_tomorrow_Flag();
+                      // this.setState({ modalpopupplandate: true });
                     }}
                     // onPress={this.onChange_today_tomorrow_Flag}
                   />
@@ -2743,10 +2747,15 @@ class MainContainer extends React.Component {
                   }}
                   // onPress={this.onChange_today_tomorrow_Flag}
                   onPress={() => {
-                    this.setState({
-                      modalpopupplandate: false,
-                      modal_Pop_Up: true,
-                    });
+                    this.setState(
+                      {
+                        modalpopupplandate: false,
+                        modal_Pop_Up: true,
+                      },
+                      () => {
+                        this.onChange_today_tomorrow_Flag();
+                      }
+                    );
                   }}
                 />
                 <EDThemeButton
