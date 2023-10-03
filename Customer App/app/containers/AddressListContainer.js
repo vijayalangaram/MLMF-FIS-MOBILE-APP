@@ -298,13 +298,21 @@ export class AddressListContainer extends React.PureComponent {
       }
     );
 
+    let filterstatesMastervalueszerothfornull =
+      filterstatesMastervalueszeroth &&
+      filterstatesMastervalueszeroth.filter((item) => {
+        return (
+          item.slotId != "" && item.slotId != null && item.slotId != undefined
+        );
+      });
+
     debugLog(
-      "filterstatesMastervalues ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalues ",
+      "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalueszeroth ",
       filterstatesMastervalueszeroth
     );
 
     this.setState({
-      slot_Master_against_category: filterstatesMastervalueszeroth || [],
+      slot_Master_against_category: filterstatesMastervalueszerothfornull || [],
       selected_Slot_value: filterstatesMastervalues[0]?.value,
     });
 
@@ -690,7 +698,7 @@ export class AddressListContainer extends React.PureComponent {
     // );
 
     debugLog(
-      "this.state?.slot_Master_against_category.length **************************   render  this.state?.slot_Master_against_category.length **********************",
+      "this.state?.slot_Master_against_category **************************   render ",
       this.state?.slot_Master_against_category
     );
 
