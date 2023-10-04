@@ -2483,19 +2483,19 @@ export class CheckOutContainer extends React.PureComponent {
       // Position to add string
       let indexPosition = 5;
 
-      let eletwemonthcheck =
+      let eletwemonthcheck = 
         this?.props?.type_today_tomorrow__date &&
-        this?.props?.type_today_tomorrow__date.substring(5, 6);
-
-      debugLog(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    newString ~~~~~~~~~~~~~~~",
-        eletwemonthcheck,
-        typeof eletwemonthcheck
-      );
-
+        this?.props?.type_today_tomorrow__date.substring(5, 7);
+        
+      // debugLog(
+      //   "8888888888888888888888888888   666666666666666 8888888888888888888888888888 8888888888888888888888888888",
+      //   eletwemonthcheck,
+      //   typeof eletwemonthcheck
+      // );
       let newString;
       // Using substring method to split string
       if (
+        // eletwemonthcheck != "1" 
         eletwemonthcheck != "10" &&
         eletwemonthcheck != "11" &&
         eletwemonthcheck != "12"
@@ -2548,11 +2548,10 @@ export class CheckOutContainer extends React.PureComponent {
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
       debugLog(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~addOrderParams~~~~~~~~~~~~~~~",
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  addOrderParams ~~~~~~~~~~~~~~~  676",
         addOrderParams
       );
       // return false;
-
       if (status) {
         this.setState({ isLoading: true });
         addOrder(
