@@ -668,7 +668,7 @@ class OrderDetailContainer extends React.Component {
                                 </EDRTLView>
                             </View>
                             {/* REORDER BUTTON */}
-                            {this.props.navigation.getParam("track") !== true ?
+                            {/* {this.props.navigation.getParam("track") !== true ?
                                 <EDRTLView style={styles.btnView}>
                                     <EDThemeButton
                                         style={styles.reorderBtn}
@@ -696,7 +696,7 @@ class OrderDetailContainer extends React.Component {
                                             onPress={this.onTipDriverPressed}
                                         /> : null}
                                 </EDRTLView>
-                                : null}
+                                : null} */}
 
                             {/* </View> */}
                             {
