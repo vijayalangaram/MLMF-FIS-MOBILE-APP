@@ -138,12 +138,11 @@ android {
         applicationId "com.mlmf.customer"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
     }
-
     splits {
         abi {
             reset()
@@ -163,10 +162,8 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }   
-    }
-    
-    buildTypes {
-        
+    }    
+    buildTypes {        
         debug {
             signingConfig signingConfigs.debug
             
@@ -181,9 +178,7 @@ android {
             useProguard true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
-    }
-
-    
+    }    
 
 //    packagingOptions {
 //        pickFirst "lib/armeabi-v7a/libc++_shared.so"
