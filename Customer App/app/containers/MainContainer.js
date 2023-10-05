@@ -105,6 +105,7 @@ import {
   Pressable,
   FlatList,
   TextInput,
+  Image,
 } from "react-native";
 
 class MainContainer extends React.Component {
@@ -145,6 +146,21 @@ class MainContainer extends React.Component {
     //   selected: 0,
     // },
   ];
+
+  data = [
+    {
+      id: "1",
+      title: "Food Item 1",
+      imageUrl: "https://example.com/food1.jpg",
+      buttonText: "Order Now",
+      onPress: () => {
+        // Implement the action when the button is pressed
+        console.log("Order Now button pressed for Food Item 1");
+      },
+    },
+    // Add more data items as needed
+  ];
+
   is_filter = false;
   locationError = false;
   isFreeDelivery = false;
@@ -184,6 +200,7 @@ class MainContainer extends React.Component {
     cartDatafromstore: [],
     selected_awaited_item: "",
     selected_Plan_id_of_User: "",
+    imageUrl: "https://example.com/food1.jpg",
   };
 
   /** DID MOUNT */
@@ -1338,20 +1355,23 @@ class MainContainer extends React.Component {
       )
       .then((response) => {
         if (response.status === 200) {
-          // debugLog(
-          //   "888888888888888888888899999999999999999",
-          //   response?.data?.data
-          // );
+          debugLog(
+            "888888888888888888888899999999999999999000000000000000008888888",
+            response?.data?.data
+          );
           let { restaurantCategoryMAster } = this.state;
           let apiresponseofcatemaster = response?.data?.data;
 
           let filterstatesMastervalues =
             apiresponseofcatemaster &&
-            apiresponseofcatemaster.map(({ category, categoryName }) => ({
-              category,
-              flag: false,
-              categoryName,
-            }));
+            apiresponseofcatemaster.map(
+              ({ category, categoryName, categoryURL }) => ({
+                category,
+                flag: false,
+                categoryName,
+                categoryURL,
+              })
+            );
 
           let filterstatesMastervalueszeroth;
 
@@ -1441,7 +1461,6 @@ class MainContainer extends React.Component {
             filterstatesMastervalueszeroth.filter((item) => {
               return item.flag === true;
             });
-
           let { propsfromcatecontainervalue } = this.state;
 
           this.setState(
@@ -2452,12 +2471,13 @@ class MainContainer extends React.Component {
       restaurant_restaurantName,
       restaurant_selected_Name,
       modalpopupplandate,
+      data,
     } = this.state;
 
-    debugLog(
-      "33333333333333333333333333 restaurantCategoryMAster 3333333333333333333333333333",
-      restaurantCategoryMAster
-    );
+    // debugLog(
+    //   "33333333333333333333333333 restaurantCategoryMAster 3333333333333333333333333333",
+    //   restaurantCategoryMAster
+    // );
 
     // debugLog(
     //   " this?.props?.selected_category_id_home_cont render",
@@ -2564,31 +2584,29 @@ class MainContainer extends React.Component {
                   </Text>
                 </View>
 
-                <View>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={true}
+                >
                   {restaurantCategoryMAster &&
                     restaurantCategoryMAster.length > 0 &&
                     restaurantCategoryMAster.map((items) => {
-                      // debugLog("cardviiiw", items);
+                      // debugLog("cardviiiw%%%%%%%%%%%%%%%", items);
                       return (
                         <Card
                           containerStyle={{
                             backgroundColor: items?.flag ? "#75e68d" : "white",
+                            // height: 350,
+                            height: 350,
+                            width: 300,
+                            //overflow: 'hidden'
                           }}
                         >
-                          <Text
-                            // style={styles.font_text_option}
-                            style={{
-                              fontSize: 18,
-                              color: "black",
-                              fontWeight: "400",
-                              // fontWeight: "bold",
-                              textAlign: "center",
-                              // backgroundColor: "skyblue",
-                              // backgroundColor: items?.flag
-                              //   ? "#90EE90"
-                              //   : "white",
-                            }}
+                          <TouchableOpacity
                             onPress={() => {
+                              debugLog(
+                                "cardviiiw%%%%%%%%%%%%%%%**********welcome**************"
+                              );
                               let todayrever =
                                 this.state?.today &&
                                 this.state?.today
@@ -2654,17 +2672,106 @@ class MainContainer extends React.Component {
                               }
                             }}
                           >
-                            {" "}
-                            {items?.categoryName}{" "}
-                            {/* <Icon
-                              name={"check"}
-                              color={items?.flag ? "green" : "white"}
-                            /> */}
-                          </Text>
+                            <Image
+                              source={{
+                                uri: items.categoryURL,
+                                // 'https://source.unsplash.com/user/c_v_r/100x100'
+                              }}
+                              style={styles.image}
+                            />
+                          </TouchableOpacity>
+                          {/* <Text
+                            // style={styles.font_text_option}
+                            style={{
+                              fontSize: 18,
+                              color: "black",
+                              fontWeight: "400",
+                              // fontWeight: "bold",
+                              textAlign: "center",
+                              // backgroundColor: "skyblue",
+                              // backgroundColor: items?.flag
+                              //   ? "#90EE90"
+                              //   : "white",
+                            }}
+                            // onPress ={() => {
+                            //   debugLog(
+                            //     "cardviiiw%%%%%%%%%%%%%%%**********welcome**************"
+                            //   );
+                            //   let todayrever =
+                            //     this.state?.today &&
+                            //     this.state?.today
+                            //       .split("-")
+                            //       .reverse()
+                            //       .join("-");
+                            //   let tomorrowrev =
+                            //     this.state?.tomorrow &&
+                            //     this.state?.tomorrow
+                            //       .split("-")
+                            //       .reverse()
+                            //       .join("-");
+
+                            //   let localdatecheck =
+                            //     today_tomorrow_Flag === false
+                            //       ? todayrever
+                            //       : tomorrowrev;
+
+                            //   if (
+                            //     this?.props?.selected_category_id_home_cont
+                            //       ?.category != "" &&
+                            //     this?.props?.selected_category_id_home_cont
+                            //       ?.category != undefined &&
+                            //     this.state.cartDatafromstore?.items &&
+                            //     this.state.cartDatafromstore?.items.length >
+                            //       0 &&
+                            //     this?.props?.selected_category_id_home_cont
+                            //       ?.category != items?.category
+                            //   ) {
+                            //     this.setState({
+                            //       modal_Pop_Up_added_item: true,
+                            //       selected_awaited_item: items,
+                            //     });
+                            //   } else if (
+                            //     this.props.received_plan_date_from_home_cont !=
+                            //       undefined &&
+                            //     localdatecheck !=
+                            //       this.props.received_plan_date_from_home_cont
+                            //   ) {
+                            //     this.setState({
+                            //       modal_Pop_Up_added_item: true,
+                            //       selected_awaited_item: items,
+                            //     });
+                            //   } else if (
+                            //     propsfromcatecontainervalue?.categoryName !=
+                            //       undefined &&
+                            //     this.state.cartDatafromstore?.items &&
+                            //     this.state.cartDatafromstore?.items.length > 0
+                            //   ) {
+                            //     if (
+                            //       propsfromcatecontainervalue?.categoryName !=
+                            //       items?.categoryName
+                            //     )
+                            //       this.setState({
+                            //         modal_Pop_Up_added_item: true,
+                            //         selected_awaited_item: items,
+                            //       });
+                            //   } else {
+                            //     this.setState({
+                            //       modal_Pop_Up_added_item: false,
+                            //     });
+                            //     this.changeflagcategorymenu(items);
+                            //   }
+                            // }}
+                          >
+                             {/* {items?.categoryName}{" "}  */}
+                          {/* <Icon
+                            name={"check"}
+                            color={items?.flag ? "green" : "white"}
+                          /> */}
+                          {/* </Text> */}
                         </Card>
                       );
                     })}
-                </View>
+                </ScrollView>
 
                 <EDRTLView style={{ alignItems: "center", padding: 10 }}>
                   <EDThemeButton
@@ -2994,6 +3101,49 @@ class MainContainer extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+  },
+  imageCard: {
+    flex: 1,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    // resizeMode: "cover",
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+  },
+  content: {
+    flex: 2,
+    marginLeft: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  button: {
+    marginTop: 10,
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+  },
+
   container: {
     flex: 1,
     alignItems: "center",
