@@ -2397,14 +2397,16 @@ class MainContainer extends React.Component {
               },
               () => {}
             );
-
             let filterstatesMastervalues =
               apiresponseofcatemaster &&
-              apiresponseofcatemaster.map(({ category, categoryName }) => ({
-                category,
-                flag: false,
-                categoryName,
-              }));
+              apiresponseofcatemaster.map(
+                ({ category, categoryName, categoryURL }) => ({
+                  category,
+                  flag: false,
+                  categoryName,
+                  categoryURL,
+                })
+              );
             let filterstatesMastervalueszeroth =
               filterstatesMastervalues &&
               filterstatesMastervalues.map((item, i) => {
