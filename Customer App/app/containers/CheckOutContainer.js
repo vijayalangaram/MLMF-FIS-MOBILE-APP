@@ -2475,6 +2475,8 @@ export class CheckOutContainer extends React.PureComponent {
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
+      addOrderParams.delivery_instructions =
+        this.props.selected_category_name_home_cont;
 
       // Input String
       let origString = this?.props?.type_today_tomorrow__date;
@@ -2483,10 +2485,10 @@ export class CheckOutContainer extends React.PureComponent {
       // Position to add string
       let indexPosition = 5;
 
-      let eletwemonthcheck = 
+      let eletwemonthcheck =
         this?.props?.type_today_tomorrow__date &&
         this?.props?.type_today_tomorrow__date.substring(5, 7);
-        
+
       // debugLog(
       //   "8888888888888888888888888888   666666666666666 8888888888888888888888888888 8888888888888888888888888888",
       //   eletwemonthcheck,
@@ -2495,7 +2497,7 @@ export class CheckOutContainer extends React.PureComponent {
       let newString;
       // Using substring method to split string
       if (
-        // eletwemonthcheck != "1" 
+        // eletwemonthcheck != "1"
         eletwemonthcheck != "10" &&
         eletwemonthcheck != "11" &&
         eletwemonthcheck != "12"
@@ -3662,6 +3664,8 @@ export default connect(
       selected_category_id_home_cont:
         state.userOperations.selected_category_id_home_cont,
       type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
+      selected_category_name_home_cont:
+        state.userOperations.selected_category_name_home_cont,
     };
   },
   (dispatch) => {

@@ -48,6 +48,7 @@ import {
   save_selected_planid_home_cont,
   save_today_tomorrow_details,
   save_selected_category_home_cont,
+  save_selected_category_name_home_cont,
 } from "../redux/actions/User";
 import {
   clearCartData,
@@ -1461,6 +1462,13 @@ class MainContainer extends React.Component {
             filterstatesMastervalueszeroth.filter((item) => {
               return item.flag === true;
             });
+
+          let trueitemflagcategoryName =
+            filterstatesMastervalueszeroth &&
+            filterstatesMastervalueszeroth.filter((item) => {
+              return item.flag === true ? item?.categoryName : "";
+            });
+
           let { propsfromcatecontainervalue } = this.state;
 
           this.setState(
@@ -1476,9 +1484,11 @@ class MainContainer extends React.Component {
               //   filterstatesMastervalueszeroth[0]
               // );
               this.props.save_selected_category_home_cont(trueitemflag);
+              this.props.save_selected_category_name_home_cont(
+                trueitemflagcategoryName
+              );
             }
           );
-
           // this.setState({
           //   restaurantCategoryMAster: [
           //     {
@@ -1598,6 +1608,10 @@ class MainContainer extends React.Component {
       _planDate && _planDate.split("-").reverse().join("-");
 
     this.props.save_selected_category_home_cont(filterflagtrue[0]);
+    this.props.save_selected_category_name_home_cont(
+      filterflagtrue[0]?.categoryName
+    );
+
     this.props.navigation.navigate("RestaurantContainer", {
       // selected_restaurantCategory:
       //   this.props.selected_category_id_home_cont?.category,
@@ -3390,6 +3404,9 @@ export default connect(
       },
       save_selected_category_home_cont: (data) => {
         dispatch(save_selected_category_home_cont(data));
+      },
+      save_selected_category_name_home_cont: (data) => {
+        dispatch(save_selected_category_name_home_cont(data));
       },
       save_dunzodelivery_amount: (data) => {
         dispatch(save_dunzodelivery_amount(data));
