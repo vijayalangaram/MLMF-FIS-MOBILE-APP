@@ -849,7 +849,9 @@ export default class EDOrderDetailsView extends Component {
                                 title={"(#" + this.itemToIterate.order_id + ")"}
                             />} */}
           </EDRTLView>
-          {!this.isForPastOrder &&
+         
+         
+          {/* {!this.isForPastOrder &&
           this.itemToIterate.scheduled_date !== undefined &&
           this.itemToIterate.scheduled_date !== null &&
           this.itemToIterate.scheduled_date !== "" ? (
@@ -873,7 +875,9 @@ export default class EDOrderDetailsView extends Component {
                 />
               </EDRTLView>
             </>
-          ) : null}
+          ) : null} */}
+
+
           {!this.isForPastOrder ? (
             <View style={styles.statusView}>
               {this.itemToIterate.order_status.toLowerCase() === "placed" ? (
