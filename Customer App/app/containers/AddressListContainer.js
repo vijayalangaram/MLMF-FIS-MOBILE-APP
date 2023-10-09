@@ -275,7 +275,7 @@ export class AddressListContainer extends React.PureComponent {
 
       filterstatesMastervalues = this.props.slot_Master_details.map(
         ({ startTime, endTime, slotId, formatStartTime, formatEndTime }) => ({
-          name: ` ${" "} ${startTime} - ${endTime}${" "}`,
+          name: `${startTime}-${endTime}`,
           flag: false,
           slotId,
           value: slotId,
@@ -298,6 +298,11 @@ export class AddressListContainer extends React.PureComponent {
       }
     );
 
+    debugLog(
+      "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
+      filterstatesMastervalueszeroth
+    );
+
     let filterstatesMastervalueszerothfornull =
       filterstatesMastervalueszeroth &&
       filterstatesMastervalueszeroth.filter((item) => {
@@ -306,13 +311,18 @@ export class AddressListContainer extends React.PureComponent {
         );
       });
 
-    debugLog(
-      "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalueszeroth ",
-      filterstatesMastervalueszeroth
-    );
+    //   debugLog(
+    //     "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
+    //     filterstatesMastervalueszeroth
+    //   );
+
+    // debugLog(
+    //   "filterstatesMastervalueszerothfornull ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  filterstatesMastervalueszerothfornull ",
+    //   filterstatesMastervalueszerothfornull
+    // );
 
     this.setState({
-      slot_Master_against_category: filterstatesMastervalueszerothfornull || [],
+      slot_Master_against_category: filterstatesMastervalueszeroth || [],
       selected_Slot_value: filterstatesMastervalues[0]?.value,
     });
 
