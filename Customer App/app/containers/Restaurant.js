@@ -420,9 +420,50 @@ export class Restaurant extends React.Component {
       // );
       // debugLog("getstoredCatemaster", getstoredCatemaster);
 
+      // debugLog(
+      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  this.props?.navigation?.state?.params?.restId",
+      //   this.props?.navigation?.state?.params?.restId
+      // );
+      // debugLog(
+      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  this.props.navigation?.state?.params?.selected_restaurantCategory",
+      //   this.props.navigation?.state?.params?.selected_restaurantCategory
+      // );
+      // debugLog(
+      //   "@@@@@@@@@@@@@@@@@@@@@@@@@ this?.props?.type_today_tomorrow__date  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.props.type_today_tomorrow__date",
+      //   this?.props?.type_today_tomorrow__date
+      // );
+
+      // Input String
+      let origString = this?.props?.type_today_tomorrow__date;
+      // String to be added
+      let stringToAdd = "0";
+      // Position to add string
+      let indexPosition = 8;
+      let eletwemonthcheck =        this?.props?.type_today_tomorrow__date &&        this?.props?.type_today_tomorrow__date.substring(8, 10);
+      // let eletwemonthcheck =  "2023-10-10".substring(8, 10);
+      let newString;
+
+      // debugLog(
+      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.eletwemonthcheck.type_today_tomorrow__date",
+      //   eletwemonthcheck
+      // );
+
+      if (Number(eletwemonthcheck) <= 9)
+        newString =
+          origString.substring(0, indexPosition) +
+          stringToAdd +
+          origString.substring(indexPosition);
+      else {
+        newString = this?.props?.type_today_tomorrow__date;
+      }
+      // debugLog(
+      //   "@@@@@@@@@@@@@@@@@@@@@@@@@ newString @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.props.type_today_tomorrow__date",
+      //   newString
+      // );
+
       let getDeliveryChargeAPICall = await axios
         .get(
-          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${this.props.type_today_tomorrow__date}`,
+          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${newString}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -431,10 +472,7 @@ export class Restaurant extends React.Component {
         )
         .then((response) => {
           if (response.status === 200) {
-            // debugLog(
-            //   "888888888888888888888899999999999999999",
-            //   response?.data?.data
-            // );
+            debugLog("888888888888888888888899999999999999999", response?.data);
             localStorage.setItem(
               "Slot_Master_Rest_Category",
               JSON.stringify(response?.data?.data)
@@ -955,7 +993,7 @@ export class Restaurant extends React.Component {
   //#region
   /** ON PLUS CLICKED */
   onPlusEventHandler = (value, index) => {
-    // console.log("in plus event::::: ", this?.state?.cartData);
+    console.log("in plus event::::: ", this?.state?.cartData);
     if (value > 0) {
       var array = this?.state?.cartData;
       this.state.cartData[index].quantity = value;
@@ -1888,7 +1926,10 @@ export class Restaurant extends React.Component {
           price: "" + this.priceType,
           availability: this.availType,
           plan_date: this.props.type_today_tomorrow__date,
-          plan_id: this.props.navigation.state.params?.selected_Plan_id_of_User || this.props.selected_plan_id_home_cont || 0,
+          plan_id:
+            this.props.navigation.state.params?.selected_Plan_id_of_User ||
+            this.props.selected_plan_id_home_cont ||
+            0,
           category_id:
             this.props.navigation?.state?.params?.selected_restaurantCategory ||
             this.props?.selected_category_id_home_cont ||
