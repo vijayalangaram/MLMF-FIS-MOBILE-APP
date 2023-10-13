@@ -2222,9 +2222,9 @@ export class CheckOutContainer extends React.PureComponent {
         // return false;
 
         if (
-          parseInt(this.state.loggedInUserwalletBalance) >
+          parseInt(this.state.loggedInUserwalletBalance) >=
             Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) >
+          parseInt(this.state.loggedInUserwalletBalance) >=
             filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
@@ -2388,6 +2388,11 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Failure Response Object } onFailure
    */
   onFailureAddOrder = (onfailure) => {
+    debugLog(
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  onfailure ~~~~~~~~~~~~~~~  676",
+      onfailure
+    );
+
     showValidationAlert(strings("generalWebServiceError"));
     this.setState({ isLoading: false });
   };
