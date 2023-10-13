@@ -2218,7 +2218,6 @@ export class CheckOutContainer extends React.PureComponent {
         //   "********************************************************* else part B22222222222",
         //   filterForactualTotalsubtotalTaxes[0]?.value
         // );
-
         // return false;
 
         if (
@@ -2233,10 +2232,8 @@ export class CheckOutContainer extends React.PureComponent {
           // return false;
           this.placeOrder();
         } else if (
-          parseInt(this.state.loggedInUserwalletBalance) >
-            Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) <
-            filterForactualTotalsubtotalTaxes[0]?.value
+          parseInt(this.state.loggedInUserwalletBalance) >=    Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) <  filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "******************************************************* else part 111111 razorpay paymett $$$$$$$$$$$"
