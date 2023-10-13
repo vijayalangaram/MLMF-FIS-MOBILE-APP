@@ -3330,7 +3330,6 @@ export class AddressListContainer extends React.PureComponent {
         debugLog(
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
         );
-
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -3338,10 +3337,9 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
-      } else if (
-        parseInt(this.state.loggedInUserwalletBalance) >
-          Number(this.props.minOrderAmount) &&
-        parseInt(this.state.loggedInUserwalletBalance) > PriceandTotalPrice
+      }  else if (
+        parseInt(this.state.loggedInUserwalletBalance) >= Number(this.props.minOrderAmount) &&
+        parseInt(this.state.loggedInUserwalletBalance) >= PriceandTotalPrice
       ) {
         debugLog(
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
@@ -3354,8 +3352,7 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else if (
-        parseInt(this.state.loggedInUserwalletBalance) >
-          Number(this.props.minOrderAmount) &&
+        parseInt(this.state.loggedInUserwalletBalance) >  Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) < PriceandTotalPrice
       ) {
         debugLog(
@@ -3368,7 +3365,9 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
-      } else {
+      }
+            
+      else {
         debugLog(
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
         );
