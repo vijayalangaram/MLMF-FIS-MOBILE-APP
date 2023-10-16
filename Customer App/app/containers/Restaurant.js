@@ -407,7 +407,7 @@ export class Restaurant extends React.Component {
       // );
       // this.props.navigation.state.params.restId
       // let getDeliveryChargeAPICall = await axios.get(
-      //   `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
+      //   `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${get_category_Master[0]?.category_id}`,
       //   {
       //     headers: {
       //       "Content-Type": "application/json",
@@ -420,50 +420,9 @@ export class Restaurant extends React.Component {
       // );
       // debugLog("getstoredCatemaster", getstoredCatemaster);
 
-      // debugLog(
-      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  this.props?.navigation?.state?.params?.restId",
-      //   this.props?.navigation?.state?.params?.restId
-      // );
-      // debugLog(
-      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  this.props.navigation?.state?.params?.selected_restaurantCategory",
-      //   this.props.navigation?.state?.params?.selected_restaurantCategory
-      // );
-      // debugLog(
-      //   "@@@@@@@@@@@@@@@@@@@@@@@@@ this?.props?.type_today_tomorrow__date  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.props.type_today_tomorrow__date",
-      //   this?.props?.type_today_tomorrow__date
-      // );
-
-      // Input String
-      let origString = this?.props?.type_today_tomorrow__date;
-      // String to be added
-      let stringToAdd = "0";
-      // Position to add string
-      let indexPosition = 8;
-      let eletwemonthcheck =        this?.props?.type_today_tomorrow__date &&        this?.props?.type_today_tomorrow__date.substring(8, 10);
-      // let eletwemonthcheck =  "2023-10-10".substring(8, 10);
-      let newString;
-
-      // debugLog(
-      //   "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.eletwemonthcheck.type_today_tomorrow__date",
-      //   eletwemonthcheck
-      // );
-
-      if (Number(eletwemonthcheck) <= 9)
-        newString =
-          origString.substring(0, indexPosition) +
-          stringToAdd +
-          origString.substring(indexPosition);
-      else {
-        newString = this?.props?.type_today_tomorrow__date;
-      }
-      // debugLog(
-      //   "@@@@@@@@@@@@@@@@@@@@@@@@@ newString @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   this.props.type_today_tomorrow__date",
-      //   newString
-      // );
-
       let getDeliveryChargeAPICall = await axios
         .get(
-          `http://52.77.35.146:8080/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${newString}`,
+          `https://fis.clsslabs.com/FIS/api/auth/getDeliverySlot?outletId=${this.props?.navigation?.state?.params?.restId}&menuCategoryId=${this.props.navigation?.state?.params?.selected_restaurantCategory}&deliveryDate=${this.props.type_today_tomorrow__date}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -472,7 +431,10 @@ export class Restaurant extends React.Component {
         )
         .then((response) => {
           if (response.status === 200) {
-            debugLog("888888888888888888888899999999999999999", response?.data);
+            // debugLog(
+            //   "888888888888888888888899999999999999999",
+            //   response?.data?.data
+            // );
             localStorage.setItem(
               "Slot_Master_Rest_Category",
               JSON.stringify(response?.data?.data)
@@ -993,7 +955,7 @@ export class Restaurant extends React.Component {
   //#region
   /** ON PLUS CLICKED */
   onPlusEventHandler = (value, index) => {
-    console.log("in plus event::::: ", this?.state?.cartData);
+    // console.log("in plus event::::: ", this?.state?.cartData);
     if (value > 0) {
       var array = this?.state?.cartData;
       this.state.cartData[index].quantity = value;
@@ -1176,7 +1138,7 @@ export class Restaurant extends React.Component {
           this.menuArray.length !== 0
             ? { url: "search1", name: "Search", type: "ant-design" }
             : {},
-          { url: "filter", name: "filter", type: "ant-design" },
+           { url: "filter", name: "filter", type: "ant-design" },
           {
             url: "shopping-cart",
             name: "Cart",
@@ -1200,175 +1162,7 @@ export class Restaurant extends React.Component {
         {/* <SafeAreaView style={{ flex: 1 }}> */}
 
         {/* MAIN VIEW */}
-        <View
-          style={{
-            width: "100%",
-            height:
-              Platform.OS == "ios"
-                ? metrics.screenHeight * 0.9 +
-                  (deviceInfoModule.hasNotch() ? 0 : 5)
-                : "100%",
-            // borderColor: 'red', borderWidth: 1
-          }}
-        >
-          {this.restaurantDetails !== undefined ? (
-            <View style={style.mainContainer}>
-              {this.renderItemDetails()}
-              {this.renderTiming()}
-              {/* {this.renderRecipeDetails()} */}
-              {this.renderCategoryOrder()}
-              {/* {this?.props?.selected_category_id_home_cont?.categoryName !==
-              (this?.state?.cartData.length >= 0 &&
-                this?.state?.cartData[0]?.availability)
-                ? this.clear_category_ifdiffers()
-                : null} */}
-              {this.renderCartChangeModal()}
-              {this?.state?.cartData !== [] ? this.renderRemoveItems() : null}
-              {this.menuArray !== undefined && this.menuArray.length > 0 ? (
-                <View style={{ flex: 1 }}>
-                  <EDMenuListComponent
-                    onPullToRefreshHandler={this.onPullToRefreshHandler}
-                    ListHeaderComponent={this.renderSectionHeader}
-                    data={this.sectionData}
-                    data2={this.sectionData}
-                    currency_Symbol={this.restaurantDetails.currency_symbol}
-                    cartData={
-                      this?.state?.cartData?.length === 0
-                        ? []
-                        : this?.state?.cartData
-                    }
-                    isOpen={this.isOpen.toLowerCase() === "open" ? true : false}
-                    plusAction={this.onResDetailsPlusEvent}
-                    minusItems={this.onResDetailsMinusEvent}
-                    addData={this.onResDetailsAddEvent}
-                    addOneData={this.storeData}
-                    onProductPress={this.onProductPress}
-                    scrolledHeight={this.state.menuListScroll}
-                    screenHeight={(height) => this.scrollListHeight(height)}
-                    isSearchVisible={this.state.isSearchVisible}
-                    cancelSearch={this.cancelSearch}
-                    allowPreOrder={
-                      !this.takeToCheckout &&
-                      !this.isDineIn &&
-                      this.restaurantDetails.allow_scheduled_delivery == "1"
-                    }
-                    // refreshControl={this.onPullToRefreshHandler}
-                  />
-                  {this.props.minOrderAmount !== undefined &&
-                  this.isDineIn == false ? (
-                    this.props.cartPrice !== undefined &&
-                    this.props.cartPrice >=
-                      this.props.minOrderAmount ? null : this
-                        .restaurantDetails !== undefined &&
-                      this.restaurantDetails.flag_delivery_order == true ? (
-                      <View
-                        style={{
-                          backgroundColor: EDColors.primary,
-                          alignItems: "center",
-                          paddingBottom:
-                            (this.props.cartCount == undefined ||
-                              this.props.cartCount == null ||
-                              this.props.cartCount == 0 ||
-                              this.props.cartCount == "") &&
-                            Platform.OS == "ios"
-                              ? initialWindowMetrics.insets.bottom
-                              : 0,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: EDColors.white,
-                            fontSize: 14,
-                            margin: 5,
-                            fontFamily: EDFonts.medium,
-                            textAlign: "center",
-                          }}
-                        >
-                          {isRTLCheck()
-                            ? strings("minOrderMsg") +
-                              this.props.currency +
-                              " " +
-                              this.props.minOrderAmount +
-                              strings("minOrderMsg2")
-                            : strings("minOrderMsg") +
-                              this.props.currency +
-                              " " +
-                              this.props.minOrderAmount +
-                              strings("minOrderMsg2")}
-                        </Text>
-                      </View>
-                    ) : null
-                  ) : null}
-
-                  {this.props.cartCount !== undefined &&
-                  this.props.cartCount !== null &&
-                  this.props.cartCount >= 1 ? (
-                    <View>
-                      <View
-                        style={{
-                          // marginBottom: Platform.OS == 'android' ? 10 : 10,
-                          marginBottom:
-                            (Platform.OS == "ios"
-                              ? initialWindowMetrics.insets.bottom
-                              : 0) + 10,
-                          height:
-                            Platform.OS == "android"
-                              ? heightPercentageToDP("6.0%")
-                              : heightPercentageToDP("6.0%"),
-                          borderRadius: 16,
-                          marginHorizontal: 10,
-                          marginTop: 10,
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={this.onCartItemPressed}
-                          style={[
-                            style.themeButton,
-                            { marginTop: heightPercentageToDP("0.1%") },
-                          ]}
-                        >
-                          <Text style={[style.themeButtonText]}>
-                            {strings("viewCart") +
-                              " (" +
-                              (this.props.cartCount != undefined
-                                ? this.props.cartCount.toString()
-                                : "") +
-                              ") " +
-                              (parseInt(this.props.cartCount) == 1
-                                ? strings("item")
-                                : strings("items"))}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  ) : null}
-                </View>
-              ) : !this.state.isLoading &&
-                !this.state.isMenuLoading &&
-                this.strOnScreenMessage.trim().length > 0 ? (
-                <View style={style.noDataViewStyle}>
-                  <EDPlaceholderComponent
-                    title={this.strOnScreenMessage}
-                    subTitle={this.strOnScreenSubtitle}
-                  />
-                </View>
-              ) : null}
-
-              {/* {this?.state?.cartData !== []
-                ? this.clear_category_ifdiffers()
-                : null} */}
-            </View>
-          ) : !this.state.isLoading &&
-            !this.state.isMenuLoading &&
-            this.strOnScreenMessage.trim().length > 0 ? (
-            <View style={style.noDataViewStyle}>
-              <EDPlaceholderComponent
-                title={this.strOnScreenMessage}
-                subTitle={this.strOnScreenSubtitle}
-              />
-            </View>
-          ) : null}
-        </View>
+       
         {/* </SafeAreaView> */}
         {/* } */}
       </BaseContainer>
@@ -1898,26 +1692,6 @@ export class Restaurant extends React.Component {
       if (status) {
         this.setState({ isMenuLoading: true });
 
-        // debugLog(
-        //   " this.props.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
-        //   this.props  , this.props.selected_plan_id_home_cont
-        // );
-
-        // debugLog(
-        //   " this.props.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
-        //   this.props  , this.props.selected_plan_id_home_cont
-        // );
-
-        debugLog(
-          "this.props.navigation.state.params?.selected_Plan_id_of_User  ***************************************************************** 3333333333 ====>",
-          this.props.navigation.state.params?.selected_Plan_id_of_User
-        );
-
-        debugLog(
-          " this.props.selected_plan_id_home_cont ***************************************************************** 3333333333 ====>",
-          this.props.selected_plan_id_home_cont
-        );
-
         let objRestaurantData = {
           language_slug: this.props.lan,
           restaurant_id: parseInt(this.resId),
@@ -1926,22 +1700,11 @@ export class Restaurant extends React.Component {
           price: "" + this.priceType,
           availability: this.availType,
           plan_date: this.props.type_today_tomorrow__date,
-          plan_id:
-            this.props.navigation.state.params?.selected_Plan_id_of_User ||
-            this.props.selected_plan_id_home_cont ||
-            0,
           category_id:
             this.props.navigation?.state?.params?.selected_restaurantCategory ||
             this.props?.selected_category_id_home_cont ||
             0,
         };
-
-        debugLog(
-          "objRestaurantData  ***************************************************************** 3333333333 ====>",
-          objRestaurantData
-        );
-
-        // return false;
 
         getRestaurantMenu(
           objRestaurantData,
@@ -2094,8 +1857,6 @@ export default connect(
         state.userOperations.received_category_id_from_home_cont,
       received_plan_date_from_home_cont:
         state.userOperations.received_plan_date_from_home_cont,
-      selected_plan_id_home_cont:
-        state.userOperations.selected_plan_id_home_cont,
     };
   },
   (dispatch) => {

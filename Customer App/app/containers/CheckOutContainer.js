@@ -2222,10 +2222,8 @@ export class CheckOutContainer extends React.PureComponent {
         // return false;
 
         if (
-          parseInt(this.state.loggedInUserwalletBalance) >
-            Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) >
-            filterForactualTotalsubtotalTaxes[0]?.value
+          parseInt(this.state.loggedInUserwalletBalance) >=            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) >=            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "***************************************************** else part 00000 COD paymett $$$$$$$$$$$$$$$$"
@@ -2233,7 +2231,7 @@ export class CheckOutContainer extends React.PureComponent {
           // return false;
           this.placeOrder();
         } else if (
-          parseInt(this.state.loggedInUserwalletBalance) >
+          parseInt(this.state.loggedInUserwalletBalance) >=
             Number(this.props.minOrderAmount) &&
           parseInt(this.state.loggedInUserwalletBalance) <
             filterForactualTotalsubtotalTaxes[0]?.value

@@ -3339,9 +3339,8 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else if (
-        parseInt(this.state.loggedInUserwalletBalance) >
-          Number(this.props.minOrderAmount) &&
-        parseInt(this.state.loggedInUserwalletBalance) > PriceandTotalPrice
+        parseInt(this.state.loggedInUserwalletBalance) >= Number(this.props.minOrderAmount) &&
+        parseInt(this.state.loggedInUserwalletBalance) >= PriceandTotalPrice
       ) {
         debugLog(
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
