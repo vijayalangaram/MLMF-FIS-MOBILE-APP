@@ -153,7 +153,8 @@ android {
     }
        signingConfigs {
         debug {
-            storeFile file('/Users/evince/Documents/RN Projects/MLMF/MLMF_Customer/android/MLMF.jks')
+            storeFile file('/MLMF.jks')
+            //  storeFile file('/Users/evince/Documents/RN Projects/MLMF/MLMF_Customer/android/MLMF.jks')
             storePassword 'Test@123'
             keyAlias 'mlmf'
             keyPassword 'Test@123'
