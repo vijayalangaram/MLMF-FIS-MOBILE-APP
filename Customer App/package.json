@@ -48,6 +48,7 @@
     "native-base": "^2.15.2",
     "patch-package": "^6.4.7",
     "react": "16.13.1",
+    "react-datepicker": "^4.20.0",
     "react-native": "0.63.5",
     "react-native-android-location-enabler": "^1.2.2",
     "react-native-apple-authentication": "^2.0.0",

@@ -244,9 +244,10 @@ export class Subscription extends React.PureComponent {
     foodMenu: ["Pongal", "Masal Dosa", "Idly", "Poori"],
     selectPlandays: ["5", "10", "15", "20"],
     Amount: ["300", "500", "1000", "2000"],
-    date: new Date(),
-    mode: "date",
-    show: false,
+
+
+     showPicker: false,
+    selectedDate: new Date(),
 
     // save_order_payload: localStorage.getItem("save_order_payload"),
     restaurants: [
@@ -278,6 +279,13 @@ export class Subscription extends React.PureComponent {
     isRestaurantModalVisible: false,
     isCategoryModalVisible: false,
     isPaymentModalVisible: false,
+    isSummaryModalVisible:false,
+
+    selectedAmount:'',
+    selectedMenu:'',
+    selecteddate:'',
+    selcecteddays:'',
+
   };
 
   componentDidMount() {
@@ -302,6 +310,11 @@ export class Subscription extends React.PureComponent {
     this.setState({ isPaymentModalVisible: !this.state.isPaymentModalVisible });
   };
 
+  toggleSumaryModal = () => {
+    this.setState({ isSummaryModalVisible: !this.state.isSummaryModalVisible });
+  };
+
+  
   selectRestaurant = (restaurant) => {
     this.setState({ selectedRestaurant: restaurant, selectedCategory: null });
     this.toggleCategoryModal();
@@ -396,21 +409,27 @@ export class Subscription extends React.PureComponent {
     });
   };
   ////DATE DateTimePicker
-  onDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || this.state.date;
-    this.setState({ show: Platform.OS === "ios" });
-    this.setState({ date: currentDate });
+  handleButtonPress = () => {
+    this.setState({ showPicker: true });
   };
 
-  showDatepicker = () => {
-    this.setState({ mode: "date" });
-    this.setState({ show: true });
+  handleDateChange = (event, selectedDate) => {
+    if (selectedDate) {
+      this.setState({
+        showPicker: Platform.OS === 'ios',
+        selecteddate:selectedDate,
+        
+      });
+    } else {
+      this.setState({ showPicker: false });
+    }
   };
 
-  showTimepicker = () => {
-    this.setState({ mode: "time" });
-    this.setState({ show: true });
+
+  handleSumaryPress = () => {
+    this.setState({ isSummaryModalVisible: true });
   };
+
 
   // RENDER METHOD
   render() {
@@ -422,10 +441,18 @@ export class Subscription extends React.PureComponent {
       isRestaurantModalVisible,
       isCategoryModalVisible,
       isPaymentModalVisible,
+      isSummaryModalVisible,
       options,
       selectPlandays,
       foodMenu,
       Amount,
+      showPicker,
+      selectedDate,
+
+      selectedAmount,
+      selectedMenu,
+      selecteddate,
+      selcecteddays,
     } = this.state;
 
     return (
@@ -437,6 +464,7 @@ export class Subscription extends React.PureComponent {
             <TouchableOpacity
               onPress={this.toggleCategoryModal}
               style={[styles.button, styles.categoryButton]}
+              
             >
               <Text style={styles.buttonText}>
                 {selectedCategory
@@ -458,6 +486,7 @@ export class Subscription extends React.PureComponent {
             </ScrollView>
           )}
 
+           <ScrollView>
           {selectedCategory && (
             <TouchableOpacity
               onPress={this.togglePaymentModal}
@@ -474,7 +503,7 @@ export class Subscription extends React.PureComponent {
             transparent={false}
             onRequestClose={this.toggleRestaurantModal}
           >
-            <ScrollView>
+            
               <View style={styles.modalContainer}>
                 <Text style={styles.modalTitle}>Select a Restaurant</Text>
                 {restaurants.map((restaurant, index) => (
@@ -501,9 +530,9 @@ export class Subscription extends React.PureComponent {
                   <Text style={styles.buttonText}>Close</Text>
                 </TouchableOpacity>
               </View>
-            </ScrollView>
+        
           </Modal>
-
+          </ScrollView>
           {/* Category Modal */}
           <Modal
             visible={isCategoryModalVisible}
@@ -564,11 +593,13 @@ export class Subscription extends React.PureComponent {
                 </Text>
                 {/* Add payment information and UI */}
                 <View>
+                  
                   <View>
                     <Text style={styles.modalTitle}>choose your menu</Text>
                     <SelectDropdown
                       data={foodMenu}
                       onSelect={(selectedItem, index) => {
+                        this.setState({selectedMenu:selectedItem})
                         console.log(selectedItem, index);
                       }}
                       buttonTextAfterSelection={(selectedItem, index) => {
@@ -581,6 +612,7 @@ export class Subscription extends React.PureComponent {
                         // if data array is an array of objects then return item.property to represent item in dropdown
                         return item;
                       }}
+                      
                     />
                   </View>
 
@@ -589,6 +621,7 @@ export class Subscription extends React.PureComponent {
                     <SelectDropdown
                       data={selectPlandays}
                       onSelect={(selectedItem, index) => {
+                        this.setState({selcecteddays:selectedItem})
                         console.log(selectedItem, index);
                       }}
                       buttonTextAfterSelection={(selectedItem, index) => {
@@ -604,23 +637,23 @@ export class Subscription extends React.PureComponent {
                     />
                   </View>
 
-                  <View>
-                    <Text style={styles.modalTitle}>choose the Date</Text>
-
-                    <Button onPress={this.showDatepicker} title="Start Date" />
-                    {this.state.show && (
+                  <View >
+                  <Text style={styles.modalTitle}>choose Plan Date</Text>
+                    <Button
+                      title={this.state.selectedDate.toDateString()}
+                      onPress={this.handleButtonPress}
+                      styles ={{backgroundColor:"white"}}
+                    />
+                    {this.state.showPicker && (
                       <DateTimePicker
-                        testID="dateTimePicker"
-                        value={this.state.date}
-                        mode={this.state.mode}
-                        is24Hour={true}
+                        value={this.state.selectedDate}
+                        mode="date"
                         display="default"
-                        onChange={this.onDateChange}
+                        onChange={this.handleDateChange}
+                        style={styles.datePickerpic}
                       />
                     )}
-                    <Text>
-                      Selected Date and Time: {this.state.date.toLocaleString()}
-                    </Text>
+                    
                   </View>
 
                   <View>
@@ -629,6 +662,7 @@ export class Subscription extends React.PureComponent {
                       data={Amount}
                       onSelect={(selectedItem, index) => {
                         console.log(selectedItem, index);
+                        this.setState({selectedAmount:selectedItem})
                       }}
                       buttonTextAfterSelection={(selectedItem, index) => {
                         // text represented after item is selected
@@ -642,20 +676,7 @@ export class Subscription extends React.PureComponent {
                       }}
                     />
                   </View>
-                  {/* <View>
-<Text>{option.value}</Text>
-<CheckBox
-  center
-  title={option.value}
-  iconRight
-  iconType='material'
-  checkedIcon='clear'
-  uncheckedIcon='add'
-  checkedColor='red'
-  checked={this.state.checked === option.value}
-  onPress={() => this.handleOptionSelect(option.value)}
-/>
-            </View> */}
+       
                 </View>
 
                 <TouchableOpacity
@@ -668,10 +689,54 @@ export class Subscription extends React.PureComponent {
                 >
                   <Text style={styles.buttonText}>Close</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={this.handleSumaryPress}
+                  style={[
+                    styles.button,
+                    
+                  ]}
+                >
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+
               </View>
             </ScrollView>
           </Modal>
+            <Modal
+            visible={isSummaryModalVisible}
+            animationType="slide"
+            transparent={false}
+            onRequestClose={this.toggleSumaryModal}
+          >
+          <View style={styles.summaryCardsum}>
+          <Text style={styles.cardTextsum}>Selected Restaurant: {this.state.selectedRestaurant}</Text>
+          <Text style={styles.cardTextsum}>Selected Plan Name: {this.state.selectedCategory}</Text>
+          <Text style={styles.cardTextsum}>Selected Menu: {this.state.selectedMenu}</Text>
+          <Text style={styles.cardTextsum}>Selected Days: {this.state.selcecteddays}</Text>
+          <Text style={styles.cardTextsum}>Selected Amount: {this.state.selectedAmount}</Text>
+          {/* You can display more details about the selected option here */}
+           </View>
+          <Button
+          title="Pay Now"
+          onPress={() => {
+            // Handle payment logic here
+          }}
+          />
+
+             <TouchableOpacity
+                  onPress={this.toggleSumaryModal}
+                  style={[
+                    styles.button,
+                    styles.modalButton,
+                    styles.closeButton,
+                  ]}
+                >
+                  <Text style={styles.buttonText}>Close</Text>
+                </TouchableOpacity>
+           </Modal>    
         </View>
+
       </BaseContainer>
     );
   }
@@ -731,6 +796,57 @@ export default connect(
 )(Subscription);
 
 export const styles = StyleSheet.create({
+  containersum: {
+    flex: 1,
+    padding: 20,
+  },
+  selectContainersum: {
+    marginBottom: 20,
+  },
+  labelsum: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+
+  summaryCardsum: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  cardTextsum: {
+    fontSize: 16,
+  },
+
+
+
+
+
+
+
+
+  containerpic: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  datePickerpic: {
+    width: 300,
+    backgroundColor: '#fff',
+    marginTop: 20,
+  },
+  selectedDateTextpic: {
+    marginTop: 20,
+    fontSize: 18,
+  },
+
+
+
+
+
+
+
+
   container: {
     flex: 1,
     justifyContent: "center",
@@ -748,6 +864,7 @@ export const styles = StyleSheet.create({
     margin: 10,
     width: 300,
     alignItems: "center",
+    backgroundColor:'#38a832'
   },
   buttonText: {
     color: "white",
