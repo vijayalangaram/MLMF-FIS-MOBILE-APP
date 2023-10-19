@@ -3663,7 +3663,7 @@ export default connect(
         state.userOperations.selected_category_id_home_cont,
       type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
       selected_category_name_home_cont:
-        state.userOperations.selected_category_name_home_cont,
+       state.userOperations.selected_category_name_home_cont,
     };
   },
   (dispatch) => {

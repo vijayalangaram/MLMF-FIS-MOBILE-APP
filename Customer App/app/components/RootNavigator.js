@@ -47,6 +47,7 @@ import TrackOrderContainer from "../containers/TrackOrderContainer";
 import metrics from "../utils/metrics";
 import SideBar from "./SideBar";
 import Subscription from "../containers/Subscription";
+import TempMainContainer from "../containers/TempMainContainer"
 
 const MAIN_NAVIGATOR = createStackNavigator(
   {
@@ -63,6 +64,10 @@ const MAIN_NAVIGATOR = createStackNavigator(
       screen: Subscription,
     },
 
+    TempMainContainer: {
+      screen: TempMainContainer,
+    },
+    
     aboutStore: {
       screen: AboutStoreContainer,
     },

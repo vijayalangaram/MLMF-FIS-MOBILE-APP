@@ -248,3 +248,37 @@ export function getAppleTokenAsync(onSuccess, onFailure) {
         }
     );
 }
+
+export function save_subscription_Cart(token, onSuccess, onFailure) {
+    AsyncStorage.setItem("subscription", JSON.stringify(token)).then(
+        success => {
+            onSuccess(success);
+        },
+        error => {
+            onFailure(error);
+        }
+    );
+}
+
+
+export function get_save_subscription_Cart(onSuccess, onFailure) {
+    AsyncStorage.getItem("subscription").then(
+        res => {
+            onSuccess(JSON.parse(res));
+        },
+        error => {
+            onFailure("error");
+        }
+    );
+}
+
+// export function clearCurrency_Symbol(onSuccess, onError) {
+//     AsyncStorage.removeItem("subscription").then(
+//         response => {
+//             onSuccess(response);
+//         },
+//         error => {
+//             onError(error);
+//         }
+//     );
+// }
