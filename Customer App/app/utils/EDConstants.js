@@ -5,10 +5,10 @@ import { Dimensions, Platform } from "react-native";
 import I18n from "i18n-js";
 import { RFValue } from "react-native-responsive-fontsize";
 
-export const GENERAL_URL = "https://demo.mylifemyfood.com/v1/general_api/"; //LIVE
-export const BASE_URL = "https://demo.mylifemyfood.com/v1/api/";
-export const BASE_URL_FIS_IP = "http://52.77.35.146:8080/FIS/api/auth/";
-export const RETURN_URL = "https://demo.mylifemyfood.com";
+export const GENERAL_URL = "https://mylifemyfood.com/v1/general_api/"; //LIVE
+export const BASE_URL = "https://mylifemyfood.com/v1/api/";
+export const BASE_URL_FIS_IP = "https://fis.clsslabs.com/FIS/api/auth/";
+export const RETURN_URL = "https://mylifemyfood.com";
 
 // export const GENERAL_URL = "https://mlmf.evdpl.com/v1/general_api/"; //DEV
 // export const BASE_URL = "https://mlmf.evdpl.com/v1/api/";

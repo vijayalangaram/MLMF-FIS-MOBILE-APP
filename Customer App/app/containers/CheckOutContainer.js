@@ -2357,7 +2357,7 @@ export class CheckOutContainer extends React.PureComponent {
       );
 
       let getDeliveryChargeAPICall = await axios.post(
-        "http://52.77.35.146:8080/FIS/api/auth/saveOrder",
+        "https://fis.clsslabs.com/FIS/api/auth/saveOrder",
         onSuccess.order_id,
         {
           headers: {
@@ -2577,10 +2577,10 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment = () => {
-    debugLog(
-      "****************************** Vijay ****************************** this.razorpayDetails 6666",
-      this.razorpayDetails
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** this.razorpayDetails 6666",
+    //   this.razorpayDetails
+    // );
 
     this.merchant_order_id = Date.now();
     var options = {
@@ -2916,7 +2916,7 @@ export class CheckOutContainer extends React.PureComponent {
             ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
           ];
           let findmenucount222 = [
-            ...new Set(findmenucount.flatMap((s) => s && s.split(","))),
+            ...new Set(findmenucount.flatMap((s) => s.split(","))),
           ];
 
           // old  delivery balane based on indivdual order
