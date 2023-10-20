@@ -1312,6 +1312,7 @@ class TempMainContainer extends React.Component {
 
     this.props.navigation.navigate("Subscription", {
       restId: restObjModel?.restuarant_id,
+      restname:restObjModel?.name,
     });
 
     return false;

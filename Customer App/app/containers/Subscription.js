@@ -125,10 +125,15 @@ export class Subscription extends React.PureComponent {
    
   
 
-    this.resId =this.props.navigation.state.params !== undefined && 
-    this.props.navigation.state.params.rest !== undefined
-        ? this.props.navigation.state.params.allowPreOrder
+    this.restId =this.props.navigation.state.params !== undefined && 
+    this.props.navigation.state.params.restId !== undefined
+        ? this.props.navigation.state.params.restId
         : false;
+
+        this.restname =this.props.navigation.state.params !== undefined && 
+        this.props.navigation.state.params.restname !== undefined
+            ? this.props.navigation.state.params.restname
+            : false;
 
   }
 
@@ -214,6 +219,7 @@ export class Subscription extends React.PureComponent {
     debugLog(
       "****************************** RAJA ****************************** save_order_payload"
     );
+  
     this.get_save_subscription_Cart_fund();
   }
 
