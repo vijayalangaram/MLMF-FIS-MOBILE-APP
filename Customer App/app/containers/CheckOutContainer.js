@@ -2218,7 +2218,6 @@ export class CheckOutContainer extends React.PureComponent {
         //   "********************************************************* else part B22222222222",
         //   filterForactualTotalsubtotalTaxes[0]?.value
         // );
-
         // return false;
 
         if (
@@ -2372,11 +2371,15 @@ export class CheckOutContainer extends React.PureComponent {
 
       if (getDeliveryChargeAPICall.status === 200) {
         debugLog(
-          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder ",
+          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder  +++++     ",
           getDeliveryChargeAPICall.status
         );
         this.props.save_selected_category_home_cont(undefined);
       } else {
+        debugLog(
+          ":::::::::::::::::::::::::::::::::::::::::::::::::::::::saveOrder   ******** ",
+          getDeliveryChargeAPICall.status
+        );
       }
     }
 
@@ -2388,13 +2391,20 @@ export class CheckOutContainer extends React.PureComponent {
    * @param { Failure Response Object } onFailure
    */
   onFailureAddOrder = (onfailure) => {
+    debugLog(
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  onfailure ~~~~~~~~~~~~~~~  676",
+      onfailure
+    );
+
     showValidationAlert(strings("generalWebServiceError"));
     this.setState({ isLoading: false });
   };
 
   //#region
   /** PLACE ORDER API */
-  placeOrder = (txn_id, payment_option = "cod") => {
+  // data.
+
+  placeOrder = (txn_id, payment_option = "cod", data_razorpay_response) => {
     netStatus((status) => {
       let addOrderParams = this.props.checkoutDetail;
       // addOrderParams.extra_comment = this.comment
@@ -2472,6 +2482,7 @@ export class CheckOutContainer extends React.PureComponent {
       // let startTimestrimmed = startTimes && startTimes.trim();
       // let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
 
+      addOrderParams.razorpay_order_id = `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}`;
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
@@ -2570,16 +2581,29 @@ export class CheckOutContainer extends React.PureComponent {
   };
   //#endregion
 
+  /**
+   * Start Razorpay Payment
+   */
+
   startRazorPayment_Get_Order_ID = async () => {
+    // return false;
+
     let base64 = require("base-64");
     let username1 = this.razorpayDetails?.test_publishable_key;
     let password1 = this.razorpayDetails?.test_secret_key;
+    let currentdate= new Date().toISOString();
 
     let dataforgenraeorder = {
       amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
       currency: this.currency_code,
+      receipt  : `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}` ,
+      "notes": {
+        "user_id":  this.props.userID,
+        "mobile_no": this.props.token,
+      }
     };
 
+    // return false;
     let generate_order_id = await axios.post(
       "https://api.razorpay.com/v1/orders",
       dataforgenraeorder,
@@ -2589,7 +2613,7 @@ export class CheckOutContainer extends React.PureComponent {
           Authorization: "Basic " + base64.encode(username1 + ":" + password1),
         },
       }
-    );
+    );    
     if (generate_order_id.status === 200) {
       // debugLog(
       //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
@@ -2600,10 +2624,6 @@ export class CheckOutContainer extends React.PureComponent {
       showValidationAlert("Unable to generate order id");
     }
   };
-
-  /**
-   * Start Razorpay Payment
-   */
 
   startRazorPayment = (valueoforderid) => {
     // debugLog(
@@ -2670,7 +2690,7 @@ export class CheckOutContainer extends React.PureComponent {
         this.placeOrder(
           data.razorpay_payment_id,
           "razorpay",
-          data.razorpay_order_id
+          data
         );
       })
       .catch((error) => {
@@ -2960,7 +2980,7 @@ export class CheckOutContainer extends React.PureComponent {
             ...new Set(onSuccess?.items.map((item) => item.menu_avail)),
           ];
           let findmenucount222 = [
-            ...new Set(findmenucount.flatMap((s) => s.split(","))),
+            ...new Set(findmenucount.flatMap((s) => s && s.split(","))),
           ];
 
           // old  delivery balane based on indivdual order
