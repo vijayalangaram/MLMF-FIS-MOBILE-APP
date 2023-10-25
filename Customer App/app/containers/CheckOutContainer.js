@@ -2222,8 +2222,10 @@ export class CheckOutContainer extends React.PureComponent {
         // return false;
 
         if (
-          parseInt(this.state.loggedInUserwalletBalance) >=            Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) >=            filterForactualTotalsubtotalTaxes[0]?.value
+          parseInt(this.state.loggedInUserwalletBalance) >=
+            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) >=
+            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "***************************************************** else part 00000 COD paymett $$$$$$$$$$$$$$$$"
@@ -2568,14 +2570,46 @@ export class CheckOutContainer extends React.PureComponent {
   };
   //#endregion
 
+  startRazorPayment_Get_Order_ID = async () => {
+    let base64 = require("base-64");
+    let username1 = this.razorpayDetails?.test_publishable_key;
+    let password1 = this.razorpayDetails?.test_secret_key;
+
+    let dataforgenraeorder = {
+      amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
+      currency: this.currency_code,
+    };
+
+    let generate_order_id = await axios.post(
+      "https://api.razorpay.com/v1/orders",
+      dataforgenraeorder,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic " + base64.encode(username1 + ":" + password1),
+        },
+      }
+    );
+    if (generate_order_id.status === 200) {
+      // debugLog(
+      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
+      //   generate_order_id.data
+      // );
+      this.startRazorPayment(generate_order_id.data?.id);
+    } else {
+      showValidationAlert("Unable to generate order id");
+    }
+  };
+
   /**
    * Start Razorpay Payment
    */
 
-  startRazorPayment = () => {
+  startRazorPayment = (valueoforderid) => {
     // debugLog(
-    //   "****************************** Vijay ****************************** this.razorpayDetails 6666",
-    //   this.razorpayDetails
+    //   "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
+    //   this.razorpayDetails,
+    //   valueoforderid
     // );
 
     this.merchant_order_id = Date.now();
@@ -2590,7 +2624,7 @@ export class CheckOutContainer extends React.PureComponent {
           : this.razorpayDetails.test_publishable_key, // Your api key
       amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
       name: "MLMF",
-      // order_id :
+      order_id: valueoforderid,
       prefill: {
         email:
           this.props.userID == undefined ||
@@ -2618,12 +2652,26 @@ export class CheckOutContainer extends React.PureComponent {
         merchant_order_id: this.merchant_order_id,
       },
     };
+    debugLog(
+      "****************************** Vijay ******************************  order_id 00000",
+      options
+    );
+    // return false;
     RazorpayCheckout.open(options)
       .then((data) => {
         // handle success
         // debugLog("Payment success ::::::", data);
+        debugLog(
+          "******************************response ******************************  data 3245345435",
+          data
+        );
+        // return false;
         this.razorpay_payment_id = data.razorpay_payment_id;
-        this.placeOrder(data.razorpay_payment_id, "razorpay");
+        this.placeOrder(
+          data.razorpay_payment_id,
+          "razorpay",
+          data.razorpay_order_id
+        );
       })
       .catch((error) => {
         // handle failure
@@ -2784,8 +2832,8 @@ export class CheckOutContainer extends React.PureComponent {
       //   "****************************** Vijay ****************************** this.payment_option 444",
       //   this.payment_option
       // );
-
-      this.startRazorPayment();
+      // this.startRazorPayment();
+      this.startRazorPayment_Get_Order_ID();
       // } else if (this.payment_option == "paypal")
     } else if (valuefromDynamicPricde == "paypal")
       this.props.navigation.navigate("PaymentGatewayContainer", {
@@ -3663,7 +3711,7 @@ export default connect(
         state.userOperations.selected_category_id_home_cont,
       type_today_tomorrow__date: state.userOperations.type_today_tomorrow__date,
       selected_category_name_home_cont:
-       state.userOperations.selected_category_name_home_cont,
+        state.userOperations.selected_category_name_home_cont,
     };
   },
   (dispatch) => {
