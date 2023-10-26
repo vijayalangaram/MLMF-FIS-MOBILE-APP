@@ -15,6 +15,7 @@ import {
   Modal,
   TouchableHighlight,
   Button,
+  Input,
 } from "react-native";
 
 import { Icon, Card, ListItem, CheckBox } from "react-native-elements";
@@ -116,25 +117,27 @@ import { data } from "currency-codes";
 import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { style } from "./AboutStoreContainer";
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export class Subscription extends React.PureComponent {
   //#region LIFE CYCLE METHODS
 
   constructor(props) {
     super(props);
-   
-  
 
-    this.restId =this.props.navigation.state.params !== undefined && 
-    this.props.navigation.state.params.restId !== undefined
+    this.restId =
+      this.props.navigation.state.params !== undefined &&
+      this.props.navigation.state.params.restId !== undefined
         ? this.props.navigation.state.params.restId
         : false;
 
-        this.restname =this.props.navigation.state.params !== undefined && 
-        this.props.navigation.state.params.restname !== undefined
-            ? this.props.navigation.state.params.restname
-            : false;
-
+    this.restname =
+      this.props.navigation.state.params !== undefined &&
+      this.props.navigation.state.params.restname !== undefined
+        ? this.props.navigation.state.params.restname
+        : false;
   }
 
   state = {
@@ -157,7 +160,6 @@ export class Subscription extends React.PureComponent {
     selected_restaurant: "",
     selected_restaurantCategory: "",
 
-    selectedPlan: "",
     selectedDependence: "",
     selectedDays: [],
     startDate: "",
@@ -170,12 +172,26 @@ export class Subscription extends React.PureComponent {
     selectedOption: null,
     selectMenuOption: "",
 
-    foodMenu: ["Pongal", "Masal Dosa", "Idly", "Poori"],
-    selectPlandays: ["5", "10", "15", "20"],
-    Amount: ["300", "500", "1000", "2000"],
-    subscriptionPlan: ["Breakfast 3", "Lunch 4", "Dinner 11", "Snacks 12"],
+    foodMenu: [],
+    selectPlandays: [],
+    planAmount: {},
+
+    subscriptionPlan: [
+      {
+        value: "Breakfast",
+        name: "Breakfast",
+        planId: "999",
+        selectPlandays: [
+          { value: "5", name: "5", amount: { value: "300", name: "300" } },
+        ],
+      },
+    ],
+
     showPicker: false,
     selectedDate: new Date(),
+
+    dateTimePickerVisible: false,
+    dateOrTimeValue: new Date(),
 
     // save_order_payload: localStorage.getItem("save_order_payload"),
     restaurants: [
@@ -202,7 +218,7 @@ export class Subscription extends React.PureComponent {
       },
       // Add more restaurants and categories as needed
     ],
-    selectedRestaurant: null,
+
     selectedCategory: null,
     isRestaurantModalVisible: false,
     isCategoryModalVisible: false,
@@ -210,16 +226,29 @@ export class Subscription extends React.PureComponent {
     isSummaryModalVisible: false,
 
     selectedAmount: "",
-    selectedMenu: "",
-    selecteddate: "",
+    selectedRestaurant:"",
+    selectedMenu: {},
+    // selecteddate: "",
     selcecteddays: "",
+    selectedPlan: "",
+    isFocus: false,
   };
 
   componentDidMount() {
     debugLog(
       "****************************** RAJA ****************************** save_order_payload"
     );
-  
+
+    debugLog(
+      "****************************** restID ****************************** save_order_payload",
+      this.restId
+    );
+    debugLog(
+      "****************************** restName ****************************** save_order_payload",
+      this.restname
+    );
+    this.setState({ selectedRestaurant:this.restname });
+
     this.get_save_subscription_Cart_fund();
   }
 
@@ -236,18 +265,23 @@ export class Subscription extends React.PureComponent {
   };
 
   togglePaymentModal = () => {
-    this.setState({ isPaymentModalVisible: !this.state.isPaymentModalVisible });
+    this.setState({ isPaymentModalVisible: !this.state.isPaymentModalVisible ,
+    selectedAmount:"",
+    selcecteddays:"",
+    selectedPlan:"",
+    });
+
   };
 
   toggleSumaryModal = () => {
     this.setState({ isSummaryModalVisible: !this.state.isSummaryModalVisible });
   };
 
-  selectRestaurant = (restaurant) => {
-    this.setState({ selectedRestaurant: restaurant, selectedCategory: null });
-    // AsyncStorage.setItem("subscription",restaurant);
-    this.toggleCategoryModal();
-  };
+  // selectRestaurant = (restaurant) => {
+  //   this.setState({ selectedRestaurant: restaurant, selectedCategory: null });
+  //   // AsyncStorage.setItem("subscription",restaurant);
+  //   this.toggleCategoryModal();
+  // };
 
   selectCategory = (category) => {
     this.setState({ selectedCategory: category });
@@ -258,16 +292,13 @@ export class Subscription extends React.PureComponent {
     this.setState({ selectedOption: value });
   };
 
-  handlePlanChange = (plan) => {
-    this.setState({ selectedPlan: plan });
-  };
+  // handlePlanChange = (plan) => {
+  //   this.setState({ selectedPlan: plan });
+  // };
 
   handleDependenceChange = (dependence) => {
     this.setState({ selectedDependence: dependence });
   };
-
- 
-
 
   ////DATE DateTimePicker
   handleButtonPress = () => {
@@ -286,19 +317,14 @@ export class Subscription extends React.PureComponent {
   };
 
   handleSumaryPress = () => {
-    let {
-      selectedRestaurant,
-      selectedCategory,
-      selectedMenu,
-      selcecteddays,
-      selectedAmount,
-    } = this.state;
+    let { selectedRestaurant, selectedPlan, selcecteddays, selectedAmount, } =
+      this.state;
     let localsubsobje = {
       selectedRestaurant,
-      selectedCategory,
-      selectedMenu,
+      selectedPlan,
       selcecteddays,
       selectedAmount,
+      
     };
 
     debugLog("localsubsobje ********************", localsubsobje);
@@ -307,10 +333,9 @@ export class Subscription extends React.PureComponent {
     this.setState({ isSummaryModalVisible: true });
   };
 
-  add_subscription_fun = ( ) =>{
-  this.setState({isPaymentModalVisible :true}) ; 
-
-  }
+  add_subscription_fun = () => {
+    this.setState({ isPaymentModalVisible: true });
+  };
 
   get_save_subscription_Cart_fund = () => {
     // let { cartDatafromstore } = this.state;
@@ -337,19 +362,24 @@ export class Subscription extends React.PureComponent {
       options,
       selectPlandays,
       foodMenu,
-      Amount,
+      planAmount,
       showPicker,
       selectedDate,
+
+      dateTimePickerVisible,
+      dateOrTimeValue,
 
       selectedAmount,
       selectedMenu,
       selecteddate,
       selcecteddays,
-      subscriptionPlan
+      subscriptionPlan,
+      isFocus,
+      selectedPlan,
     } = this.state;
 
     return (
-     <>
+      <>
         <View style={styles.container}>
           <Text style={styles.title}>
             {selectedRestaurant
@@ -357,19 +387,16 @@ export class Subscription extends React.PureComponent {
               : "Restaurant Order Flow"}
           </Text>
 
-            <ScrollView>
-             
-                <TouchableOpacity
-                  onPress={() => {
-                   this.add_subscription_fun()
-                  }}
-                  style={[styles.button, styles.restaurantButton]}
-                >
-                  <Text style={styles.buttonText}>Add Subscription</Text>
-                </TouchableOpacity>
-            
-            </ScrollView>
-          
+          <ScrollView>
+            <TouchableOpacity
+              onPress={() => {
+                this.add_subscription_fun();
+              }}
+              style={[styles.button, styles.restaurantButton]}
+            >
+              <Text style={styles.buttonText}>+Add</Text>
+            </TouchableOpacity>
+          </ScrollView>
 
           <ScrollView>
             {selectedCategory && (
@@ -382,83 +409,7 @@ export class Subscription extends React.PureComponent {
             )}
 
             {/* Restaurant Modal */}
-            <Modal
-              visible={isRestaurantModalVisible}
-              animationType="slide"
-              transparent={false}
-              onRequestClose={this.toggleRestaurantModal}
-            >
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Select a Restaurant</Text>
-                {restaurants.map((restaurant, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.selectRestaurant(restaurant.name);
-                    }}
-                    style={[
-                      styles.button,
-                      styles.modalButton,
-                      styles.restaurantButton,
-                    ]}
-                  >
-                    <Text style={styles.buttonText}>{restaurant.name}</Text>
-                  </TouchableOpacity>
-                ))}
-                <TouchableOpacity
-                  onPress={this.toggleRestaurantModal}
-                  style={[
-                    styles.button,
-                    styles.modalButton,
-                    styles.closeButton,
-                  ]}
-                >
-                  <Text style={styles.buttonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </Modal>
           </ScrollView>
-          {/* Category Modal */}
-          <Modal
-            visible={isCategoryModalVisible}
-            animationType="slide"
-            transparent={false}
-            onRequestClose={this.toggleCategoryModal}
-          >
-            <ScrollView>
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Select a Category</Text>
-                {selectedRestaurant &&
-                  restaurants
-                    .find(
-                      (restaurant) => restaurant.name === selectedRestaurant
-                    )
-                    .categories.map((category, index) => (
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => this.selectCategory(category)}
-                        style={[
-                          styles.button,
-                          styles.modalButton,
-                          styles.categoryButton,
-                        ]}
-                      >
-                        <Text style={styles.buttonText}>{category}</Text>
-                      </TouchableOpacity>
-                    ))}
-                <TouchableOpacity
-                  onPress={this.toggleCategoryModal}
-                  style={[
-                    styles.button,
-                    styles.modalButton,
-                    styles.closeButton,
-                  ]}
-                >
-                  <Text style={styles.buttonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </Modal>
 
           {/* Payment Modal */}
           <Modal
@@ -469,140 +420,241 @@ export class Subscription extends React.PureComponent {
           >
             <ScrollView>
               <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle }>New Subscription</Text>
-               
-               
+                <Text style={styles.modalTitle}>New Subscription</Text>
+
                 {/* Add payment information and UI */}
                 <View>
-                <View>
-                    <Text style={styles.modalTitle}>choose your plan</Text>
-                    <SelectDropdown
-                      data={subscriptionPlan}
-                      onSelect={(selectedItem, index) => {
-                        this.setState({ subscriptionPlan: selectedItem });
-                        console.log(selectedItem, index);
+                  <View style={styles.containerDrop}>
+                    <Dropdown
+                      style={[
+                        styles.dropdownDrop,
+                        isFocus && { borderColor: "blue" },
+                      ]}
+                      placeholderStyle={styles.placeholderStyleDrop}
+                      selectedTextStyle={styles.selectedTextStyleDrop}
+                      inputSearchStyle={styles.inputSearchStyleDrop}
+                      iconStyle={styles.iconStyleDrop}
+                      data={this.state?.subscriptionPlan}
+                      // search
+                      maxHeight={200}
+                      labelField="name"
+                      valueField="value"
+                      placeholder={!isFocus ? "Select Plan" : "..."}
+                      searchPlaceholder="Search..."
+                      //value={selected_Slot_value}
+                      // onFocus={() => setIsFocus(true)}
+                      // onBlur={() => setIsFocus(false)}
+                      onChange={(item, i) => {
+                        debugLog("item", item);
+                        //debugLog("i", i);
+                        // setValue(item.value);
+                        //this.slot_Master_against_category_Call(item);
+                        this.setState({
+                          selectedPlan: item?.value,
+                          selectPlandays: item?.selectPlandays,
+                          isFocus: !isFocus,
+                        });
+
+                        debugLog(
+                          "selectedPlan%%%%%%%%%@@@@!!!!!!",
+                          selectedPlan
+                        );
+                        debugLog("foodMenu%%%%%%%%%@@@@!!!!!!", foodMenu);
+
+                        // setIsFocus(false);
                       }}
-                      buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem;
-                      }}
-                      rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item;
-                      }}
+                      renderLeftIcon={() => (
+                        <AntDesign
+                          style={styles.iconDrop}
+                          color={isFocus ? "blue" : "black"}
+                          name="Safety"
+                          size={20}
+                        />
+                      )}
                     />
                   </View>
 
-                  <View>
-                    <Text style={styles.modalTitle}>choose your menu</Text>
-                    <SelectDropdown
-                      data={foodMenu}
-                      onSelect={(selectedItem, index) => {
-                        this.setState({ selectedMenu: selectedItem });
-                        console.log(selectedItem, index);
-                      }}
-                      buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem;
-                      }}
-                      rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item;
-                      }}
-                    />
-                  </View>
+                  {/* {subscriptionPlan && (
+                    <View style={styles.containerDrop}>
+                      <Text style={styles.modalTitle}>choose your menu</Text>
+                      <Dropdown
+                        style={[
+                          styles.dropdownDrop,
+                          isFocus && { borderColor: "blue" },
+                        ]}
+                        placeholderStyle={styles.placeholderStyleDrop}
+                        selectedTextStyle={styles.selectedTextStyleDrop}
+                        inputSearchStyle={styles.inputSearchStyleDrop}
+                        iconStyle={styles.iconStyleDrop}
+                        data={this.state?.foodMenu}
+                        // search
+                        maxHeight={200}
+                        labelField="name"
+                        valueField="value"
+                        placeholder={!isFocus ? "Select Menu" : "..."}
+                        searchPlaceholder="Search..."
+                        //value={selected_Slot_value}
+                        // onFocus={() => setIsFocus(true)}
+                        // onBlur={() => setIsFocus(false)}
+                        onChange={(item, i) => {
+                          debugLog("item", item);
+                         // debugLog("i", i);
+                          // setValue(item.value);
+                          //this.slot_Master_against_category_Call(item);
+                          this.setState({
+                            selectedMenu: item?.value,
+                            selectPlandays: item?.selectPlandays,
+                            isFocus: !isFocus,
+                          });
 
-                  <View>
-                    <Text style={styles.modalTitle}>choose plan days</Text>
-                    <SelectDropdown
-                      data={selectPlandays}
-                      onSelect={(selectedItem, index) => {
-                        this.setState({ selcecteddays: selectedItem });
-                        console.log(selectedItem, index);
-                      }}
-                      buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem;
-                      }}
-                      rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item;
-                      }}
-                    />
-                  </View>
-
-                  <View>
-                    <Text style={styles.modalTitle}>choose Plan Date</Text>
-                    <Button
-                      title={this.state.selectedDate.toDateString()}
-                      onPress={this.handleButtonPress}
-                      styles={{ backgroundColor: "white" }}
-                    />
-                    {this.state.showPicker && (
-                      <DateTimePicker
-                        value={this.state.selectedDate}
-                        mode="date"
-                        display="default"
-                        onChange={this.handleDateChange}
-                        style={styles.datePickerpic}
+                          debugLog("selectedMenu()()()()+++()()()()()", selectedMenu);
+                          // setIsFocus(false);
+                        }}
+                        renderLeftIcon={() => (
+                          <AntDesign
+                            style={styles.iconDrop}
+                            color={isFocus ? "blue" : "black"}
+                            name="Safety"
+                            size={20}
+                          />
+                        )}
                       />
-                    )}
-                  </View>
+                    </View>
+                  )} */}
 
-                  <View>
-                    <Text style={styles.modalTitle}>Plan Amount</Text>
-                    <SelectDropdown
-                      data={Amount}
-                      onSelect={(selectedItem, index) => {
-                        console.log(selectedItem, index);
-                        this.setState({ selectedAmount: selectedItem });
-                      }}
-                      buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem;
-                      }}
-                      rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item;
-                      }}
-                    />
-                  </View>
+                  {subscriptionPlan && selectPlandays && (
+                    <View style={styles.containerDrop}>
+                      <Text style={styles.modalTitle}>choose Count</Text>
+                      <Dropdown
+                        style={[
+                          styles.dropdownDrop,
+                          isFocus && { borderColor: "blue" },
+                        ]}
+                        placeholderStyle={styles.placeholderStyleDrop}
+                        selectedTextStyle={styles.selectedTextStyleDrop}
+                        inputSearchStyle={styles.inputSearchStyleDrop}
+                        iconStyle={styles.iconStyleDrop}
+                        data={this.state?.selectPlandays}
+                        // search
+                        maxHeight={200}
+                        labelField="name"
+                        valueField="value"
+                        placeholder={!isFocus ? "Count" : "..."}
+                        searchPlaceholder="Search..."
+                        //value={selected_Slot_value}
+                        // onFocus={() => setIsFocus(true)}
+                        // onBlur={() => setIsFocus(false)}
+                        onChange={(item, i) => {
+                          debugLog("item", item);
+                          //debugLog("i", i);
+                          // setValue(item.value);
+                          //this.slot_Master_against_category_Call(item);
+                          this.setState({
+                            selcecteddays: item?.value,
+                            planAmount: item?.amount,
+                            selectedAmount:item?.amount.value,
+                            isFocus: !isFocus,
+                          });
+                          debugLog("selectedAmount", selectedAmount);
+
+                          // setIsFocus(false);
+                        }}
+                        renderLeftIcon={() => (
+                          <AntDesign
+                            style={styles.iconDrop}
+                            color={isFocus ? "blue" : "black"}
+                            name="Safety"
+                            size={20}
+                          />
+                        )}
+                      />
+                    </View>
+                  )}
+
+                  {selectPlandays && (
+                    <View style={styles.containerDrop}>
+                      <Text style={styles.modalTitle}> Total Amount</Text>
+
+                      <TextInput
+                        style={[
+                          styles.dropdownDrop,
+                          isFocus && { borderColor: "blue" },
+                        ]}               
+                   
+                        value={planAmount.value}
+                        placeholder="Total Amount"
+                        editable={false}
+                        //keyboardType="numeric"
+                      />
+                    </View>
+                  )}
+
+                  {/* <View>
+                    <Text style={styles.modalTitle}>choose Plan Date</Text>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({ dateTimePickerVisible: true })
+                        }
+                      >
+                        <TextInput
+                          style={styles.dropdownDrop}
+                          label="Shift Starts At"
+                          placeholder={"01/01/2023"}
+                          editable={false}
+                          value={this.state.dateOrTimeValue.toDateString()}
+                        />
+                      </TouchableOpacity>
+
+                      {/* {this.state.dateTimePickerVisible && (
+                        <DateTimePicker
+                          mode={"datetime"} // THIS DOES NOT WORK ON ANDROID. IT DISPLAYS ONLY A DATE PICKER.
+                          display="default" // Android Only
+                          is24Hour={false} // Android Only
+                          value={dateOrTimeValue}
+                          onChange={(event, value) => {
+                            this.setState({
+                              dateOrTimeValue: value,
+                              selecteddate:dateOrTimeValue,
+                              dateTimePickerVisible:
+                                Platform.OS === "ios" ? true : false,
+                            });
+
+                            if (event.type === "set")
+                              console.log("value:", value);
+                          }}
+                        />
+                      )} 
+                    </View>
+                  </View> */}
                 </View>
 
-               
-                <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity
-                  onPress={this.handleSumaryPress}
-                  style={[styles.button,
-                    styles.modalButton,
-                    styles.closeButton,]}
-                >
-                  <Text style={styles.buttonText}>Submit</Text>
-                </TouchableOpacity>
+                <View style={{ flexDirection: "row", marginTop: 10 }}>
+                  <TouchableOpacity
+                    onPress={this.handleSumaryPress}
+                    style={[
+                      styles.button,
+                      styles.modalButton,
+                      styles.closeButton,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>PAY-{selectedAmount}</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={this.togglePaymentModal}
-                  style={[
-                    styles.button,
-                    styles.modalButton,
-                    styles.closeButton,
-                  ]}
-                >
-                  <Text style={styles.buttonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
+                  <TouchableOpacity
+                    onPress={this.togglePaymentModal}
+                    style={[
+                      styles.button,
+                      styles.modalButton,
+                      styles.closeButton,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>Close</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
           </Modal>
-
 
           <Modal
             visible={isSummaryModalVisible}
@@ -615,10 +667,7 @@ export class Subscription extends React.PureComponent {
                 Selected Restaurant: {this.state.selectedRestaurant}
               </Text>
               <Text style={styles.cardTextsum}>
-                Selected Plan Name: {this.state.subscriptionPlan}
-              </Text>
-              <Text style={styles.cardTextsum}>
-                Selected Menu: {this.state.selectedMenu}
+                Selected Plan Name: {this.state.selectedPlan}
               </Text>
               <Text style={styles.cardTextsum}>
                 Selected Days: {this.state.selcecteddays}
@@ -626,6 +675,9 @@ export class Subscription extends React.PureComponent {
               <Text style={styles.cardTextsum}>
                 Selected Amount: {this.state.selectedAmount}
               </Text>
+              {/* <Text style={styles.cardTextsum}>
+                Selected Date: {this.state.selecteddate}
+              </Text> */}
               {/* You can display more details about the selected option here */}
             </View>
             <Button
@@ -643,8 +695,7 @@ export class Subscription extends React.PureComponent {
             </TouchableOpacity>
           </Modal>
         </View>
-
-        </>
+      </>
     );
   }
 }
@@ -703,6 +754,47 @@ export default connect(
 )(Subscription);
 
 export const styles = StyleSheet.create({
+  //DropDown styles
+
+  containerDrop: {
+    backgroundColor: "white",
+    padding: 16,
+  },
+  dropdownDrop: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  iconDrop: {
+    marginRight: 5,
+  },
+  labelDrop: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyleDrop: {
+    fontSize: 16,
+  },
+  selectedTextStyleDrop: {
+    fontSize: 16,
+  },
+  iconStyleDrop: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyleDrop: {
+    height: 40,
+    fontSize: 16,
+  },
+
+  ///summary card
   containersum: {
     flex: 1,
     padding: 20,
@@ -766,6 +858,8 @@ export const styles = StyleSheet.create({
   },
   restaurantButton: {
     backgroundColor: "#28d439",
+    marginLeft:180,
+    width:90,
   },
   categoryButton: {
     backgroundColor: "#64B5F6",
@@ -782,8 +876,8 @@ export const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    marginBottom: 20,
-    marginLeft:20,
+    marginBottom: 10,
+    marginLeft: 15,
   },
   modalItem: {
     fontSize: 18,
