@@ -233,6 +233,7 @@ export class Subscription extends React.PureComponent {
     selectedPlan: "",
     isFocus: false,
     selected_user_subscription_list: [],
+    subscription_Master_list: [],
   };
 
   componentDidMount() {
@@ -252,7 +253,35 @@ export class Subscription extends React.PureComponent {
     this.setState({ selectedRestaurant: this.restname });
     this.get_save_subscription_Cart_fund();
     this.get_subscription_List();
+    this.subscription_Master_listapi();
   }
+
+  subscription_Master_listapi = async () => {
+    let generate_order_id = await axios.get(
+      `http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemePlanDetails?outletId=${this.props.navigation.state.params.restId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Basic" +
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTgzODkxNDIsImV4cCI6MTY5ODQ3NTU0Mn0.vDlcHQ4k3ks8b-6fVKTLBuVx8t5S-tVk0PBoCps8ouIAHQdOCP-zCtoylFCasrOmyMdYnG8qyfL-3B6QPYmOzQ",
+        },
+      }
+    );
+    if (generate_order_id.status === 200) {
+      debugLog(
+        "****************************** rest*****************************",
+        generate_order_id.data.data
+      );
+      this.setState({
+        subscription_Master_list: generate_order_id.data.data,
+      });
+      // this.startRazorPayment(generate_order_id.data?.id);
+    } else {
+      this.setState({ subscription_Master_list: [] });
+      // showValidationAlert("Unable to generate order id");
+    }
+  };
 
   get_subscription_List = async () => {
     let generate_order_id = await axios.get(
@@ -393,10 +422,8 @@ export class Subscription extends React.PureComponent {
       planAmount,
       showPicker,
       selectedDate,
-
       dateTimePickerVisible,
       dateOrTimeValue,
-
       selectedAmount,
       selectedMenu,
       selecteddate,
@@ -405,6 +432,7 @@ export class Subscription extends React.PureComponent {
       isFocus,
       selectedPlan,
       selected_user_subscription_list,
+      subscription_Master_list,
     } = this.state;
 
     return (
@@ -490,6 +518,36 @@ export class Subscription extends React.PureComponent {
 
                 {/* Add payment information and UI */}
                 <View>
+                  <ScrollView
+                    horizontal={false}
+                    showsVerticalScrollIndicator={true}
+                  >
+                    {subscription_Master_list &&
+                      subscription_Master_list.length > 0 &&
+                      subscription_Master_list.map((items) => {
+                        return (
+                          <Card
+                            containerStyle={{
+                              backgroundColor: "#85e6e4",
+                              height: 60,
+                              width: 280,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: "black",
+                                fontWeight: "400",
+                                textAlign: "center",
+                              }}
+                            >
+                              {items?.planName} - RS.{items?.amount}
+                            </Text>
+                          </Card>
+                        );
+                      })}
+                  </ScrollView>
+
                   <View style={styles.containerDrop}>
                     <Dropdown
                       style={[
@@ -539,54 +597,6 @@ export class Subscription extends React.PureComponent {
                       )}
                     />
                   </View>
-
-                  {/* {subscriptionPlan && (
-                    <View style={styles.containerDrop}>
-                      <Text style={styles.modalTitle}>choose your menu</Text>
-                      <Dropdown
-                        style={[
-                          styles.dropdownDrop,
-                          isFocus && { borderColor: "blue" },
-                        ]}
-                        placeholderStyle={styles.placeholderStyleDrop}
-                        selectedTextStyle={styles.selectedTextStyleDrop}
-                        inputSearchStyle={styles.inputSearchStyleDrop}
-                        iconStyle={styles.iconStyleDrop}
-                        data={this.state?.foodMenu}
-                        // search
-                        maxHeight={200}
-                        labelField="name"
-                        valueField="value"
-                        placeholder={!isFocus ? "Select Menu" : "..."}
-                        searchPlaceholder="Search..."
-                        //value={selected_Slot_value}
-                        // onFocus={() => setIsFocus(true)}
-                        // onBlur={() => setIsFocus(false)}
-                        onChange={(item, i) => {
-                          debugLog("item", item);
-                         // debugLog("i", i);
-                          // setValue(item.value);
-                          //this.slot_Master_against_category_Call(item);
-                          this.setState({
-                            selectedMenu: item?.value,
-                            selectPlandays: item?.selectPlandays,
-                            isFocus: !isFocus,
-                          });
-
-                          debugLog("selectedMenu()()()()+++()()()()()", selectedMenu);
-                          // setIsFocus(false);
-                        }}
-                        renderLeftIcon={() => (
-                          <AntDesign
-                            style={styles.iconDrop}
-                            color={isFocus ? "blue" : "black"}
-                            name="Safety"
-                            size={20}
-                          />
-                        )}
-                      />
-                    </View>
-                  )} */}
 
                   {subscriptionPlan && selectPlandays && (
                     <View style={styles.containerDrop}>
