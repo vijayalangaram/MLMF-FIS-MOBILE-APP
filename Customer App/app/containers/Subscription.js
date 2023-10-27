@@ -226,31 +226,60 @@ export class Subscription extends React.PureComponent {
     isSummaryModalVisible: false,
 
     selectedAmount: "",
-    selectedRestaurant:"",
+    selectedRestaurant: "",
     selectedMenu: {},
     // selecteddate: "",
     selcecteddays: "",
     selectedPlan: "",
     isFocus: false,
+    selected_user_subscription_list: [],
   };
 
   componentDidMount() {
-    debugLog(
-      "****************************** RAJA ****************************** save_order_payload"
-    );
-
-    debugLog(
-      "****************************** restID ****************************** save_order_payload",
-      this.restId
-    );
-    debugLog(
-      "****************************** restName ****************************** save_order_payload",
-      this.restname
-    );
-    this.setState({ selectedRestaurant:this.restname });
-
+    // debugLog(
+    //   "****************************** RAJA ****************************** save_order_payload"
+    // );
+    // debugLog(
+    //   "****************************** restID ****************************** save_order_payload",
+    //   this.props,
+    //   this.props.navigation.state.params
+    // );
+    // return false;
+    // debugLog(
+    //   "****************************** restName ****************************** save_order_payload",
+    //   this.restname
+    // );
+    this.setState({ selectedRestaurant: this.restname });
     this.get_save_subscription_Cart_fund();
+    this.get_subscription_List();
   }
+
+  get_subscription_List = async () => {
+    let generate_order_id = await axios.get(
+      `http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemeSubscriptionDetails?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Basic" +
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTgzODkxNDIsImV4cCI6MTY5ODQ3NTU0Mn0.vDlcHQ4k3ks8b-6fVKTLBuVx8t5S-tVk0PBoCps8ouIAHQdOCP-zCtoylFCasrOmyMdYnG8qyfL-3B6QPYmOzQ",
+        },
+      }
+    );
+    if (generate_order_id.status === 200) {
+      debugLog(
+        "****************************** rest*****************************",
+        generate_order_id.data.data
+      );
+      this.setState({
+        selected_user_subscription_list: generate_order_id.data.data,
+      });
+      // this.startRazorPayment(generate_order_id.data?.id);
+    } else {
+      this.setState({ selected_user_subscription_list: [] });
+      // showValidationAlert("Unable to generate order id");
+    }
+  };
 
   toggleRestaurantModal = () => {
     this.setState({
@@ -265,12 +294,12 @@ export class Subscription extends React.PureComponent {
   };
 
   togglePaymentModal = () => {
-    this.setState({ isPaymentModalVisible: !this.state.isPaymentModalVisible ,
-    selectedAmount:"",
-    selcecteddays:"",
-    selectedPlan:"",
+    this.setState({
+      isPaymentModalVisible: !this.state.isPaymentModalVisible,
+      selectedAmount: "",
+      selcecteddays: "",
+      selectedPlan: "",
     });
-
   };
 
   toggleSumaryModal = () => {
@@ -317,14 +346,13 @@ export class Subscription extends React.PureComponent {
   };
 
   handleSumaryPress = () => {
-    let { selectedRestaurant, selectedPlan, selcecteddays, selectedAmount, } =
+    let { selectedRestaurant, selectedPlan, selcecteddays, selectedAmount } =
       this.state;
     let localsubsobje = {
       selectedRestaurant,
       selectedPlan,
       selcecteddays,
       selectedAmount,
-      
     };
 
     debugLog("localsubsobje ********************", localsubsobje);
@@ -376,6 +404,7 @@ export class Subscription extends React.PureComponent {
       subscriptionPlan,
       isFocus,
       selectedPlan,
+      selected_user_subscription_list,
     } = this.state;
 
     return (
@@ -396,6 +425,43 @@ export class Subscription extends React.PureComponent {
             >
               <Text style={styles.buttonText}>+Add</Text>
             </TouchableOpacity>
+          </ScrollView>
+
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+            {selected_user_subscription_list &&
+              selected_user_subscription_list.length > 0 &&
+              selected_user_subscription_list.map((items) => {
+                return (
+                  <Card
+                    containerStyle={{
+                      backgroundColor: "#85e6e4",
+                      height: 100,
+                      width: 300,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: "black",
+                        fontWeight: "400",
+                        textAlign: "center",
+                      }}
+                    >
+                      {items?.planName} - RS.{items?.totalAmount}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: "black",
+                        fontWeight: "400",
+                        textAlign: "center",
+                      }}
+                    >
+                      END DATE - {items?.endDate}
+                    </Text>
+                  </Card>
+                );
+              })}
           </ScrollView>
 
           <ScrollView>
@@ -552,7 +618,7 @@ export class Subscription extends React.PureComponent {
                           this.setState({
                             selcecteddays: item?.value,
                             planAmount: item?.amount,
-                            selectedAmount:item?.amount.value,
+                            selectedAmount: item?.amount.value,
                             isFocus: !isFocus,
                           });
                           debugLog("selectedAmount", selectedAmount);
@@ -579,8 +645,7 @@ export class Subscription extends React.PureComponent {
                         style={[
                           styles.dropdownDrop,
                           isFocus && { borderColor: "blue" },
-                        ]}               
-                   
+                        ]}
                         value={planAmount.value}
                         placeholder="Total Amount"
                         editable={false}
@@ -858,8 +923,8 @@ export const styles = StyleSheet.create({
   },
   restaurantButton: {
     backgroundColor: "#28d439",
-    marginLeft:180,
-    width:90,
+    marginLeft: 180,
+    width: 90,
   },
   categoryButton: {
     backgroundColor: "#64B5F6",
