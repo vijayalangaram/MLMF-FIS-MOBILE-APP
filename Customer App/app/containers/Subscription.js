@@ -264,7 +264,7 @@ export class Subscription extends React.PureComponent {
           "Content-Type": "application/json",
           Authorization:
             "Basic" +
-            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTgzODkxNDIsImV4cCI6MTY5ODQ3NTU0Mn0.vDlcHQ4k3ks8b-6fVKTLBuVx8t5S-tVk0PBoCps8ouIAHQdOCP-zCtoylFCasrOmyMdYnG8qyfL-3B6QPYmOzQ",
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg0ODMxNzYsImV4cCI6MTY5ODU2OTU3Nn0.ciUQO7o9RCX22xHfQ5TdyC4sugaZMSn6veH0f0wuXb2AN2kbcUMNxzN-RmsXFqSCovXPMlm53n1NAdWSVm3s3w",
         },
       }
     );
@@ -291,7 +291,7 @@ export class Subscription extends React.PureComponent {
           "Content-Type": "application/json",
           Authorization:
             "Basic" +
-            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTgzODkxNDIsImV4cCI6MTY5ODQ3NTU0Mn0.vDlcHQ4k3ks8b-6fVKTLBuVx8t5S-tVk0PBoCps8ouIAHQdOCP-zCtoylFCasrOmyMdYnG8qyfL-3B6QPYmOzQ",
+            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg0ODMxNzYsImV4cCI6MTY5ODU2OTU3Nn0.ciUQO7o9RCX22xHfQ5TdyC4sugaZMSn6veH0f0wuXb2AN2kbcUMNxzN-RmsXFqSCovXPMlm53n1NAdWSVm3s3w",
         },
       }
     );
@@ -501,7 +501,6 @@ export class Subscription extends React.PureComponent {
                 <Text style={styles.buttonText}>Proceed to Payment</Text>
               </TouchableOpacity>
             )}
-
             {/* Restaurant Modal */}
           </ScrollView>
 
@@ -514,41 +513,41 @@ export class Subscription extends React.PureComponent {
           >
             <ScrollView>
               <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>New Subscription</Text>
+                <Text style={styles.modalTitle}>Select Subscription Plan</Text>
 
                 {/* Add payment information and UI */}
                 <View>
-                  <ScrollView
+                  {/* <ScrollView
                     horizontal={false}
                     showsVerticalScrollIndicator={true}
-                  >
-                    {subscription_Master_list &&
-                      subscription_Master_list.length > 0 &&
-                      subscription_Master_list.map((items) => {
-                        return (
-                          <Card
-                            containerStyle={{
-                              backgroundColor: "#85e6e4",
-                              height: 60,
-                              width: 280,
+                  > */}
+                  {subscription_Master_list &&
+                    subscription_Master_list.length > 0 &&
+                    subscription_Master_list.map((items) => {
+                      return (
+                        <Card
+                          containerStyle={{
+                            backgroundColor: "#85e6e4",
+                            height: 60,
+                            width: 280,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: "black",
+                              fontWeight: "400",
+                              textAlign: "center",
                             }}
                           >
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                color: "black",
-                                fontWeight: "400",
-                                textAlign: "center",
-                              }}
-                            >
-                              {items?.planName} - RS.{items?.amount}
-                            </Text>
-                          </Card>
-                        );
-                      })}
-                  </ScrollView>
+                            {items?.planName} - RS.{items?.amount}
+                          </Text>
+                        </Card>
+                      );
+                    })}
+                  {/* </ScrollView> */}
 
-                  <View style={styles.containerDrop}>
+                  {/* <View style={styles.containerDrop}>
                     <Dropdown
                       style={[
                         styles.dropdownDrop,
@@ -596,12 +595,11 @@ export class Subscription extends React.PureComponent {
                         />
                       )}
                     />
-                  </View>
-
+                  </View> */}
                   {subscriptionPlan && selectPlandays && (
                     <View style={styles.containerDrop}>
-                      <Text style={styles.modalTitle}>choose Count</Text>
-                      <Dropdown
+                      <Text style={styles.modalTitle}>Select Days</Text>
+                      {/* <Dropdown
                         style={[
                           styles.dropdownDrop,
                           isFocus && { borderColor: "blue" },
@@ -621,8 +619,6 @@ export class Subscription extends React.PureComponent {
                         // onFocus={() => setIsFocus(true)}
                         // onBlur={() => setIsFocus(false)}
                         onChange={(item, i) => {
-                          debugLog("item", item);
-                          //debugLog("i", i);
                           // setValue(item.value);
                           //this.slot_Master_against_category_Call(item);
                           this.setState({
@@ -631,9 +627,6 @@ export class Subscription extends React.PureComponent {
                             selectedAmount: item?.amount.value,
                             isFocus: !isFocus,
                           });
-                          debugLog("selectedAmount", selectedAmount);
-
-                          // setIsFocus(false);
                         }}
                         renderLeftIcon={() => (
                           <AntDesign
@@ -643,11 +636,24 @@ export class Subscription extends React.PureComponent {
                             size={20}
                           />
                         )}
+                      /> */}
+                      <EDThemeButton
+                        label="5"
+                        style={{
+                          width: "10%",
+                          backgroundColor: "green",
+                          marginLeft: 15,
+                        }}
+                        textStyle={{
+                          fontSize: getProportionalFontSize(14),
+                          paddingLeft: 7,
+                          paddingRight: 7,
+                        }}
                       />
                     </View>
                   )}
 
-                  {selectPlandays && (
+                  {/* {selectPlandays && (
                     <View style={styles.containerDrop}>
                       <Text style={styles.modalTitle}> Total Amount</Text>
 
@@ -662,7 +668,7 @@ export class Subscription extends React.PureComponent {
                         //keyboardType="numeric"
                       />
                     </View>
-                  )}
+                  )} */}
 
                   {/* <View>
                     <Text style={styles.modalTitle}>choose Plan Date</Text>
