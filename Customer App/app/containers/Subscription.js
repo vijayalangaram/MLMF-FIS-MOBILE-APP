@@ -173,19 +173,30 @@ export class Subscription extends React.PureComponent {
     selectMenuOption: "",
 
     foodMenu: [],
-    selectPlandays: [],
+    // selectPlandays: [
+    //   { value: "5", name: "5", }, { value: "10", name: "10",}, { value: "15", name: "15"},
+    // ],
     planAmount: {},
 
-    subscriptionPlan: [
-      {
-        value: "Breakfast",
-        name: "Breakfast",
-        planId: "999",
-        selectPlandays: [
-          { value: "5", name: "5", amount: { value: "300", name: "300" } },
-        ],
-      },
+    selectedCards: new Set(),
+    // selectPlandays: [
+    //   { id: 1, title: '5' , },
+    //   { id: 2, title: '10' },
+    //   { id: 3, title: '15' },
+    //   { id: 4, title: '20' },
+    //   // { id: 5, title: 'Card 5' },
+    //   // { id: 6, title: 'Card 6' },
+    //   // { id: 7, title: 'Card 7' },
+    //   // Add more cards as needed
+    // ],
+
+    selectPlandays: [
+      { id: 1, text: '5', selected: false },
+      { id: 2, text: '10', selected: false },
+      { id: 3, text: '15', selected: false },
+      { id: 4, text: '20', selected: false },
     ],
+
 
     showPicker: false,
     selectedDate: new Date(),
@@ -234,6 +245,7 @@ export class Subscription extends React.PureComponent {
     isFocus: false,
     selected_user_subscription_list: [],
     subscription_Master_list: [],
+    plan_Master:{},
   };
 
   componentDidMount() {
@@ -262,10 +274,10 @@ export class Subscription extends React.PureComponent {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Basic" +
-            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg0ODMxNzYsImV4cCI6MTY5ODU2OTU3Nn0.ciUQO7o9RCX22xHfQ5TdyC4sugaZMSn6veH0f0wuXb2AN2kbcUMNxzN-RmsXFqSCovXPMlm53n1NAdWSVm3s3w",
-        },
+        //   Authorization:
+        //     "Basic" +
+        //     "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg2Mzk5OTMsImV4cCI6MTY5ODcyNjM5M30.zzonG2TpfIF-ARvnViVrJhkKjSj3EBaO6HWHKOVqWdNYlynVg-qDI-Cfw9QHCX72ts74ZkcZRLcQq6hBmqgp6g",
+         },
       }
     );
     if (generate_order_id.status === 200) {
@@ -275,6 +287,17 @@ export class Subscription extends React.PureComponent {
       );
       this.setState({
         subscription_Master_list: generate_order_id.data.data,
+
+      });
+      let planlist = generate_order_id.data.data && generate_order_id.data.data.map(({amount, planId, planName})=>({
+        name:`${planName} - ${amount}`,
+        value:`${planId}`,
+      })
+      )
+
+      this.setState({
+        plan_Master:planlist,
+
       });
       // this.startRazorPayment(generate_order_id.data?.id);
     } else {
@@ -289,9 +312,9 @@ export class Subscription extends React.PureComponent {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Basic" +
-            "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg0ODMxNzYsImV4cCI6MTY5ODU2OTU3Nn0.ciUQO7o9RCX22xHfQ5TdyC4sugaZMSn6veH0f0wuXb2AN2kbcUMNxzN-RmsXFqSCovXPMlm53n1NAdWSVm3s3w",
+          // Authorization:
+          //   "Basic" +
+          //   "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBjbHNzbGFicy5jb20iLCJpYXQiOjE2OTg2Mzk5OTMsImV4cCI6MTY5ODcyNjM5M30.zzonG2TpfIF-ARvnViVrJhkKjSj3EBaO6HWHKOVqWdNYlynVg-qDI-Cfw9QHCX72ts74ZkcZRLcQq6hBmqgp6g",
         },
       }
     );
@@ -405,6 +428,83 @@ export class Subscription extends React.PureComponent {
     });
   };
 
+
+  //flatlist 
+
+  // toggleCardSelection = (card) => {
+  //   const { selectedCards } = this.state;
+  //   const updatedSelectedCards = new Set(selectedCards);
+    
+  //   if (updatedSelectedCards.has(card.id)) {
+  //     updatedSelectedCards.delete(card.id);
+  //   } else {
+  //     updatedSelectedCards.add(card.id);
+  //   }
+
+  //   this.setState({ selectedCards: updatedSelectedCards });
+  //   debugLog("successget_save_subscription_Cart_fund", selectedCards);
+  // };
+
+  toggleItemSelection = (id) => {
+    const newData = this.state.selectPlandays.map((item,i) => {
+      debugLog("toggle selected ======== === === ", item);
+      if (item.id === id) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+
+    let filterflagtrue =
+    this.state.selectPlandays &&
+    this.state.selectPlandays.filter((item, i) => {
+      if (item?.selected == true) {
+        return item;
+      }
+    });
+    debugLog("filterflagtrue filterflagtrue ", filterflagtrue);
+      this.setState({ selectPlandays: newData });
+    //  debugLog("toggle selected ======== === === ", selectPlandays);
+    
+  };
+
+//flatlist 
+
+  // renderCard = ({ item }) => {
+  //   return (
+  //     <TouchableOpacity
+  //       onPress={() => this.toggleCardSelection(item)}
+  //       style={[
+  //         styles.cardFlat,
+  //         {
+  //           backgroundColor: this.state.selectedCards.has(item.id) ? 'blue' : 'white',
+  //         },
+  //       ]}
+  //     >
+  //       <Text style={{ color: this.state.selectedCards.has(item.id) ? 'white' : 'black' }}>
+  //         {item.title}
+  //       </Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
+  
+  renderItem = ({ item }) => {
+    debugLog("seleced id+++++====++++++items())))(())()(()()()))", item);
+
+    return (
+      <TouchableOpacity
+        onPress={() => this.toggleItemSelection(item.id)}
+        style={[
+          styles.cardFlat,
+          { backgroundColor: item.selected ? 'blue' : 'white' },
+        ]}
+      >
+        <Text style={{ color: item.selected ? 'white' : 'black' }}>{item.text}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   // RENDER METHOD
   render() {
     let {
@@ -433,6 +533,8 @@ export class Subscription extends React.PureComponent {
       selectedPlan,
       selected_user_subscription_list,
       subscription_Master_list,
+      plan_Master,
+
     } = this.state;
 
     return (
@@ -516,12 +618,12 @@ export class Subscription extends React.PureComponent {
                 <Text style={styles.modalTitle}>Select Subscription Plan</Text>
 
                 {/* Add payment information and UI */}
-                <View>
+                
                   {/* <ScrollView
                     horizontal={false}
                     showsVerticalScrollIndicator={true}
-                  > */}
-                  {subscription_Master_list &&
+                  > 
+                   {subscription_Master_list &&
                     subscription_Master_list.length > 0 &&
                     subscription_Master_list.map((items) => {
                       return (
@@ -544,10 +646,10 @@ export class Subscription extends React.PureComponent {
                           </Text>
                         </Card>
                       );
-                    })}
+                    })} */}
                   {/* </ScrollView> */}
 
-                  {/* <View style={styles.containerDrop}>
+                  <View style={styles.containerDrop}>
                     <Dropdown
                       style={[
                         styles.dropdownDrop,
@@ -557,7 +659,7 @@ export class Subscription extends React.PureComponent {
                       selectedTextStyle={styles.selectedTextStyleDrop}
                       inputSearchStyle={styles.inputSearchStyleDrop}
                       iconStyle={styles.iconStyleDrop}
-                      data={this.state?.subscriptionPlan}
+                      data={plan_Master}
                       // search
                       maxHeight={200}
                       labelField="name"
@@ -574,7 +676,6 @@ export class Subscription extends React.PureComponent {
                         //this.slot_Master_against_category_Call(item);
                         this.setState({
                           selectedPlan: item?.value,
-                          selectPlandays: item?.selectPlandays,
                           isFocus: !isFocus,
                         });
 
@@ -595,63 +696,43 @@ export class Subscription extends React.PureComponent {
                         />
                       )}
                     />
-                  </View> */}
-                  {subscriptionPlan && selectPlandays && (
-                    <View style={styles.containerDrop}>
-                      <Text style={styles.modalTitle}>Select Days</Text>
-                      {/* <Dropdown
-                        style={[
-                          styles.dropdownDrop,
-                          isFocus && { borderColor: "blue" },
-                        ]}
-                        placeholderStyle={styles.placeholderStyleDrop}
-                        selectedTextStyle={styles.selectedTextStyleDrop}
-                        inputSearchStyle={styles.inputSearchStyleDrop}
-                        iconStyle={styles.iconStyleDrop}
-                        data={this.state?.selectPlandays}
-                        // search
-                        maxHeight={200}
-                        labelField="name"
-                        valueField="value"
-                        placeholder={!isFocus ? "Count" : "..."}
-                        searchPlaceholder="Search..."
-                        //value={selected_Slot_value}
-                        // onFocus={() => setIsFocus(true)}
-                        // onBlur={() => setIsFocus(false)}
-                        onChange={(item, i) => {
-                          // setValue(item.value);
-                          //this.slot_Master_against_category_Call(item);
-                          this.setState({
-                            selcecteddays: item?.value,
-                            planAmount: item?.amount,
-                            selectedAmount: item?.amount.value,
-                            isFocus: !isFocus,
-                          });
-                        }}
-                        renderLeftIcon={() => (
-                          <AntDesign
-                            style={styles.iconDrop}
-                            color={isFocus ? "blue" : "black"}
-                            name="Safety"
-                            size={20}
-                          />
-                        )}
-                      /> */}
-                      <EDThemeButton
-                        label="5"
-                        style={{
-                          width: "10%",
-                          backgroundColor: "green",
-                          marginLeft: 15,
-                        }}
-                        textStyle={{
-                          fontSize: getProportionalFontSize(14),
-                          paddingLeft: 7,
-                          paddingRight: 7,
-                        }}
-                      />
-                    </View>
-                  )}
+                  </View>
+
+                  <View style={styles.containerFlat}>
+                    <FlatList
+                      data={this.state.selectPlandays}
+                      renderItem={this.renderItem}
+                      keyExtractor={(item) => item.id.toString()}
+                      horizontal={true}
+                    />
+                  </View>
+
+                  {/* {selectPlandays.map((items) => {
+                    return (
+                      <View style={styles.containerDrop}>
+                       
+                          <Card
+                            containerStyle={{
+                              backgroundColor: "#85e6e4",
+                              height: 60,
+                              width: 100,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: "black",
+                                fontWeight: "400",
+                                textAlign: "center",
+                              }}
+                            >
+                              {items?.name}
+                            </Text>
+                          </Card>
+                        
+                      </View>
+                    );
+                  })} */}
 
                   {/* {selectPlandays && (
                     <View style={styles.containerDrop}>
@@ -708,7 +789,7 @@ export class Subscription extends React.PureComponent {
                       )} 
                     </View>
                   </View> */}
-                </View>
+                
 
                 <View style={{ flexDirection: "row", marginTop: 10 }}>
                   <TouchableOpacity
@@ -835,6 +916,19 @@ export default connect(
 )(Subscription);
 
 export const styles = StyleSheet.create({
+//Flatlist
+containerFlat: {
+  flex: 1,
+  padding: 16,
+},
+cardFlat: {
+  margin: 10,
+  padding: 16,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: 'blue',
+},
+
   //DropDown styles
 
   containerDrop: {
@@ -842,11 +936,13 @@ export const styles = StyleSheet.create({
     padding: 16,
   },
   dropdownDrop: {
-    height: 50,
+    height: 80,
+    width:160,
     borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 5,
+    
   },
   iconDrop: {
     marginRight: 5,
