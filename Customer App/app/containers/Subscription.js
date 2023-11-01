@@ -122,6 +122,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { style } from "./AboutStoreContainer";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { FloatingAction } from "react-native-floating-action";
 
 export class Subscription extends React.PureComponent {
   //#region LIFE CYCLE METHODS
@@ -238,6 +240,7 @@ export class Subscription extends React.PureComponent {
     isSummaryModalVisible: false,
 
     selectedAmount: "",
+    selectedPlanname: "",
     selectedRestaurant: "",
     selectedMenu: {},
     selectedboolean: false,
@@ -247,9 +250,8 @@ export class Subscription extends React.PureComponent {
     isFocus: false,
     selected_user_subscription_list: [],
     subscription_Master_list: [],
-    plan_Master:{},
-    selectedplanname:"",
-
+    plan_Master: {},
+    selectedplanname: "",
 
     isPaymentLoading: false,
     razorpayDetails: [],
@@ -839,16 +841,10 @@ export class Subscription extends React.PureComponent {
       "****************************** save_Subscription_List_Api ******************************  data 3245345435",
       data
     );
-   
-    let plan = this.state.plan_Master.name.split("-");
-    let planname = plan[0];
-    let currentdate =
-      new Date().getFullYear +
-      "-" +
-      new Date().getMonth +
-      1 +
-      "-" +
-      new Date().getDate;
+
+    // let plan = this.state.plan_Master.name.split("-");
+    // let planname = plan[0];
+    let date = moment(new Date()).format("YYYY/MM/DD");
 
     let subscripdetail = {
       outletCode: this.restId,
@@ -858,15 +854,20 @@ export class Subscription extends React.PureComponent {
       totalAmount: this.state.planAmount,
       deliveryType: "SelfPickup",
       actualCount: this.state.selcecteddays,
-      planName: planname,
-      paymentId: "",
-      paymentDate: currentdate,
+      planName: this.state.selectedPlanname,
+      paymentId: data.razorpay_payment_id,
+      paymentDate: date,
       paymentMode: "UPI",
-      razorpayOrderId: data.razorpayOrderId,
-      razorpayPaymentId: data.razorpayPaymentId,
-      razorpaySignature: data.razorpaySignature,
+      razorpayOrderId: data.razorpay_order_id,
+      razorpayPaymentId: data.razorpay_payment_id,
+      razorpaySignature: data.razorpay_signature,
       planAmount: this.state.selectedAmount,
     };
+
+    debugLog(
+      "****************************** Vijay ****************************** subscripdetail ",
+      subscripdetail
+    );
 
     //return false
     let generate_order_id = await axios.post(
@@ -875,7 +876,6 @@ export class Subscription extends React.PureComponent {
       {
         headers: {
           "Content-Type": "application/json",
-          // Authorization: "Basic " + base64.encode(username1 + ":" + password1),
         },
       }
     );
@@ -888,6 +888,7 @@ export class Subscription extends React.PureComponent {
       this.togglePaymentModal();
     } else {
       showValidationAlert("Unable to generate order id");
+      this.togglePaymentModal();
     }
   };
 
@@ -907,6 +908,7 @@ export class Subscription extends React.PureComponent {
     this.setState({
       isPaymentModalVisible: !this.state.isPaymentModalVisible,
       selectedAmount: "",
+      selectedPlanname: "",
       planAmount: "",
       selectedPlan: [],
     });
@@ -956,13 +958,19 @@ export class Subscription extends React.PureComponent {
   };
 
   handleSumaryPress = () => {
-    let { selectedRestaurant, selectedPlan, selcecteddays, selectedAmount } =
-      this.state;
+    let {
+      selectedRestaurant,
+      selectedPlan,
+      selcecteddays,
+      selectedAmount,
+      selectedPlanname,
+    } = this.state;
     let localsubsobje = {
       selectedRestaurant,
       selectedPlan,
       selcecteddays,
       selectedAmount,
+      selectedPlanname,
     };
 
     debugLog("localsubsobje ********************", localsubsobje);
@@ -1089,6 +1097,7 @@ export class Subscription extends React.PureComponent {
       dateTimePickerVisible,
       dateOrTimeValue,
       selectedAmount,
+      selectedPlanname,
       selectedMenu,
       selecteddate,
       selcecteddays,
@@ -1103,86 +1112,83 @@ export class Subscription extends React.PureComponent {
     return (
       <>
         <View style={styles.container}>
-          <Text style={styles.title}>
-            {selectedRestaurant
-              ? `${selectedRestaurant}`
-              : "Restaurant Order Flow"}
-          </Text>
-
           <ScrollView>
-            <TouchableOpacity
-              onPress={() => {
-                this.add_subscription_fun();
-              }}
-              style={[styles.button, styles.restaurantButton]}
+            <View
+               style={{ flexDirection: "row", marginTop: 20, marginBottom: 30, alignItems:"center" }}
             >
-              <Text style={styles.buttonText}>+Add</Text>
-            </TouchableOpacity>
-          </ScrollView>
+              <Text style={styles.title}>
+                {selectedRestaurant
+                  ? `${selectedRestaurant.slice(0, 12)}`
+                  : "Restaurant Order Flow"}
+              </Text>
+            </View>
 
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
-            {selected_user_subscription_list &&
-              selected_user_subscription_list.length > 0 &&
-              selected_user_subscription_list.map((items) => {
-                return (
-                  <Card
-                    containerStyle={{
-                      backgroundColor: "#85e6e4",
-                      height: 100,
-                      width: 300,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: "black",
-                        fontWeight: "400",
-                        textAlign: "center",
+            <ScrollView >
+              {selected_user_subscription_list &&
+                selected_user_subscription_list.length > 0 &&
+                selected_user_subscription_list.map((items) => {
+                  return (
+                    <Card
+                      containerStyle={{
+                        backgroundColor: "#9f1982",
+                        height: 100,
+                        width: 300,
+                        borderRadius: 50,
                       }}
                     >
-                      {items?.planName} - RS.{items?.totalAmount}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: "black",
-                        fontWeight: "400",
-                        textAlign: "center",
-                      }}
-                    >
-                      END DATE - {items?.endDate}
-                    </Text>
-                  </Card>
-                );
-              })}
-          </ScrollView>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: "white",
+                          fontWeight: "400",
+                          textAlign: "center",
+                        }}
+                      >
+                        {items?.planName} - RS.{items?.totalAmount}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: "white",
+                          fontWeight: "400",
+                          textAlign: "center",
+                        }}
+                      >
+                        END DATE - {items?.endDate}
+                      </Text>
+                    </Card>
+                  );
+                })}
+            </ScrollView>
 
-          <ScrollView>
-            {selectedCategory && (
-              <TouchableOpacity
-                onPress={this.togglePaymentModal}
-                style={[styles.button, styles.paymentButton]}
-              >
-                <Text style={styles.buttonText}>Proceed to Payment</Text>
-              </TouchableOpacity>
-            )}
-            {/* Restaurant Modal */}
-          </ScrollView>
-
-          {/* Payment Modal */}
-          <Modal
-            visible={isPaymentModalVisible}
-            animationType="slide"
-            transparent={false}
-            onRequestClose={this.togglePaymentModal}
-          >
             <ScrollView>
-              <View style={styles.modalContainer}>
-                <Text style={styles.modalTitle}>Select Subscription Plan</Text>
+              {selectedCategory && (
+                <TouchableOpacity
+                  onPress={this.togglePaymentModal}
+                  style={[styles.button, styles.paymentButton]}
+                >
+                  <Text style={styles.buttonText}>Proceed to Payment</Text>
+                </TouchableOpacity>
+              )}
+              {/* Restaurant Modal */}
+            </ScrollView>
 
-                {/* Add payment information and UI */}
+            {/* Payment Modal */}
+            <Modal
+              visible={isPaymentModalVisible}
+              animationType="slide"
+              transparent={false}
+              onRequestClose={this.togglePaymentModal}
+            >
+              <ScrollView>
+                <View style={styles.modalContainer}>
+                  <Text style={styles.modalTitle}>
+                    Select Subscription Plan
+                  </Text>
 
-                {/* <ScrollView
+                  {/* Add payment information and UI */}
+
+                  {/* <ScrollView
                     horizontal={false}
                     showsVerticalScrollIndicator={true}
                   > 
@@ -1210,75 +1216,77 @@ export class Subscription extends React.PureComponent {
                         </Card>
                       );
                     })} */}
-                {/* </ScrollView> */}
+                  {/* </ScrollView> */}
 
-                <View style={styles.containerDrop}>
-                  <Dropdown
-                    style={[
-                      styles.dropdownDrop,
-                      isFocus && { borderColor: "blue" },
-                    ]}
-                    placeholderStyle={styles.placeholderStyleDrop}
-                    selectedTextStyle={styles.selectedTextStyleDrop}
-                    inputSearchStyle={styles.inputSearchStyleDrop}
-                    iconStyle={styles.iconStyleDrop}
-                    data={plan_Master}
-                    // search
-                    maxHeight={200}
-                    labelField="name"
-                    valueField="value"
-                    placeholder={!isFocus ? "Select Plan" : "..."}
-                    searchPlaceholder="Search..."
-                    //value={selected_Slot_value}
-                    // onFocus={() => setIsFocus(true)}
-                    // onBlur={() => setIsFocus(false)}
-                    onChange={(item, i) => {
-                      debugLog("item", item);
-                      //debugLog("i", i);
-                      // setValue(item.value);
-                      //this.slot_Master_against_category_Call(item);
-                      this.setState({
-                        selectedPlan: item?.value,
-                        
-                        isFocus: !isFocus,
-                      });
-                      let val = item.name.split("-");
-                      let amount = val[1];
+                  <View style={styles.containerDrop}>
+                    <Dropdown
+                      style={[
+                        styles.dropdownDrop,
+                        isFocus && { borderColor: "blue" },
+                      ]}
+                      placeholderStyle={styles.placeholderStyleDrop}
+                      selectedTextStyle={styles.selectedTextStyleDrop}
+                      inputSearchStyle={styles.inputSearchStyleDrop}
+                      iconStyle={styles.iconStyleDrop}
+                      data={plan_Master}
+                      // search
+                      maxHeight={200}
+                      labelField="name"
+                      valueField="value"
+                      placeholder={!isFocus ? "Select Plan" : "..."}
+                      searchPlaceholder="Search..."
+                      //value={selected_Slot_value}
+                      // onFocus={() => setIsFocus(true)}
+                      // onBlur={() => setIsFocus(false)}
+                      onChange={(item, i) => {
+                        debugLog("item", item);
+                        //debugLog("i", i);
+                        // setValue(item.value);
+                        //this.slot_Master_against_category_Call(item);
+                        this.setState({
+                          selectedPlan: item?.value,
 
-                      this.setState({
-                        selectedAmount: amount,
-                      });
-                      debugLog(
-                        "amount amount amount amount %%%%%%%%%@@@@!!!!!!",
-                        amount
-                      );
-                      // debugLog("foodMenu%%%%%%%%%@@@@!!!!!!", foodMenu);
+                          isFocus: !isFocus,
+                        });
+                        let val = item.name.split("-");
+                        let name = val[0];
+                        let amount = val[1];
 
-                      // setIsFocus(false);
-                    }}
-                    renderLeftIcon={() => (
-                      <AntDesign
-                        style={styles.iconDrop}
-                        color={isFocus ? "blue" : "black"}
-                        name="Safety"
-                        size={20}
-                      />
-                    )}
-                  />
-                </View>
-                <Text style={styles.modalTitle}>
-                  Select Subscription Count{" "}
-                </Text>
-                <View style={styles.containerFlat}>
-                  <FlatList
-                    data={this.state.selectPlandays}
-                    renderItem={this.renderItem}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal={true}
-                  />
-                </View>
+                        this.setState({
+                          selectedAmount: amount,
+                          selectedPlanname: name,
+                        });
+                        debugLog(
+                          "amount amount amount amount %%%%%%%%%@@@@!!!!!!",
+                          amount
+                        );
+                        debugLog("foodMenu%%%%%%%%%@@@@!!!!!!", name);
 
-                {/* {selectPlandays.map((items) => {
+                        // setIsFocus(false);
+                      }}
+                      renderLeftIcon={() => (
+                        <AntDesign
+                          style={styles.iconDrop}
+                          color={isFocus ? "blue" : "black"}
+                          name="Safety"
+                          size={20}
+                        />
+                      )}
+                    />
+                  </View>
+                  <Text style={styles.modalTitle}>
+                    Select Subscription Count{" "}
+                  </Text>
+                  <View style={styles.containerFlat}>
+                    <FlatList
+                      data={this.state.selectPlandays}
+                      renderItem={this.renderItem}
+                      keyExtractor={(item) => item.id.toString()}
+                      horizontal={true}
+                    />
+                  </View>
+
+                  {/* {selectPlandays.map((items) => {
                     return (
                       <View style={styles.containerDrop}>
                        
@@ -1305,7 +1313,7 @@ export class Subscription extends React.PureComponent {
                     );
                   })} */}
 
-                {/* {selectPlandays && (
+                  {/* {selectPlandays && (
                     <View style={styles.containerDrop}>
                       <Text style={styles.modalTitle}> Total Amount</Text>
 
@@ -1322,7 +1330,7 @@ export class Subscription extends React.PureComponent {
                     </View>
                   )} */}
 
-                {/* <View>
+                  {/* <View>
                     <Text style={styles.modalTitle}>choose Plan Date</Text>
                     <View>
                       <TouchableOpacity
@@ -1361,76 +1369,98 @@ export class Subscription extends React.PureComponent {
                     </View>
                   </View> */}
 
-                <View style={{ flexDirection: "row", marginTop: 10 }}>
-                  <TouchableOpacity
-                    onPress={this.startRazorPayment_Get_Order_ID}
-                    style={[
-                      styles.button,
-                      styles.modalButton,
-                      styles.payButton,
-                      // styles.closeButton={backgroundColor:"#73ff00"},
-                    ]}
-                    disabled={planAmount === ""}
-                  >
-                    <Text styles={{ color: "black" }}>PAY-{planAmount}</Text>
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: "row", marginTop: 10 }}>
+                    <TouchableOpacity
+                      onPress={this.startRazorPayment_Get_Order_ID}
+                      style={[
+                        styles.button,
+                        styles.modalButton,
+                        styles.payButton,
+                        // styles.closeButton={backgroundColor:"#73ff00"},
+                      ]}
+                      disabled={planAmount === ""}
+                    >
+                      <Text styles={{ color: "black" }}>PAY-{planAmount}</Text>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity
-                    //onPress={this.togglePaymentModal}
-                    onPress={() => {
-                      this.togglePaymentModal();
-                    }}
-                    style={[
-                      styles.button,
-                      styles.modalButton,
-                      styles.closeButton,
-                    ]}
-                  >
-                    <Text style={styles.buttonText}>Close</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      //onPress={this.togglePaymentModal}
+                      onPress={() => {
+                        this.togglePaymentModal();
+                      }}
+                      style={[
+                        styles.button,
+                        styles.modalButton,
+                        styles.closeButton,
+                      ]}
+                    >
+                      <Text style={styles.buttonText}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            </ScrollView>
-          </Modal>
+              </ScrollView>
+            </Modal>
 
-          <Modal
-            visible={isSummaryModalVisible}
-            animationType="slide"
-            transparent={false}
-            onRequestClose={this.toggleSumaryModal}
-          >
-            <View style={styles.summaryCardsum}>
-              <Text style={styles.cardTextsum}>
-                Selected Restaurant: {this.state.selectedRestaurant}
-              </Text>
-              <Text style={styles.cardTextsum}>
-                Selected Plan Name: {this.state.selectedPlan}
-              </Text>
-              <Text style={styles.cardTextsum}>
-                Selected Days: {this.state.selcecteddays}
-              </Text>
-              <Text style={styles.cardTextsum}>
-                Selected Amount: {this.state.selectedAmount}
-              </Text>
-              {/* <Text style={styles.cardTextsum}>
+            <Modal
+              visible={isSummaryModalVisible}
+              animationType="slide"
+              transparent={false}
+              onRequestClose={this.toggleSumaryModal}
+            >
+              <View style={styles.summaryCardsum}>
+                <Text style={styles.cardTextsum}>
+                  Selected Restaurant: {this.state.selectedRestaurant}
+                </Text>
+                <Text style={styles.cardTextsum}>
+                  Selected Plan Name: {this.state.selectedPlan}
+                </Text>
+                <Text style={styles.cardTextsum}>
+                  Selected Days: {this.state.selcecteddays}
+                </Text>
+                <Text style={styles.cardTextsum}>
+                  Selected Amount: {this.state.selectedAmount}
+                </Text>
+                {/* <Text style={styles.cardTextsum}>
                 Selected Date: {this.state.selecteddate}
               </Text> */}
-              {/* You can display more details about the selected option here */}
-            </View>
-            <Button
-              title="Pay Now"
-              onPress={() => {
-                // Handle payment logic here
-              }}
-            />
+                {/* You can display more details about the selected option here */}
+              </View>
 
-            <TouchableOpacity
-              onPress={this.toggleSumaryModal}
-              style={[styles.button, styles.modalButton, styles.closeButton]}
-            >
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
-          </Modal>
+              <Button
+                title="Pay Now"
+                onPress={() => {
+                  // Handle payment logic here
+                }}
+              />
+
+              <TouchableOpacity
+                onPress={this.toggleSumaryModal}
+                style={[styles.button, styles.modalButton, styles.closeButton]}
+              >
+                <Text style={styles.buttonText}>Close</Text>
+              </TouchableOpacity>
+            </Modal>
+          </ScrollView>
+        </View>
+
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              this.add_subscription_fun();
+            }}
+            style={[styles.buttonAdd, styles.restaurantButton]}
+          >
+            <Icon
+              name="add"
+              type="add"
+              //  onPress={() => {
+              //      // this.add_subscription_fun();
+              //     }}
+              size={30}
+              color="white"
+            />
+            {/* <Text style={styles.buttonText}>+</Text> */}
+          </TouchableOpacity>
         </View>
       </>
     );
@@ -1591,8 +1621,10 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: "#ff0048",
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 10,
+    alignItems:"center"
   },
   button: {
     padding: 10,
@@ -1602,14 +1634,23 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#38a832",
   },
+  buttonAdd: {
+    padding: 10,
+    borderRadius: 10,
+    margin: 5,
+    width: 200,
+    alignItems: "center",
+    backgroundColor: "#38a832",
+  },
+
   buttonText: {
     color: "white",
     textAlign: "center",
     fontSize: 18,
   },
   restaurantButton: {
-    backgroundColor: "#28d439",
-    marginLeft: 180,
+    backgroundColor: "#88096c",
+    marginLeft: 230,
     width: 90,
   },
   categoryButton: {
