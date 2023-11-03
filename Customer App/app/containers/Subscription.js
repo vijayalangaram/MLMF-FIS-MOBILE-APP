@@ -1316,16 +1316,15 @@ export class Subscription extends React.PureComponent {
                         >
                           END DATE - {items?.endDate}
                         </Text>
-
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: 13,
                             color: "black",
                             fontWeight: "180",
                             textAlign: "center",
                           }}
                         >
-                          DAYS COUNT - {items?.actualCount}
+                          COUNT - {items?.actualCount}
                         </Text>
                       </Card>
                     );
