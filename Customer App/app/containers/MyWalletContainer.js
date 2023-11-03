@@ -498,7 +498,7 @@ class MyWalletContainer extends React.Component {
                     padding: 10,
                     elevation: 1,
                   }}
-                >
+                 >
                   {/* VIKRANT 30-07-21 */}
                   <EDRTLView style={style.header}>
                     <View style={style.walletView}>
@@ -552,9 +552,13 @@ class MyWalletContainer extends React.Component {
                                                 <Text style={[style.btnText]} >{strings("earnMore")} </Text>
                                             </EDRTLView>
                                         </TouchableOpacity> */}
-                  </EDRTLView>
-                </View>
-                <View style={style.earning}>
+                     </EDRTLView>
+                   </View>
+                
+                
+                
+                  <View style={style.earning}>
+
                   <EDRTLView style={style.earningView}>
                     <Text style={[style.headerText]}>
                       {strings("transactions")}

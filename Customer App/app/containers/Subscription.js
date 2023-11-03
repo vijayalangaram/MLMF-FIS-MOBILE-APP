@@ -182,31 +182,15 @@ export class Subscription extends React.PureComponent {
     //   { value: "5", name: "5", }, { value: "10", name: "10",}, { value: "15", name: "15"},
     // ],
     planAmount: "",
-
+    Apicall: false,
     selectedCards: new Set(),
-    // selectPlandays: [
-    //   { id: 1, title: '5' , },
-    //   { id: 2, title: '10' },
-    //   { id: 3, title: '15' },
-    //   { id: 4, title: '20' },
-    //   // { id: 5, title: 'Card 5' },
-    //   // { id: 6, title: 'Card 6' },
-    //   // { id: 7, title: 'Card 7' },
-    //   // Add more cards as needed
-    // ],
 
     selectPlandays: [
-      { id: 1, text: "5", selected: false },
+      { id: 1, text: "05", selected: false },
       { id: 2, text: "10", selected: false },
       { id: 3, text: "15", selected: false },
       { id: 4, text: "20", selected: false },
     ],
-
-    showPicker: false,
-    selectedDate: new Date(),
-
-    dateTimePickerVisible: false,
-    dateOrTimeValue: new Date(),
 
     // save_order_payload: localStorage.getItem("save_order_payload"),
     restaurants: [
@@ -728,6 +712,8 @@ export class Subscription extends React.PureComponent {
 
   startRazorPayment_Get_Order_ID = async () => {
     // return false;
+    let { Apicall } = this.state;
+    this.setState({ Apicall: true });
 
     // debugLog(
     //   "%%%%%%%%   this.state.razorpayDetails   %%%5%%%%",
@@ -782,6 +768,7 @@ export class Subscription extends React.PureComponent {
       this.startRazorPayment(generate_order_id.data?.id);
     } else {
       showValidationAlert("Unable to generate order id");
+      this.setState({ Apicall: false });
     }
   };
 
@@ -866,6 +853,7 @@ export class Subscription extends React.PureComponent {
   };
 
   save_Subscription_List_Api = async (data) => {
+    let { Apicall } = this.state;
     debugLog(
       "****************************** save_Subscription_List_Api ******************************  data 3245345435",
       data
@@ -914,11 +902,14 @@ export class Subscription extends React.PureComponent {
       //   generate_order_id.data
       // );
       showValidationAlert(" subscription Added Successfully");
+
       // this.togglePaymentModal();
     } else {
       showValidationAlert("Unable to generate order id");
     }
     this.togglePaymentModal();
+
+    this.setState({ Apicall: false });
   };
 
   toggleRestaurantModal = () => {
@@ -998,22 +989,6 @@ export class Subscription extends React.PureComponent {
     this.setState({ selectedDependence: dependence });
   };
 
-  ////DATE DateTimePicker
-  handleButtonPress = () => {
-    this.setState({ showPicker: true });
-  };
-
-  handleDateChange = (event, selectedDate) => {
-    if (selectedDate) {
-      this.setState({
-        showPicker: Platform.OS === "ios",
-        selecteddate: selectedDate,
-      });
-    } else {
-      this.setState({ showPicker: false });
-    }
-  };
-
   handleSumaryPress = () => {
     let {
       selectedRestaurant,
@@ -1038,6 +1013,7 @@ export class Subscription extends React.PureComponent {
 
   add_subscription_fun = () => {
     this.setState({ isPaymentModalVisible: true });
+    this.setState({ Apicall: false });
   };
 
   get_save_subscription_Cart_fund = () => {
@@ -1124,7 +1100,7 @@ export class Subscription extends React.PureComponent {
         onPress={() => this.toggleItemSelection(item.id)}
         style={[
           styles.cardFlat,
-          { backgroundColor: item.selected ? "blue" : "white" },
+          { backgroundColor: item.selected ? "#721C37" : "white" },
         ]}
       >
         <Text style={{ color: item.selected ? "white" : "black" }}>
@@ -1186,6 +1162,7 @@ export class Subscription extends React.PureComponent {
       plan_Master,
       loggedInUserwalletBalance,
       symbol,
+      Apicall,
     } = this.state;
 
     return (
@@ -1201,6 +1178,51 @@ export class Subscription extends React.PureComponent {
           <View style={styles.container}>
             <ScrollView>
               <View
+                style={{
+                  backgroundColor: EDColors.white,
+                  borderRadius: 16,
+                  padding: 10,
+                  elevation: 1,
+                  marginBottom: 2,
+                  marginTop: 10,
+                }}
+              >
+                {/* VIKRANT 30-07-21 */}
+                <EDRTLView style={style.header}>
+                  <View style={style.walletView}>
+                    <EDRTLView style={{ alignItems: "center" }}>
+                      <Text style={style.walletHeader}>
+                        {strings("yourWalletBalance")}
+                      </Text>
+                    </EDRTLView>
+
+                    <Text
+                      style={[
+                        style.walletText,
+                        {
+                          fontFamily: EDFonts.bold,
+                          textAlign: isRTLCheck() ? "right" : "left",
+                        },
+                      ]}
+                    >
+                      {this.state.symbol +
+                        " " +
+                        this.state.loggedInUserwalletBalance}
+                    </Text>
+                  </View>
+                  {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.add_subscription_fun();
+                    }}
+                    style={[styles.buttonAdd, styles.restaurantButton]}
+                  >
+                    <Text style={styles.buttonTextAdd}>Add Subscription</Text>
+                  </TouchableOpacity>
+                </EDRTLView>
+              </View>
+
+              {/* <View
                 style={{
                   flexDirection: "row",
                   marginTop: 20,
@@ -1228,10 +1250,10 @@ export class Subscription extends React.PureComponent {
               //     }}
               size={30}
               color="white"
-            /> */}
+            /> 
                   <Text style={styles.buttonTextAdd}>Add Subscription</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <ScrollView>
                 {selected_user_subscription_list &&
@@ -1242,13 +1264,13 @@ export class Subscription extends React.PureComponent {
                       height: 50,
                       width: 200,
                       borderRadius: 30,
-                      // marginLeft: 50,
+                      marginLeft: 50,
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 14,
-                        color: "white",
+                        color: "black",
                         fontWeight: "400",
                         textAlign: "center",
                       }}
@@ -1263,7 +1285,7 @@ export class Subscription extends React.PureComponent {
                       <Card
                         containerStyle={{
                           backgroundColor: "#fffcfc", //#9f1982 #fffcfc
-                          height: 80,
+                          height: 90,
                           width: 300,
                           borderRadius: 20,
                           //borderColor:"#c7c3c3",
@@ -1294,6 +1316,17 @@ export class Subscription extends React.PureComponent {
                         >
                           END DATE - {items?.endDate}
                         </Text>
+
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "black",
+                            fontWeight: "180",
+                            textAlign: "center",
+                          }}
+                        >
+                          DAYS COUNT - {items?.actualCount}
+                        </Text>
                       </Card>
                     );
                   })
@@ -1321,10 +1354,10 @@ export class Subscription extends React.PureComponent {
               >
                 <ScrollView>
                   <View style={styles.modalContainer}>
-
-                  
-                   <Text style={styles.modalTitle}>
-                    {plan_Master && plan_Master.length > 0 ? "Select Subscription Plan":"Curently no plan available"}
+                    <Text style={styles.modalTitle}>
+                      {plan_Master && plan_Master.length > 0
+                        ? "Select Subscription Plan"
+                        : "Curently no plan available"}
                     </Text>
 
                     {/* Add payment information and UI */}
@@ -1429,68 +1462,7 @@ export class Subscription extends React.PureComponent {
                       />
                     </View>
 
-                    {/* {selectPlandays.map((items) => {
-                    return (
-                      <View style={styles.containerDrop}>
-                       
-                          <Card
-                            containerStyle={{
-                              backgroundColor: "#85e6e4",
-                              height: 60,
-                              width: 100,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                color: "black",
-                                fontWeight: "400",
-                                textAlign: "center",
-                              }}
-                            >
-                              {items?.name}
-                            </Text>
-                          </Card>
-                        
-                      </View>
-                    );
-                  })} */}
-
-                    {/* {selectPlandays && (
-                    <View style={styles.containerDrop}>
-                      <Text style={styles.modalTitle}> Total Amount</Text>
-
-                      <TextInput
-                        style={[
-                          styles.dropdownDrop,
-                          isFocus && { borderColor: "blue" },
-                        ]}
-                        value={planAmount.value}
-                        placeholder="Total Amount"
-                        editable={false}
-                        //keyboardType="numeric"
-                      />
-                    </View>
-                  )} */}
-
-                    {/* <View>
-                    <Text style={styles.modalTitle}>choose Plan Date</Text>
-                    <View>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.setState({ dateTimePickerVisible: true })
-                        }
-                      >
-                        <TextInput
-                          style={styles.dropdownDrop}
-                          label="Shift Starts At"
-                          placeholder={"01/01/2023"}
-                          editable={false}
-                          value={this.state.dateOrTimeValue.toDateString()}
-                        />
-                      </TouchableOpacity>
-
-                      {/* {this.state.dateTimePickerVisible && (
+                    {/* {this.state.dateTimePickerVisible && (
                         <DateTimePicker
                           mode={"datetime"} // THIS DOES NOT WORK ON ANDROID. IT DISPLAYS ONLY A DATE PICKER.
                           display="default" // Android Only
@@ -1518,17 +1490,23 @@ export class Subscription extends React.PureComponent {
                         // onPress={() => {
                         //   this.startRazorPayment_Get_Order_ID
                         // }}
-                        style={[
-                          styles.button,
-                          styles.modalButton,
-                          styles.payButton,
-                          // styles.closeButton={backgroundColor:"#73ff00"},
-                        ]}
-                        disabled={planAmount === ""}
+                        style={
+                          planAmount == "" || Apicall == true
+                            ? [
+                                styles.button,
+                                styles.modalButton,
+                                styles.payButtonDis,
+                              ]
+                            : [
+                                styles.button,
+                                styles.modalButton,
+                                styles.payButton,
+                                // styles.closeButton={backgroundColor:"#73ff00"},
+                              ]
+                        }
+                        disabled={planAmount == "" || Apicall == true}
                       >
-                        <Text styles={{ color: "black" }}>
-                          PAY- {planAmount}
-                        </Text>
+                        <Text style={styles.buttonText}>PAY- {planAmount}</Text>
                       </TouchableOpacity>
 
                       <TouchableOpacity
@@ -1662,9 +1640,9 @@ export const styles = StyleSheet.create({
   cardFlat: {
     margin: 10,
     padding: 16,
-    borderRadius: 8,
+    borderRadius: 100,
     borderWidth: 1,
-    borderColor: "blue",
+    borderColor: "#721C37",
   },
 
   //DropDown styles
@@ -1789,7 +1767,7 @@ export const styles = StyleSheet.create({
 
   restaurantButton: {
     backgroundColor: "#721C37",
-    marginLeft: 110,
+    marginLeft: 80,
     width: 120,
   },
   categoryButton: {
@@ -1823,14 +1801,42 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeButton: {
-    backgroundColor: "#ff0048",
+    backgroundColor: "#ed4a4a",
   },
   payButton: {
-    backgroundColor: "#73ff00",
+    backgroundColor: "#721C37",
+  },
+  payButtonDis: {
+    backgroundColor: "#e1e6e4",
   },
 
   paymentText: {
     fontSize: 16,
     marginBottom: 10,
+  },
+
+  header: {
+    marginBottom: 5,
+    justifyContent: "space-between",
+    // alignItems: "center"
+  },
+  walletView: {
+    padding: 5,
+    flex: 1,
+  },
+
+  walletHeader: {
+    fontFamily: EDFonts.semiBold,
+    fontSize: getProportionalFontSize(18),
+    color: EDColors.black,
+    // textAlign: isRTLCheck() ? 'right' : 'left'
+  },
+  walletText: {
+    fontFamily: EDFonts.semiBold,
+    fontSize: getProportionalFontSize(32),
+    color: EDColors.black,
+    marginRight: 5,
+    // marginTop: 5
+    // textAlign: isRTLCheck() ? 'right' : 'left'
   },
 });
