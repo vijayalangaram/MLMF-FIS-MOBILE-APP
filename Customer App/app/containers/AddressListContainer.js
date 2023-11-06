@@ -87,6 +87,7 @@ import {
 import SelectDropdown from "react-native-select-dropdown";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { get_save_slot_Master } from "../utils/AsyncStorageHelper";
 
 export class AddressListContainer extends React.PureComponent {
   //#region LIFE CYCLE METHODS
@@ -156,6 +157,7 @@ export class AddressListContainer extends React.PureComponent {
       dunzo_Direct_Delivery_Amt: "",
       // loader_Flag_dunzo_CallResponse: false,
       slot_Master_against_category: [],
+      slot_Master_from_AsynStorage: [],
       isFocus: false,
       selected_Slot_value: "",
     };
@@ -166,16 +168,14 @@ export class AddressListContainer extends React.PureComponent {
     // debugLog(
     //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ AddressListContainer1111111111111111"
     // );
-
     // debugLog(
     //   "****************************** Vijay ****************************** dunzo_Delivery_Amount ******************************",
     //   this.props.dunzo_Delivery_Amount
     // );
-    debugLog(
-      "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
-      this.props.dunzo_Delivery_Details
-    );
-
+    // debugLog(
+    //   "****************************** Vijay ****************************** Number(this.props.dunzo_Delivery_Details) ******************************",
+    //   this.props.dunzo_Delivery_Details
+    // );
     // debugLog(
     //   "****************************** Vijay ******************************     this.state.addressId",
     //   this.state.address_id
@@ -226,17 +226,31 @@ export class AddressListContainer extends React.PureComponent {
     this.getWalletHistoryAPIREQ();
     this.getAddressList();
     this.dunzoApiCall();
-    this.slot_masterCall();
-
+    // this.slot_masterCall();
+    this.get_save_slotmaster_call();
     this.props.save_order_payload_req(
       this.props.dunzo_Delivery_Details?.directRestaurantDelivery
     );
-
     localStorage.setItem(
       "save_order_payload",
       this.props.dunzo_Delivery_Details?.directRestaurantDelivery
     );
   }
+
+  get_save_slotmaster_call = () => {
+    get_save_slot_Master((success) => {    
+      let { slot_Master_from_AsynStorage } = this.state;
+      // return false;
+      this.setState(
+        {
+          slot_Master_from_AsynStorage: success || [],
+        },
+        () => {
+          this.slot_masterCall();
+        }
+      );
+    });
+  };
 
   getWalletHistoryAPIREQ = () => {
     let param = {
@@ -256,24 +270,32 @@ export class AddressListContainer extends React.PureComponent {
 
   slot_masterCall = () => {
     let localstrSlotMaster = localStorage.getItem("Slot_Master_Rest_Category");
-    let { slot_Master_against_category } = this.state;
+    let { slot_Master_against_category, slot_Master_from_AsynStorage } =
+      this.state;
     let filterstatesMastervalues = [];
     // debugLog(
     //   "this.props.slot_Master_details ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
     //   this.props.slot_Master_details
     // );
-
+    // get_save_slot_Master((success) => {
+    //   // const asystorageslotmaster = success;
+    //   debugLog(
+    //     "get_save_slot_Master  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 000000000000  ",
+    //     success
+    //   );
+    // });
+    // debugLog("asystorageslotmaster", asystorageslotmaster);
     if (
-      this.props.slot_Master_details != undefined &&
-      this.props.slot_Master_details != null &&
-      this.props.slot_Master_details.length > 0
+      this.state.slot_Master_from_AsynStorage != undefined &&
+      this.state.slot_Master_from_AsynStorage != null &&
+      this.state.slot_Master_from_AsynStorage.length > 0
     ) {
       // debugLog(
       //   "localstrSlotMaster ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 000000000000 ",
       //   localstrSlotMaster
       // );
 
-      filterstatesMastervalues = this.props.slot_Master_details.map(
+      filterstatesMastervalues = this.state.slot_Master_from_AsynStorage.map(
         ({ startTime, endTime, slotId, formatStartTime, formatEndTime }) => ({
           name: `${startTime}-${endTime}`,
           flag: false,
@@ -287,22 +309,20 @@ export class AddressListContainer extends React.PureComponent {
       showValidationAlert("Delivery Slots not available, Please try later");
     }
 
-    let filterstatesMastervalueszeroth = filterstatesMastervalues.map(
-      (item, i) => {
+    let filterstatesMastervalueszeroth =
+      filterstatesMastervalues &&
+      filterstatesMastervalues.map((item, i) => {
         if (i == 0) {
           item.flag = true;
         } else {
           item.flag = false;
         }
         return item;
-      }
-    );
-
-    debugLog(
-      "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
-      filterstatesMastervalueszeroth
-    );
-
+      });
+    // debugLog(
+    //   "filterstatesMastervalueszeroth ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     this.props.slot_Master_details",
+    //   filterstatesMastervalueszeroth
+    // );
     let filterstatesMastervalueszerothfornull =
       filterstatesMastervalueszeroth &&
       filterstatesMastervalueszeroth.filter((item) => {
@@ -561,10 +581,10 @@ export class AddressListContainer extends React.PureComponent {
           (dunzo_Point_DeliveryFlag == 2 &&
             this.state?.dunzoPointDelivery?.directRestaurantDelivery?.amount);
 
-        debugLog(
-          "***************************************** 0000000000000000000000000000000",
-          calulatedunzodeliveryAMT
-        );
+        // debugLog(
+        //   "***************************************** 0000000000000000000000000000000",
+        //   calulatedunzodeliveryAMT
+        // );
 
         // debugLog(
         //   "*****************************************    111111111111111111111111",
@@ -578,10 +598,10 @@ export class AddressListContainer extends React.PureComponent {
 
         let dunzo_Delivery_Amount = Number(calulatedunzodeliveryAMT);
 
-        debugLog(
-          "***************************************** ***************************************** 3333333333333333333333333333333333333333333",
-          dunzo_Delivery_Amount
-        );
+        // debugLog(
+        //   "***************************************** ***************************************** 3333333333333333333333333333333333333333333",
+        //   dunzo_Delivery_Amount
+        // );
 
         this.props.save_dunzodelivery_amount(dunzo_Delivery_Amount);
 
@@ -707,10 +727,10 @@ export class AddressListContainer extends React.PureComponent {
     //     this.state?.dunzoPointDelivery?.directPointDelivery?.price
     // );
 
-    debugLog(
-      "this.state?.slot_Master_against_category **************************   render ",
-      this.state?.slot_Master_against_category
-    );
+    // debugLog(
+    //   "this.state?.slot_Master_against_category **************************   render ",
+    //   this.state?.slot_Master_against_category
+    // );
 
     // debugLog(
     //   "Object.keys(this.state?.dunzoPointDelivery).length  ************************** Object.keys(this.state?.dunzoPointDelivery).length **********************",
@@ -1319,8 +1339,8 @@ export class AddressListContainer extends React.PureComponent {
                 // onFocus={() => setIsFocus(true)}
                 // onBlur={() => setIsFocus(false)}
                 onChange={(item, i) => {
-                  debugLog("item", item);
-                  debugLog("i", i);
+                  // debugLog("item", item);
+                  // debugLog("i", i);
                   // setValue(item.value);
                   this.slot_Master_against_category_Call(item);
                   this.setState({
@@ -3280,15 +3300,15 @@ export class AddressListContainer extends React.PureComponent {
       //   findmenucount.length
       // );
 
-      debugLog(
-        "################################################################################ 0000000000",
-        currentPriceTotal
-      );
+      // debugLog(
+      //   "################################################################################ 0000000000",
+      //   currentPriceTotal
+      // );
 
-      debugLog(
-        "########################################################################### 111111",
-        this.state.dunzo_Direct_Delivery_Amt
-      );
+      // debugLog(
+      //   "########################################################################### 111111",
+      //   this.state.dunzo_Direct_Delivery_Amt
+      // );
 
       let dunzo_Delivery_Point_AmountbasedonMenucate =
         findmenucount &&
@@ -3298,25 +3318,25 @@ export class AddressListContainer extends React.PureComponent {
 
       let taxesintialcalc = currentPriceTotal / 20;
 
-      debugLog(
-        "############################################################################ dunzo_Delivery_Point_AmountbasedonMenucate",
-        dunzo_Delivery_Point_AmountbasedonMenucate
-      );
+      // debugLog(
+      //   "############################################################################ dunzo_Delivery_Point_AmountbasedonMenucate",
+      //   dunzo_Delivery_Point_AmountbasedonMenucate
+      // );
 
-      debugLog(
-        "############################################################################ taxesintialcalc",
-        taxesintialcalc
-      );
+      // debugLog(
+      //   "############################################################################ taxesintialcalc",
+      //   taxesintialcalc
+      // );
 
       let PriceandTotalPrice =
         currentPriceTotal +
         dunzo_Delivery_Point_AmountbasedonMenucate +
         taxesintialcalc;
 
-      debugLog(
-        "############################################################################ 222222",
-        PriceandTotalPrice
-      );
+      // debugLog(
+      //   "############################################################################ 222222",
+      //   PriceandTotalPrice
+      // );
 
       let { currentTotalSumValue } = this.state;
       this.setState({
@@ -3327,9 +3347,9 @@ export class AddressListContainer extends React.PureComponent {
         parseInt(this.state.loggedInUserwalletBalance) <
         Number(this.props.minOrderAmount)
       ) {
-        debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
-        );
+        // debugLog(
+        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  111111111111111111111111111111111111"
+        // );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -3337,13 +3357,14 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
-      }  else if (
-        parseInt(this.state.loggedInUserwalletBalance) >= Number(this.props.minOrderAmount) &&
+      } else if (
+        parseInt(this.state.loggedInUserwalletBalance) >=
+          Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) >= PriceandTotalPrice
       ) {
-        debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
-        );
+        // debugLog(
+        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ cod 2222222222222222222222222222222222"
+        // );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -3352,12 +3373,13 @@ export class AddressListContainer extends React.PureComponent {
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
       } else if (
-        parseInt(this.state.loggedInUserwalletBalance) >  Number(this.props.minOrderAmount) &&
+        parseInt(this.state.loggedInUserwalletBalance) >
+          Number(this.props.minOrderAmount) &&
         parseInt(this.state.loggedInUserwalletBalance) < PriceandTotalPrice
       ) {
-        debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  333333333333333333333"
-        );
+        // debugLog(
+        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay  333333333333333333333"
+        // );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
@@ -3365,12 +3387,10 @@ export class AddressListContainer extends React.PureComponent {
           );
         this.paymentOptions = filteredvalue;
         this.onOptionSelection(filteredvalue[0]);
-      }
-            
-      else {
-        debugLog(
-          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
-        );
+      } else {
+        // debugLog(
+        //   "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ razorpay 444444444444444444444444"
+        // );
         let filteredvalue =
           onSuccess.Payment_method &&
           onSuccess.Payment_method.filter(
