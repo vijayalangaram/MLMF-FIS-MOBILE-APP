@@ -745,7 +745,6 @@ export class Subscription extends React.PureComponent {
     };
 
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", dataforgenraeorder);
-
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", username1);
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", password1);
 
@@ -1406,7 +1405,7 @@ export class Subscription extends React.PureComponent {
                           maxHeight={200}
                           labelField="name"
                           valueField="value"
-                          placeholder={!isFocus ? "Select Plan" : "..."}
+                          placeholder={ "Select Subscription Plan" }
                           searchPlaceholder="Search..."
                           //value={selected_Slot_value}
                           // onFocus={() => setIsFocus(true)}
@@ -1492,13 +1491,13 @@ export class Subscription extends React.PureComponent {
                         style={
                           planAmount == "" || Apicall == true
                             ? [
-                                styles.button,
-                                styles.modalButton,
+                               // styles.button,
+                                styles.modalButtonPay,
                                 styles.payButtonDis,
                               ]
                             : [
-                                styles.button,
-                                styles.modalButton,
+                               // styles.button,
+                                styles.modalButtonPay,
                                 styles.payButton,
                                 // styles.closeButton={backgroundColor:"#73ff00"},
                               ]
@@ -1514,8 +1513,8 @@ export class Subscription extends React.PureComponent {
                         //   this.togglePaymentModal();
                         // }}
                         style={[
-                          styles.button,
-                          styles.modalButton,
+                          //styles.button,
+                          styles.modalButtonPay,
                           styles.closeButton,
                         ]}
                       >
@@ -1792,11 +1791,11 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 10,
   },
-  modalButton: {
+  modalButtonPay: {
     padding: 10,
     borderRadius: 10,
     margin: 5,
-    width: 100,
+    width: 120,
     alignItems: "center",
   },
   closeButton: {
