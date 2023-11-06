@@ -179,7 +179,6 @@ export function saveCurrency_Symbol(symbol, onSuccess, onFailure) {
     }
   );
 }
-
 export function getCurrency_Symbol(onSuccess, onFailure) {
   AsyncStorage.getItem("currency_symbol").then(
     (res) => {
@@ -253,6 +252,27 @@ export function save_subscription_Cart(token, onSuccess, onFailure) {
     },
     (error) => {
       onFailure(error);
+    }
+  );
+}
+
+export function save_slot_Master(token, onSuccess, onFailure) {
+  AsyncStorage.setItem("save_slot_Master_list", JSON.stringify(token)).then(
+    (success) => {
+      onSuccess(success);
+    },
+    (error) => {
+      onFailure(error);
+    }
+  );
+}
+export function get_save_slot_Master(onSuccess, onFailure) {
+  AsyncStorage.getItem("save_slot_Master_list").then(
+    (res) => {
+      onSuccess(JSON.parse(res));
+    },
+    (error) => {
+      onFailure("error");
     }
   );
 }

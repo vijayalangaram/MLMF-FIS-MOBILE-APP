@@ -34,6 +34,7 @@ import {
   saveCurrency_Symbol,
   clearCartData,
   saveMenu,
+  save_slot_Master,
 } from "../utils/AsyncStorageHelper";
 import {
   showValidationAlert,
@@ -439,7 +440,9 @@ export class Restaurant extends React.Component {
       let stringToAdd = "0";
       // Position to add string
       let indexPosition = 8;
-      let eletwemonthcheck =        this?.props?.type_today_tomorrow__date &&        this?.props?.type_today_tomorrow__date.substring(8, 10);
+      let eletwemonthcheck =
+        this?.props?.type_today_tomorrow__date &&
+        this?.props?.type_today_tomorrow__date.substring(8, 10);
       // let eletwemonthcheck =  "2023-10-10".substring(8, 10);
       let newString;
 
@@ -478,6 +481,7 @@ export class Restaurant extends React.Component {
               JSON.stringify(response?.data?.data)
             );
             this.props.save_slot_Master_details(response?.data?.data);
+            save_slot_Master(response?.data?.data);
             this.props.save_selected_category(
               get_category_Master[0]?.category_id
             );
@@ -494,6 +498,7 @@ export class Restaurant extends React.Component {
             JSON.stringify(undefined)
           );
           this.props.save_slot_Master_details(undefined);
+          save_slot_Master([]);
           this.props.save_selected_category(undefined);
           return false;
         });
