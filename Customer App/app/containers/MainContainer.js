@@ -2686,6 +2686,10 @@ class MainContainer extends React.Component {
                                 });
                                 this.changeflagcategorymenu(items);
                               }
+
+                              {restaurantCategoryMAster &&
+                                restaurantCategoryMAster.length > 0 &&
+                              this.callRes_container();}
                             }}
                           >
                             <Image
@@ -2805,25 +2809,27 @@ class MainContainer extends React.Component {
                     }}
                   />
                   {restaurantCategoryMAster &&
-                  restaurantCategoryMAster.length > 0 ? (
-                    <EDThemeButton
-                      label={`Proceed`}
-                      style={{
-                        width: "40%",
-                        backgroundColor: "#808000",
-                        marginLeft: 15,
-                        color: "black",
-                      }}
-                      textStyle={{
-                        fontSize: getProportionalFontSize(14),
-                        paddingLeft: 7,
-                        paddingRight: 7,
-                      }}
-                      onPress={() => {
-                        this.callRes_container();
-                      }}
-                    />
-                  ) : (
+                  restaurantCategoryMAster.length <= 0 && 
+                  // (
+                    // <EDThemeButton
+                    //   label={`Proceed`}
+                    //   style={{
+                    //     width: "40%",
+                    //     backgroundColor: "#808000",
+                    //     marginLeft: 15,
+                    //     color: "black",
+                    //   }}
+                    //   textStyle={{
+                    //     fontSize: getProportionalFontSize(14),
+                    //     paddingLeft: 7,
+                    //     paddingRight: 7,
+                    //   }}
+                    //   onPress={() => {
+                    //     this.callRes_container();
+                    //   }}
+                    // />
+                  // ) :
+                   (
                     <EDThemeButton
                       label={`No Data`}
                       style={{
