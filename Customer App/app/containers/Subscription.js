@@ -1203,7 +1203,7 @@ export class Subscription extends React.PureComponent {
 
     // this.total_amounT();
     let efftiveCount = Number(filterflagtrue[0].text) + 5;
-    let enddate = moment(startDate, "DD-MM-YYYY").add(
+    let enddate = moment(startDate, "DD/MM/YYYY").add(
       Number(efftiveCount),
       "days"
     );
@@ -1734,24 +1734,30 @@ export class Subscription extends React.PureComponent {
                         />
                       </View>
                     </>
-                    
-                      {this.state.selcecteddays == "" ? null:
-                      
-                    (<View style={styles.summaryCardsum}>
-                      <Text style={styles.walletHeaderSum}>
-                    Description*
-                  </Text>
-                      <Text style={styles.cardTextsum}>
-                        Selected Plan Name : {this.state.selectedPlanname}
-                      </Text>
-                      <Text style={styles.cardTextsum}>
-                  Meals Price : ₹ {this.state.selectedAmount}  ( ₹.{this.state.selectedAmount} * {this.state.selcecteddays} Days)
-                  </Text>
-                      <Text style={styles.cardTextsum}>
-                        Plan Validity : {this.state.startDate}  to  {this.state.endDate}
-                      </Text>                 
-                    </View>)}
-                    
+
+                    {this.state.selcecteddays == "" ? null : (
+                      <View style={styles.summaryCardsum}>
+                        <Text style={styles.walletHeaderSum}>Description*</Text>
+                        <Text style={styles.cardTextsum}>
+                          Selected Plan Name : {this.state.selectedPlanname}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Meal Price : ₹ {this.state.selectedAmount}
+                          {/* ( ₹.
+                          {this.state.selectedAmount} *{" "}
+                          {this.state.selcecteddays} Days) */}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Plan Validity : {this.state.startDate} to{" "}
+                          {this.state.endDate}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Total Price : ( ₹.{this.state.selectedAmount} ×{" "}
+                          {this.state.selcecteddays} Days) = ₹.
+                          {this.state.planAmount}
+                        </Text>
+                      </View>
+                    )}
 
                     {/* {this.state.dateTimePickerVisible && (
                         <DateTimePicker
@@ -1998,14 +2004,13 @@ export const styles = StyleSheet.create({
   },
   cardTextsum: {
     fontSize: 14,
-    color:"#fcfcfc",
-    backgroundColor:"#721C37",
+    color: "#fcfcfc",
+    backgroundColor: "#721C37",
   },
-  walletHeaderSum:{
+  walletHeaderSum: {
     fontFamily: EDFonts.semiBold,
     fontSize: getProportionalFontSize(18),
     color: "#fcfcfc",
-
   },
   containerpic: {
     flex: 1,
@@ -2130,7 +2135,6 @@ export const styles = StyleSheet.create({
     // textAlign: isRTLCheck() ? 'right' : 'left'
   },
 
- 
   walletText: {
     fontFamily: EDFonts.semiBold,
     fontSize: getProportionalFontSize(32),
