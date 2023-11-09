@@ -17,6 +17,9 @@ import {
   Button,
   Input,
   Alert,
+  ActivityIndicator,
+  Image,
+  ImageBackground,
 } from "react-native";
 
 import { Icon, Card, ListItem, CheckBox } from "react-native-elements";
@@ -29,6 +32,7 @@ import {
   NavigationActions,
   NavigationEvents,
   StackActions,
+  withNavigation,
 } from "react-navigation";
 import { connect } from "react-redux";
 import CartItem from "../components/CartItem";
@@ -124,6 +128,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FloatingAction } from "react-native-floating-action";
+import HandleBack from "./HandleBack";
 
 export class Subscription extends React.PureComponent {
   //#region LIFE CYCLE METHODS
@@ -166,10 +171,10 @@ export class Subscription extends React.PureComponent {
     selected_restaurantCategory: "",
 
     selectedDependence: "",
-    selectedDays: [],
-    startDate: "",
+    startDate: moment(new Date()).format("DD/MM/YYYY"),
+
     amount: "",
-    endDate: "",
+
     isSubmitEnabled: false,
     summary: null,
     showSummary: false,
@@ -237,9 +242,12 @@ export class Subscription extends React.PureComponent {
     subscription_Master_list: [],
     plan_Master: {},
     selectedplanname: "",
-
+    selected_Subscription_Plan: "",
     isPaymentLoading: false,
     razorpayDetails: [],
+    effctivecount: "",
+    endDate: "",
+    //isLoading: false,
   };
 
   componentDidMount() {
@@ -262,11 +270,41 @@ export class Subscription extends React.PureComponent {
     this.subscription_Master_listapi();
     this.getPaymentOptionsAPI();
     this.getWalletHistoryAPIREQ();
+
+    // BackHandler.addEventListener("hardwareBackPress", this.onBack);
   }
+
+  // componentWillUnmount() {
+  //   // Remove the back button event listener when the component unmounts.
+  //   BackHandler.removeEventListener("hardwareBackPress", this.onBack);
+  // }
+
+  // onBack = () => {
+  //   debugLog(
+  //     "****************************** RAJA ****BackHandle************************** "
+  //   );
+
+  //   if (this.state.isLoading) {
+  //     Alert.alert(
+  //       "You're still editing!",
+  //       "Are you sure you want to go home with your edits not saved?",
+  //       [
+  //         { text: "Keep Payment", onPress: () => {}, style: "cancel" },
+  //         {
+  //           text: "Go to home Page",
+  //           onPress: () => this.props.navigation.goBack(),
+  //         },
+  //       ],
+  //       { cancelable: false }
+  //     );
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   subscription_Master_listapi = async () => {
     let generate_order_id = await axios.get(
-      ` http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemePlanMasterDetailsForMobile?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
+      `https://fis.clsslabs.com/FIS/api/auth/getMlmfSchemePlanMasterDetailsForMobile?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -286,10 +324,24 @@ export class Subscription extends React.PureComponent {
       });
       let planlist =
         generate_order_id.data.data &&
-        generate_order_id.data.data.map(({ amount, planId, planName }) => ({
-          name: `${planName} - ${amount}`,
-          value: `${planId}`,
-        }));
+        generate_order_id.data.data.map(
+          ({
+            amount,
+            planId,
+            planName,
+            imageUrl,
+            deliveryType,
+            availableDays,
+          }) => ({
+            planName: planName,
+            planId: planId,
+            amount: amount,
+            imageUrl: imageUrl,
+            flag: false,
+            availableDays: availableDays,
+            deliveryType: deliveryType,
+          })
+        );
 
       this.setState({
         plan_Master: planlist,
@@ -303,7 +355,7 @@ export class Subscription extends React.PureComponent {
 
   get_subscription_List = async () => {
     let generate_order_id = await axios.get(
-      `http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemeSubscriptionDetails?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
+      `https://fis.clsslabs.com/FIS/api/auth/getMlmfSchemeSubscriptionDetails?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -332,7 +384,7 @@ export class Subscription extends React.PureComponent {
 
   getPaymentOptionsAPI = () => {
     let { isPaymentLoading } = this.state;
-
+    this.setState({ isLoading: true });
     // this.setState({ isPaymentLoading: true });
 
     netStatus((isConnected) => {
@@ -376,6 +428,12 @@ export class Subscription extends React.PureComponent {
     );
 
     this.setState({ razorpayDetails: refKey });
+
+    // return false;
+    // this.togglePaymentModal();
+
+    // this.setState({ Apicall: false });
+
     return false;
     let {
       isPaymentLoading,
@@ -712,9 +770,10 @@ export class Subscription extends React.PureComponent {
 
   startRazorPayment_Get_Order_ID = async () => {
     // return false;
-    let { Apicall } = this.state;
-    this.setState({ Apicall: true });
 
+    let { Apicall, isPaymentModalVisible, isLoading } = this.state;
+    this.setState({ Apicall: true });
+    this.setState({ isLoading: true });
     // debugLog(
     //   "%%%%%%%%   this.state.razorpayDetails   %%%5%%%%",
     //   this.state.razorpayDetails
@@ -745,40 +804,52 @@ export class Subscription extends React.PureComponent {
     };
 
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", dataforgenraeorder);
-
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", username1);
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", password1);
 
     //  return false;
-    let generate_order_id = await axios.post(
-      "https://api.razorpay.com/v1/orders",
-      dataforgenraeorder,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic " + base64.encode(username1 + ":" + password1),
-        },
+    try {
+      let generate_order_id = await axios.post(
+        "https://api.razorpay.com/v1/orders",
+        dataforgenraeorder,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Basic " + base64.encode(username1 + ":" + password1),
+          },
+        }
+      );
+      if (generate_order_id.status === 200) {
+        // debugLog(
+        //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
+        //   generate_order_id.data
+        // );
+        this.startRazorPayment(generate_order_id.data?.id);
+        this.setState({ isLoading: false });
+      } else {
+        showValidationAlert("Unable to generate order id");
+        this.setState({ Apicall: false });
+        this.setState({ isLoading: false });
       }
-    );
-    if (generate_order_id.status === 200) {
-      // debugLog(
-      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
-      //   generate_order_id.data
-      // );
-      this.startRazorPayment(generate_order_id.data?.id);
-    } else {
-      showValidationAlert("Unable to generate order id");
-      this.setState({ Apicall: false });
+    } catch (error) {
+      this.setState({ isLoading: false });
     }
   };
 
   startRazorPayment = (valueoforderid) => {
+    let { isPaymentModalVisible, isLoading } = this.state;
+
     // debugLog(
     //   "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
     //   this.state.razorpayDetails,
     //   valueoforderid
     // );
     // return false;
+    this.setState({ isLoading: true });
+    // this.setState({ isLoading: true });
+    this.setState({ isPaymentModalVisible: false });
+
     let merchant_order_id = Date.now();
     var options = {
       description: "Paying MLMF",
@@ -824,36 +895,43 @@ export class Subscription extends React.PureComponent {
       options
     );
     // return false;
-    RazorpayCheckout.open(options)
-      .then((data) => {
-        // handle success
-        // debugLog("Payment success ::::::", data);
-        debugLog(
-          "******************************response ******************************  data 3245345435",
-          data
-        );
-        // return false;
-        // this.razorpay_payment_id = data.razorpay_payment_id;
-        this.save_Subscription_List_Api(data);
-      })
-      .catch((error) => {
-        // handle failure
 
-        if (error.code !== 0) {
-          setTimeout(() => {
-            showValidationAlert(error.description);
-          }, 500);
-        }
-        // alert(JSON.parse(error.description).error.description)
-        // debugLog(
-        //   "Payment failure ::::::",
-        //   JSON.parse(error.description).error.description
-        // );
-      });
+    try {
+      RazorpayCheckout.open(options)
+        .then((data) => {
+          // handle success
+          // debugLog("Payment success ::::::", data);
+          debugLog(
+            "******************************response ******************************  data 3245345435",
+            data
+          );
+          // return false;
+          // this.razorpay_payment_id = data.razorpay_payment_id;
+          this.save_Subscription_List_Api(data);
+        })
+        .catch((error) => {
+          // handle failure
+
+          if (error.code !== 0) {
+            setTimeout(() => {
+              showValidationAlert(error.description);
+            }, 500);
+          }
+          // alert(JSON.parse(error.description).error.description)
+          // debugLog(
+          //   "Payment failure ::::::",
+          //   JSON.parse(error.description).error.description
+          // );
+          this.setState({ isLoading: false });
+        });
+    } catch (error) {
+      this.setState({ isLoading: false });
+    }
   };
 
   save_Subscription_List_Api = async (data) => {
-    let { Apicall } = this.state;
+    let { Apicall, isLoading } = this.state;
+    this.setState({ isLoading: true });
     debugLog(
       "****************************** save_Subscription_List_Api ******************************  data 3245345435",
       data
@@ -887,29 +965,33 @@ export class Subscription extends React.PureComponent {
     );
 
     //return false
-    let generate_order_id = await axios.post(
-      "http://52.77.35.146:8080/FIS/api/auth/saveMlmfSchemeSubscriptionDataForMobile",
-      subscripdetail,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      let generate_order_id = await axios.post(
+        "https://fis.clsslabs.com/FIS/api/auth/saveMlmfSchemeSubscriptionDataForMobile",
+        subscripdetail,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (generate_order_id.status === 200) {
+        debugLog(
+          "****************************** Vijay ****************************** generate_order_id.data?.id ",
+          generate_order_id.data
+        );
+        showValidationAlert(" subscription Added Successfully");
+        this.setState({ isLoading: false });
+        // this.togglePaymentModal();
+      } else {
+        showValidationAlert("Unable to generate order id");
       }
-    );
-    if (generate_order_id.status === 200) {
-      // debugLog(
-      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
-      //   generate_order_id.data
-      // );
-      showValidationAlert(" subscription Added Successfully");
-
-      // this.togglePaymentModal();
-    } else {
-      showValidationAlert("Unable to generate order id");
+      this.togglePaymentModal();
+      this.setState({ Apicall: false });
+      this.setState({ isLoading: false });
+    } catch {
+      this.setState({ isLoading: false });
     }
-    this.togglePaymentModal();
-
-    this.setState({ Apicall: false });
   };
 
   toggleRestaurantModal = () => {
@@ -959,6 +1041,44 @@ export class Subscription extends React.PureComponent {
         this.getPaymentOptionsAPI();
         this.getWalletHistoryAPIREQ();
       }
+    );
+  };
+
+  toggleHalf_cut_PaymentModal = () => {
+    let {
+      isPaymentModalVisible,
+      selectedAmount,
+      selectedPlanname,
+      planAmount,
+      selectedPlan,
+      selcecteddays,
+      selectPlandays,
+    } = this.state;
+    let newData = this.state.selectPlandays.map((item, i) => {
+      if (item.selected === true) {
+        item.selected = false;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+    this.setState(
+      {
+        isPaymentModalVisible: !this.state.isPaymentModalVisible,
+        selectedAmount: "",
+        selectedPlanname: "",
+        planAmount: "",
+        selectedPlan: "",
+        selcecteddays: "",
+        selectPlandays: newData,
+      }
+      // () => {
+      //   this.get_subscription_List();
+      //   this.get_save_subscription_Cart_fund();
+      //   this.subscription_Master_listapi();
+      //   this.getPaymentOptionsAPI();
+      //   this.getWalletHistoryAPIREQ();
+      // }
     );
   };
 
@@ -1027,6 +1147,12 @@ export class Subscription extends React.PureComponent {
     });
   };
 
+  total_amounT = () => {
+    const { selectedAmount, selcecteddays, planAmount } = this.state;
+    let total = selectedAmount * selcecteddays;
+    this.setState({ planAmount: total });
+  };
+
   //flatlist
 
   // toggleCardSelection = (card) => {
@@ -1044,8 +1170,15 @@ export class Subscription extends React.PureComponent {
   // };
 
   toggleItemSelection = (id) => {
-    let { selcecteddays, selectedAmount, planAmount, selectedboolean } =
-      this.state;
+    let {
+      selcecteddays,
+      selectedAmount,
+      planAmount,
+      selectedboolean,
+      endDate,
+      effctivecount,
+      startDate,
+    } = this.state;
     const newData = this.state.selectPlandays.map((item, i) => {
       // debugLog("toggle selected ======== === === ", item);
       if (item.id === id) {
@@ -1067,8 +1200,18 @@ export class Subscription extends React.PureComponent {
     debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0].text);
     this.setState({ selectPlandays: newData });
     this.setState({ selcecteddays: filterflagtrue[0].text });
-    this.setState({ planAmount: total });
 
+    // this.total_amounT();
+    let efftiveCount = Number(filterflagtrue[0].text) + 5;
+    let enddate = moment(startDate, "DD/MM/YYYY").add(
+      Number(efftiveCount),
+      "days"
+    );
+    let endate = moment(enddate).utc().format("DD/MM/YYYY");
+    debugLog(" efftiveCount---efftiveCount---efftiveCount", efftiveCount);
+    debugLog(" enddate---enddate---enddate", endate);
+    this.setState({ planAmount: total });
+    this.setState({ effctivecount: efftiveCount, endDate: endate });
     debugLog(" total---total---total", total);
   };
 
@@ -1123,6 +1266,83 @@ export class Subscription extends React.PureComponent {
     this.getNotificationList();
   };
 
+  changeflagcategorymenu = async (items) => {
+    let {
+      plan_Master,
+      selected_Subscription_Plan,
+      selectedAmount,
+      selectedPlanname,
+      planAmount,
+      selcecteddays,
+      selectedPlan,
+    } = this.state;
+
+    let filterstatesMastervalues =
+      plan_Master &&
+      plan_Master.map((item, i) => {
+        if (item?.planId == items?.planId) {
+          item.flag = true;
+        } else {
+          item.flag = false;
+        }
+        return item;
+      });
+
+    let filterflagtrue =
+      plan_Master &&
+      plan_Master.filter((item, i) => {
+        if (item?.flag == true) {
+          return item;
+        }
+      });
+
+    debugLog("filterflagtrue filterflagtrue ", filterflagtrue);
+
+    let planamt = Number(filterflagtrue[0].amount) * Number(selcecteddays);
+    debugLog("planamt planamt planamt ", planamt);
+    this.setState({
+      plan_Master: filterstatesMastervalues,
+      selected_Subscription_Plan: filterflagtrue,
+      selectedPlanname: filterflagtrue[0].planName,
+      selectedAmount: filterflagtrue[0].amount,
+      planAmount: planamt,
+      selectedPlan: filterflagtrue[0].planId,
+      // selected_restaurantCategory
+    });
+  };
+
+  callRes_container = async (item) => {
+    let {
+      selectedAmount,
+      selectedPlanname,
+      planAmount,
+      plan_Master,
+      selcecteddays,
+    } = this.state;
+
+    // debugLog(
+    //   "this.props.selected_category_id_home_cont error ",
+    //   this.props.selected_category_id_home_cont
+    // );
+    // return false;
+
+    let filterflagtrue =
+      plan_Master &&
+      plan_Master.filter((item, i) => {
+        if (item?.flag == true) {
+          return item;
+        }
+      });
+    debugLog("filterflagtrue[0]()(------)()", filterflagtrue.amount);
+    let planamt = filterflagtrue.amount * selcecteddays;
+
+    this.setState({
+      selectedPlanname: filterflagtrue.planName,
+      selectedAmount: filterflagtrue.amount,
+      planAmount: planamt,
+    });
+  };
+
   //  //Alert Msg
   //   createTwoButtonAlert = () =>{
   //   Alert.alert('select you plan and Supscription days', '', [
@@ -1163,6 +1383,7 @@ export class Subscription extends React.PureComponent {
       loggedInUserwalletBalance,
       symbol,
       Apicall,
+      isLoading,
     } = this.state;
 
     return (
@@ -1173,7 +1394,7 @@ export class Subscription extends React.PureComponent {
           right={[]}
           onLeft={this.onDrawerOpen}
           onConnectionChangeHandler={this.networkConnectivityStatus}
-          loading={this.state.isLoading}
+          //loading={this.state.isLoading}
         >
           <View style={styles.container}>
             <ScrollView>
@@ -1213,6 +1434,7 @@ export class Subscription extends React.PureComponent {
                   {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
                   <TouchableOpacity
                     onPress={() => {
+                      this.toggleHalf_cut_PaymentModal();
                       this.add_subscription_fun();
                     }}
                     style={[styles.buttonAdd, styles.restaurantButton]}
@@ -1257,7 +1479,7 @@ export class Subscription extends React.PureComponent {
 
               <ScrollView>
                 {selected_user_subscription_list &&
-                selected_user_subscription_list.length <= 0 ? (
+                selected_user_subscription_list.length == 0 ? (
                   <Card
                     containerStyle={{
                       backgroundColor: "#b5b0b0",
@@ -1275,7 +1497,7 @@ export class Subscription extends React.PureComponent {
                         textAlign: "center",
                       }}
                     >
-                      Curently No active Plan
+                      Currently No active Plan
                     </Text>
                   </Card>
                 ) : (
@@ -1390,7 +1612,8 @@ export class Subscription extends React.PureComponent {
                       );
                     })} */}
                     {/* </ScrollView> */}
-                    {plan_Master && plan_Master.length > 0 && (
+
+                    {/* {plan_Master && plan_Master.length > 0 && (
                       <View style={styles.containerDrop}>
                         <Dropdown
                           style={[
@@ -1406,7 +1629,7 @@ export class Subscription extends React.PureComponent {
                           maxHeight={200}
                           labelField="name"
                           valueField="value"
-                          placeholder={!isFocus ? "Select Plan" : "..."}
+                          placeholder={"Select Subscription Plan"}
                           searchPlaceholder="Search..."
                           //value={selected_Slot_value}
                           // onFocus={() => setIsFocus(true)}
@@ -1429,6 +1652,9 @@ export class Subscription extends React.PureComponent {
                               selectedAmount: amount,
                               selectedPlanname: name,
                             });
+                            let planAmt = amount * selcecteddays;
+                            this.setState({ planAmount: planAmt });
+                            //this.total_amounT();
                             debugLog(
                               "amount amount amount amount %%%%%%%%%@@@@!!!!!!",
                               amount
@@ -1447,19 +1673,91 @@ export class Subscription extends React.PureComponent {
                           )}
                         />
                       </View>
-                    )}
+                    )} */}
+                    <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={true}
+                    >
+                      {plan_Master &&
+                        plan_Master.length > 0 &&
+                        plan_Master.map((item) => {
+                          debugLog(
+                            "card image%%%%%%%%%%%%%%%**********Image**************",
+                            item
+                          );
 
-                    <Text style={styles.modalTitle}>
-                      Select Subscription Count{" "}
-                    </Text>
-                    <View style={styles.containerFlat}>
-                      <FlatList
-                        data={this.state.selectPlandays}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item) => item.id.toString()}
-                        horizontal={true}
-                      />
-                    </View>
+                          return (
+                            <Card
+                              containerStyle={{
+                                // backgroundColor: "#fffcfc", //#9f1982 #fffcfc
+                                backgroundColor: item?.flag ? "green" : "white",
+                                height: 200,
+                                width: 200,
+                                borderRadius: 20,
+                                //borderColor:"#c7c3c3",
+                                //boxShadow: "rgba(255, 0, 0, 0.24) 0px 3px 8px",
+                                shadowColor: "black",
+                                shadowOffset: { width: 0, height: 5 },
+                                shadowOpacity: 0.8,
+                                shadowRadius: 6,
+                              }}
+                            >
+                              <TouchableOpacity
+                                onPress={() => {
+                                  this.changeflagcategorymenu(item);
+                                }}
+                              >
+                                <Image
+                                  source={{
+                                    uri: item.imageUrl,
+                                    // 'https://source.unsplash.com/user/c_v_r/100x100'
+                                  }}
+                                  style={styles.image}
+                                />
+                              </TouchableOpacity>
+                            </Card>
+                          );
+                        })}
+                    </ScrollView>
+
+                    <>
+                      <Text style={styles.modalTitle}>
+                        Select Subscription Count{" "}
+                      </Text>
+
+                      <View style={styles.containerFlat}>
+                        <FlatList
+                          data={this.state.selectPlandays}
+                          renderItem={this.renderItem}
+                          keyExtractor={(item) => item.id.toString()}
+                          horizontal={true}
+                        />
+                      </View>
+                    </>
+
+                    {this.state.selcecteddays == "" ? null : (
+                      <View style={styles.summaryCardsum}>
+                        <Text style={styles.walletHeaderSum}>Description*</Text>
+                        <Text style={styles.cardTextsum}>
+                          Selected Plan Name : {this.state.selectedPlanname}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Meal Price : ₹ {this.state.selectedAmount}
+                          {/* ( ₹.
+                          {this.state.selectedAmount} *{" "}
+                          {this.state.selcecteddays} Days) */}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Plan Validity : {this.state.startDate} to{" "}
+                          {this.state.endDate}
+                        </Text>
+                        <Text style={styles.cardTextsum}>
+                          Total Price : ( ₹.{this.state.selectedAmount} ×{" "}
+                          {this.state.selcecteddays} Days) = ₹.
+                          {this.state.planAmount}
+                        </Text>
+                      </View>
+                    )}
 
                     {/* {this.state.dateTimePickerVisible && (
                         <DateTimePicker
@@ -1492,13 +1790,13 @@ export class Subscription extends React.PureComponent {
                         style={
                           planAmount == "" || Apicall == true
                             ? [
-                                styles.button,
-                                styles.modalButton,
+                                // styles.button,
+                                styles.modalButtonPay,
                                 styles.payButtonDis,
                               ]
                             : [
-                                styles.button,
-                                styles.modalButton,
+                                // styles.button,
+                                styles.modalButtonPay,
                                 styles.payButton,
                                 // styles.closeButton={backgroundColor:"#73ff00"},
                               ]
@@ -1514,8 +1812,8 @@ export class Subscription extends React.PureComponent {
                         //   this.togglePaymentModal();
                         // }}
                         style={[
-                          styles.button,
-                          styles.modalButton,
+                          //styles.button,
+                          styles.modalButtonPay,
                           styles.closeButton,
                         ]}
                       >
@@ -1699,15 +1997,21 @@ export const styles = StyleSheet.create({
   },
 
   summaryCardsum: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#721C37",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 20,
   },
   cardTextsum: {
-    fontSize: 16,
+    fontSize: 14,
+    color: "#fcfcfc",
+    backgroundColor: "#721C37",
   },
-
+  walletHeaderSum: {
+    fontFamily: EDFonts.semiBold,
+    fontSize: getProportionalFontSize(18),
+    color: "#fcfcfc",
+  },
   containerpic: {
     flex: 1,
     justifyContent: "center",
@@ -1792,11 +2096,11 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 10,
   },
-  modalButton: {
+  modalButtonPay: {
     padding: 10,
     borderRadius: 10,
     margin: 5,
-    width: 100,
+    width: 120,
     alignItems: "center",
   },
   closeButton: {
@@ -1830,6 +2134,7 @@ export const styles = StyleSheet.create({
     color: EDColors.black,
     // textAlign: isRTLCheck() ? 'right' : 'left'
   },
+
   walletText: {
     fontFamily: EDFonts.semiBold,
     fontSize: getProportionalFontSize(32),
@@ -1837,5 +2142,13 @@ export const styles = StyleSheet.create({
     marginRight: 5,
     // marginTop: 5
     // textAlign: isRTLCheck() ? 'right' : 'left'
+  },
+
+  image: {
+    width: "100%",
+    height: "100%",
+    // resizeMode: "cover",
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
   },
 });
