@@ -2221,8 +2221,10 @@ export class CheckOutContainer extends React.PureComponent {
         // return false;
 
         if (
-          parseInt(this.state.loggedInUserwalletBalance) >= Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) >= filterForactualTotalsubtotalTaxes[0]?.value
+          parseInt(this.state.loggedInUserwalletBalance) >=
+            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) >=
+            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "***************************************************** else part 00000 COD paymett $$$$$$$$$$$$$$$$"
@@ -2230,8 +2232,10 @@ export class CheckOutContainer extends React.PureComponent {
           // return false;
           this.placeOrder();
         } else if (
-          parseInt(this.state.loggedInUserwalletBalance) >=  Number(this.props.minOrderAmount) &&
-          parseInt(this.state.loggedInUserwalletBalance) <   filterForactualTotalsubtotalTaxes[0]?.value
+          parseInt(this.state.loggedInUserwalletBalance) >=
+            Number(this.props.minOrderAmount) &&
+          parseInt(this.state.loggedInUserwalletBalance) <
+            filterForactualTotalsubtotalTaxes[0]?.value
         ) {
           debugLog(
             "******************************************************* else part 111111 razorpay paymett $$$$$$$$$$$"
@@ -2585,16 +2589,16 @@ export class CheckOutContainer extends React.PureComponent {
     let base64 = require("base-64");
     let username1 = this.razorpayDetails?.live_publishable_key;
     let password1 = this.razorpayDetails?.live_secret_key;
-    let currentdate= new Date().toISOString();
+    let currentdate = new Date().toISOString();
 
     let dataforgenraeorder = {
       amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
       currency: this.currency_code,
-      receipt  : `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}` ,
-      "notes": {
-        "user_id":  this.props.userID,
-        "mobile_no": this.props.token,
-      }
+      receipt: `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}`,
+      notes: {
+        user_id: this.props.userID,
+        mobile_no: this.props.token,
+      },
     };
 
     // return false;
@@ -2607,12 +2611,16 @@ export class CheckOutContainer extends React.PureComponent {
           Authorization: "Basic " + base64.encode(username1 + ":" + password1),
         },
       }
-    );    
-    if (generate_order_id.status === 200) {
-      // debugLog(
-      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
-      //   generate_order_id.data
-      // );
+    );
+    if (
+      generate_order_id.status === 200 &&
+      generate_order_id.data?.id != "" &&
+      generate_order_id.data?.id != undefined
+    ) {
+      debugLog(
+        "****************************** Vijay ****************************** generate_order_id.data?.id ",
+        generate_order_id.data
+      );
       this.startRazorPayment(generate_order_id.data?.id);
     } else {
       showValidationAlert("Unable to generate order id");
@@ -2625,6 +2633,7 @@ export class CheckOutContainer extends React.PureComponent {
     //   this.razorpayDetails,
     //   valueoforderid
     // );
+    // return false;
 
     this.merchant_order_id = Date.now();
     var options = {
@@ -2674,14 +2683,10 @@ export class CheckOutContainer extends React.PureComponent {
     RazorpayCheckout.open(options)
       .then((data) => {
         // handle success
-        // debugLog("Payment success ::::::", data);       
+        debugLog("Payment success ::::::", data);
         // return false;
         this.razorpay_payment_id = data.razorpay_payment_id;
-        this.placeOrder(
-          data.razorpay_payment_id,
-          "razorpay",
-          data
-        );
+        this.placeOrder(data.razorpay_payment_id, "razorpay", data);
       })
       .catch((error) => {
         // handle failure
