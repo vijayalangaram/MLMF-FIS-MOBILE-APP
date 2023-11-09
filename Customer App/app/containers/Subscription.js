@@ -171,7 +171,7 @@ export class Subscription extends React.PureComponent {
     selected_restaurantCategory: "",
 
     selectedDependence: "",
-    startDate: moment(new Date()).format("DD-MM-YYYY"),
+    startDate: moment(new Date()).format("DD/MM/YYYY"),
 
     amount: "",
 

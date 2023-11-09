@@ -2527,12 +2527,12 @@ class MainContainer extends React.Component {
                   <EDThemeButton
                     label={`Back`}
                     style={{
-                      width: "25%",
+                      width: "30%",
                       backgroundColor: "grey",
                       //  this.state.today_tomorrow_Flag
                       //   ? "green"
                       //   : "grey",
-                      marginLeft: 200,
+                      marginLeft: 190,
                     }}
                     onPress={() => {
                       this.setState({ modal_Pop_Up: false });
