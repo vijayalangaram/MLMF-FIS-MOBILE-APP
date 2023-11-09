@@ -704,7 +704,7 @@ class MainContainer extends React.Component {
       latitude: address.latitude,
       longitude: address.longitude,
       // latitude: "13.0827",
-      // longitude:  "80.2707",
+      // longitude: "80.2707",
       areaName:
         address.address_label !== undefined &&
         address.address_label !== null &&
@@ -2524,6 +2524,22 @@ class MainContainer extends React.Component {
             >
               <ScrollView>
                 <View>
+                  <EDThemeButton
+                    label={`Back`}
+                    style={{
+                      width: "25%",
+                      backgroundColor: "grey",
+                      //  this.state.today_tomorrow_Flag
+                      //   ? "green"
+                      //   : "grey",
+                      marginLeft: 200,
+                    }}
+                    onPress={() => {
+                      this.setState({ modal_Pop_Up: false });
+                    }}
+                  />
+                </View>
+                <View>
                   <Text
                     style={{
                       fontSize: 20,
@@ -2687,9 +2703,11 @@ class MainContainer extends React.Component {
                                 this.changeflagcategorymenu(items);
                               }
 
-                              {restaurantCategoryMAster &&
-                                restaurantCategoryMAster.length > 0 &&
-                              this.callRes_container();}
+                              {
+                                restaurantCategoryMAster &&
+                                  restaurantCategoryMAster.length > 0 &&
+                                  this.callRes_container();
+                              }
                             }}
                           >
                             <Image
@@ -2794,7 +2812,7 @@ class MainContainer extends React.Component {
                 </ScrollView>
 
                 <EDRTLView style={{ alignItems: "center", padding: 10 }}>
-                  <EDThemeButton
+                  {/* <EDThemeButton
                     label={`Back`}
                     style={{
                       width: "45%",
@@ -2807,45 +2825,53 @@ class MainContainer extends React.Component {
                     onPress={() => {
                       this.setState({ modal_Pop_Up: false });
                     }}
-                  />
+                  /> */}
                   {restaurantCategoryMAster &&
-                  restaurantCategoryMAster.length <= 0 && 
-                  // (
-                    // <EDThemeButton
-                    //   label={`Proceed`}
-                    //   style={{
-                    //     width: "40%",
-                    //     backgroundColor: "#808000",
-                    //     marginLeft: 15,
-                    //     color: "black",
-                    //   }}
-                    //   textStyle={{
-                    //     fontSize: getProportionalFontSize(14),
-                    //     paddingLeft: 7,
-                    //     paddingRight: 7,
-                    //   }}
-                    //   onPress={() => {
-                    //     this.callRes_container();
-                    //   }}
-                    // />
-                  // ) :
-                   (
-                    <EDThemeButton
-                      label={`No Data`}
-                      style={{
-                        width: "40%",
-                        backgroundColor: "orange",
-                        marginLeft: 15,
-                        color: "black",
-                      }}
-                      textStyle={{
-                        fontSize: getProportionalFontSize(14),
-                        paddingLeft: 7,
-                        paddingRight: 7,
-                      }}
-                    />
-                  )}
+                    restaurantCategoryMAster.length <= 0 && (
+                      // (
+                      // <EDThemeButton
+                      //   label={`Proceed`}
+                      //   style={{
+                      //     width: "40%",
+                      //     backgroundColor: "#808000",
+                      //     marginLeft: 15,
+                      //     color: "black",
+                      //   }}
+                      //   textStyle={{
+                      //     fontSize: getProportionalFontSize(14),
+                      //     paddingLeft: 7,
+                      //     paddingRight: 7,
+                      //   }}
+                      //   onPress={() => {
+                      //     this.callRes_container();
+                      //   }}
+                      // />
+                      // ) :
+                      <EDThemeButton
+                        label={`No Data`}
+                        style={{
+                          width: "40%",
+                          backgroundColor: "orange",
+                          marginLeft: 76,
+                          color: "black",
+                        }}
+                        textStyle={{
+                          fontSize: getProportionalFontSize(14),
+                          paddingLeft: 7,
+                          paddingRight: 7,
+                        }}
+                      />
+                    )}
                 </EDRTLView>
+
+                <Button
+                  title="Go to Subscription"
+                  onPress={() => {
+                    // Handle payment logic here
+                    this.props.navigation.navigate("TempMainContainer");
+                    this.setState({ modal_Pop_Up: false });
+                  }}
+                />
               </ScrollView>
             </Modal>
           </View>

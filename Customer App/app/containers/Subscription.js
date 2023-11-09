@@ -171,10 +171,10 @@ export class Subscription extends React.PureComponent {
     selected_restaurantCategory: "",
 
     selectedDependence: "",
-    selectedDays: [],
-    startDate: "",
+    startDate: moment(new Date()).format("DD-MM-YYYY"),
+
     amount: "",
-    endDate: "",
+
     isSubmitEnabled: false,
     summary: null,
     showSummary: false,
@@ -245,6 +245,8 @@ export class Subscription extends React.PureComponent {
     selected_Subscription_Plan: "",
     isPaymentLoading: false,
     razorpayDetails: [],
+    effctivecount: "",
+    endDate: "",
     //isLoading: false,
   };
 
@@ -269,7 +271,7 @@ export class Subscription extends React.PureComponent {
     this.getPaymentOptionsAPI();
     this.getWalletHistoryAPIREQ();
 
-   // BackHandler.addEventListener("hardwareBackPress", this.onBack);
+    // BackHandler.addEventListener("hardwareBackPress", this.onBack);
   }
 
   // componentWillUnmount() {
@@ -847,7 +849,7 @@ export class Subscription extends React.PureComponent {
     this.setState({ isLoading: true });
     // this.setState({ isLoading: true });
     this.setState({ isPaymentModalVisible: false });
-   
+
     let merchant_order_id = Date.now();
     var options = {
       description: "Paying MLMF",
@@ -1168,8 +1170,15 @@ export class Subscription extends React.PureComponent {
   // };
 
   toggleItemSelection = (id) => {
-    let { selcecteddays, selectedAmount, planAmount, selectedboolean } =
-      this.state;
+    let {
+      selcecteddays,
+      selectedAmount,
+      planAmount,
+      selectedboolean,
+      endDate,
+      effctivecount,
+      startDate,
+    } = this.state;
     const newData = this.state.selectPlandays.map((item, i) => {
       // debugLog("toggle selected ======== === === ", item);
       if (item.id === id) {
@@ -1193,8 +1202,16 @@ export class Subscription extends React.PureComponent {
     this.setState({ selcecteddays: filterflagtrue[0].text });
 
     // this.total_amounT();
+    let efftiveCount = Number(filterflagtrue[0].text) + 5;
+    let enddate = moment(startDate, "DD-MM-YYYY").add(
+      Number(efftiveCount),
+      "days"
+    );
+    let endate = moment(enddate).utc().format("DD/MM/YYYY");
+    debugLog(" efftiveCount---efftiveCount---efftiveCount", efftiveCount);
+    debugLog(" enddate---enddate---enddate", endate);
     this.setState({ planAmount: total });
-
+    this.setState({ effctivecount: efftiveCount, endDate: endate });
     debugLog(" total---total---total", total);
   };
 
@@ -1289,7 +1306,7 @@ export class Subscription extends React.PureComponent {
       selectedPlanname: filterflagtrue[0].planName,
       selectedAmount: filterflagtrue[0].amount,
       planAmount: planamt,
-      selectedPlan:filterflagtrue[0].planId
+      selectedPlan: filterflagtrue[0].planId,
       // selected_restaurantCategory
     });
   };
@@ -1480,7 +1497,7 @@ export class Subscription extends React.PureComponent {
                         textAlign: "center",
                       }}
                     >
-                      Curently No active Plan
+                      Currently No active Plan
                     </Text>
                   </Card>
                 ) : (
@@ -1688,7 +1705,6 @@ export class Subscription extends React.PureComponent {
                               <TouchableOpacity
                                 onPress={() => {
                                   this.changeflagcategorymenu(item);
-                                  
                                 }}
                               >
                                 <Image
@@ -1718,6 +1734,24 @@ export class Subscription extends React.PureComponent {
                         />
                       </View>
                     </>
+                    
+                      {this.state.selcecteddays == "" ? null:
+                      
+                    (<View style={styles.summaryCardsum}>
+                      <Text style={styles.walletHeaderSum}>
+                    Description*
+                  </Text>
+                      <Text style={styles.cardTextsum}>
+                        Selected Plan Name : {this.state.selectedPlanname}
+                      </Text>
+                      <Text style={styles.cardTextsum}>
+                  Meals Price : ₹ {this.state.selectedAmount}  ( ₹.{this.state.selectedAmount} * {this.state.selcecteddays} Days)
+                  </Text>
+                      <Text style={styles.cardTextsum}>
+                        Plan Validity : {this.state.startDate}  to  {this.state.endDate}
+                      </Text>                 
+                    </View>)}
+                    
 
                     {/* {this.state.dateTimePickerVisible && (
                         <DateTimePicker
@@ -1957,15 +1991,22 @@ export const styles = StyleSheet.create({
   },
 
   summaryCardsum: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#721C37",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 20,
   },
   cardTextsum: {
-    fontSize: 16,
+    fontSize: 14,
+    color:"#fcfcfc",
+    backgroundColor:"#721C37",
   },
+  walletHeaderSum:{
+    fontFamily: EDFonts.semiBold,
+    fontSize: getProportionalFontSize(18),
+    color: "#fcfcfc",
 
+  },
   containerpic: {
     flex: 1,
     justifyContent: "center",
@@ -2088,6 +2129,8 @@ export const styles = StyleSheet.create({
     color: EDColors.black,
     // textAlign: isRTLCheck() ? 'right' : 'left'
   },
+
+ 
   walletText: {
     fontFamily: EDFonts.semiBold,
     fontSize: getProportionalFontSize(32),
