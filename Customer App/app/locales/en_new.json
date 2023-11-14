@@ -224,6 +224,7 @@
     "noPastBooking": "There is no past reservation from your account yet.",
     "bookingStatus": "Reservation status: ",
     "myOrder": "My Orders",
+    "mySubscription":"My Subscription",
     "trackOrder": "Track Order ",
     "trackYourOrder": "Track Your Order",
     "orderId": "Order ID #",
