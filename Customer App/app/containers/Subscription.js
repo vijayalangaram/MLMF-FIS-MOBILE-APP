@@ -801,6 +801,7 @@ export class Subscription extends React.PureComponent {
         user_id: this.props.userID,
         mobile_no: this.props.token,
       },
+      payment_capture: true,
     };
 
     // debugLog("%%%%%%%%   dataforgenraeorder   %%%5%%%%", dataforgenraeorder);
