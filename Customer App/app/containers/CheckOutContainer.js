@@ -2600,7 +2600,8 @@ export class CheckOutContainer extends React.PureComponent {
       "notes": {
         "user_id":  this.props.userID,
         "mobile_no": this.props.token,
-      }
+      },
+      payment_capture: true,
     };
 
     // return false;
