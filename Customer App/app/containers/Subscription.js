@@ -983,7 +983,7 @@ export class Subscription extends React.PureComponent {
         );
         showValidationAlert(" subscription Added Successfully");
         this.setState({ isLoading: false });
-        // this.togglePaymentModal();
+         this.togglePaymentModal();
       } else {
         showValidationAlert("Unable to generate order id");
       }
