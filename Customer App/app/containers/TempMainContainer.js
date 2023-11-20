@@ -1128,9 +1128,9 @@ class TempMainContainer extends React.Component {
       this.props.received_category_id_from_home_cont != undefined &&
       this.props.received_category_id_from_home_cont != ""
     ) {
-      this.setState({
-        modal_Pop_Up: true,
-      });
+      // this.setState({
+      //   modal_Pop_Up: true,
+      // });
     }
 
     this.orderMode = this.props.orderMode == 1 ? 1 : 0;
@@ -1169,7 +1169,7 @@ class TempMainContainer extends React.Component {
       this.currentCity = undefined;
       this.onPullToRefreshHandler();
     }
-    this.props.saveNavigationSelection("Home");
+    this.props.saveNavigationSelection("TempMainContainer");
 
     this.getCartList();
     // this.getFoodType()
