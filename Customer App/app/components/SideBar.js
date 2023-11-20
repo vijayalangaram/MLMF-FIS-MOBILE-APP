@@ -95,12 +95,12 @@ class SideBar extends React.PureComponent {
         icon: "handbag",
         type: "simple-line-icon",
       },
-      {
-        route: "TempMainContainer",
-        screenName:" My subscription",
-        icon: "fast-food-outline",
-        type: "ionicon",
-      },
+      // {
+      //   route: "TempMainContainer",
+      //   screenName:" My subscription",
+      //   icon: "fast-food-outline",
+      //   type: "ionicon",
+      // },
 
       // {
       //   route: "PendingOrders",
