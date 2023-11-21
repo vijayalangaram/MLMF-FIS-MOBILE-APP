@@ -1353,9 +1353,9 @@ class TempMainContainer extends React.Component {
     let reversedate = planDate && planDate.split("-").reverse().join("-");
     let getRestaurantCategoryAPI = await axios
       .get(
-        // `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategory?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}`,
+        // `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}`,
 
-        `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
+        `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restObjModel.restuarant_id}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
 
         {
           headers: {
@@ -1723,7 +1723,7 @@ class TempMainContainer extends React.Component {
     // );
 
     let getDeliveryChargeAPICall = await axios.post(
-      "http://52.77.35.146:8080/FIS/api/auth/getDeliveryCharge",
+      "https://fis.clsslabs.com/FIS/api/auth/getDeliveryCharge",
       datas,
       {
         headers: {
@@ -2376,8 +2376,8 @@ class TempMainContainer extends React.Component {
       let reversedate = planDate && planDate.split("-").reverse().join("-");
       let getRestaurantCategoryAPI = await axios
         .get(
-          // `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
-          `http://52.77.35.146:8080/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
+          // `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategory?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}`,
+          `https://fis.clsslabs.com/FIS/api/auth/getRestaurantCategoryByUser?restaurantId=${restaurant_restaurantNamevalue[0]}&planDate=${reversedate}&userId=${this.props.userIdFromRedux}`,
           {
             headers: {
               "Content-Type": "application/json",
