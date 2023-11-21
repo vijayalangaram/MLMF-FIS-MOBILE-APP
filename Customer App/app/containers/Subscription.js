@@ -304,7 +304,7 @@ export class Subscription extends React.PureComponent {
 
   subscription_Master_listapi = async () => {
     let generate_order_id = await axios.get(
-      `http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemePlanMasterDetailsForMobile?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
+      `https://fis.clsslabs.com/FIS/api/auth/getMlmfSchemePlanMasterDetailsForMobile?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -355,7 +355,7 @@ export class Subscription extends React.PureComponent {
 
   get_subscription_List = async () => {
     let generate_order_id = await axios.get(
-      `http://52.77.35.146:8080/FIS/api/auth/getMlmfSchemeSubscriptionDetails?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
+      `https://fis.clsslabs.com/FIS/api/auth/getMlmfSchemeSubscriptionDetails?outletId=${this.props.navigation.state.params.restId}&customerId=${this.props.userID}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -968,7 +968,7 @@ export class Subscription extends React.PureComponent {
     //return false
     try {
       let generate_order_id = await axios.post(
-        "http://52.77.35.146:8080/FIS/api/auth/saveMlmfSchemeSubscriptionDataForMobile",
+        "https://fis.clsslabs.com/FIS/api/auth/saveMlmfSchemeSubscriptionDataForMobile",
         subscripdetail,
         {
           headers: {
