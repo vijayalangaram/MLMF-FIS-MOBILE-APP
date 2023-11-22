@@ -2602,7 +2602,7 @@ export class CheckOutContainer extends React.PureComponent {
         "mobile_no": this.props.token,
       },
       payment_capture: true,
-    };
+    }; 
 
     // return false;
     let generate_order_id = await axios.post(
@@ -3174,9 +3174,9 @@ export class CheckOutContainer extends React.PureComponent {
             //   tempArray.length
             // );
             if (
-              parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(this.state.loggedInUserwalletBalance) >=
                 Number(this.props.minOrderAmount) &&
-              parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(this.state.loggedInUserwalletBalance) >=
                 parseInt(intialTotalCountvalue)
             ) {
               const pushtoPriceForwallet = {
@@ -3189,9 +3189,9 @@ export class CheckOutContainer extends React.PureComponent {
               this.setState({ walletApplied: true });
               onSuccess.is_redeem == true;
             } else if (
-              parseInt(this.state.loggedInUserwalletBalance) >
+              parseInt(this.state.loggedInUserwalletBalance) >=
                 Number(this.props.minOrderAmount) &&
-              parseInt(this.state.loggedInUserwalletBalance) <
+              parseInt(this.state.loggedInUserwalletBalance) <=
                 parseInt(intialTotalCountvalue)
             ) {
               const pushtoPriceForwallet = {
