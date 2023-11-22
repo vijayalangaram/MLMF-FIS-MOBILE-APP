@@ -2589,8 +2589,8 @@ export class CheckOutContainer extends React.PureComponent {
     // return false;
 
     let base64 = require("base-64");
-    let username1 = this.razorpayDetails?.test_publishable_key;
-    let password1 = this.razorpayDetails?.test_secret_key;
+    let username1 = this.razorpayDetails?.live_publishable_key;
+    let password1 = this.razorpayDetails?.live_secret_key;
     let currentdate= new Date().toISOString();
 
     let dataforgenraeorder = {
