@@ -2589,20 +2589,40 @@ export class CheckOutContainer extends React.PureComponent {
     // return false;
 
     let base64 = require("base-64");
-    let username1 = this.razorpayDetails?.live_publishable_key;
-    let password1 = this.razorpayDetails?.live_secret_key;
-    let currentdate= new Date().toISOString();
+
+    // let username1 = this.razorpayDetails?.live_publishable_key;
+    // let password1 = this.razorpayDetails?.live_secret_key;
+
+    let username1 =
+      this.razorpayDetails.enable_live_mode == "1"
+        ? this.razorpayDetails.live_publishable_key
+        : this.razorpayDetails.test_publishable_key;
+
+    let password1 =
+      this.razorpayDetails.enable_live_mode == "1"
+        ? this.razorpayDetails.live_secret_key
+        : this.razorpayDetails.test_secret_key;
+
+    // debugLog("77777777777777777777777777777", this.razorpayDetails);
+    // debugLog(
+    //   "777777777777777777777777777777",
+    //   this.razorpayDetails.live_secret_key,
+    //   this.razorpayDetails.test_secret_key
+    // );
+    // return false;
+
+    let currentdate = new Date().toISOString();
 
     let dataforgenraeorder = {
       amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
       currency: this.currency_code,
-      receipt  : `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}` ,
-      "notes": {
-        "user_id":  this.props.userID,
-        "mobile_no": this.props.token,
+      receipt: `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}`,
+      notes: {
+        user_id: this.props.userID,
+        mobile_no: this.props.token,
       },
       payment_capture: true,
-    }; 
+    };
 
     // return false;
     let generate_order_id = await axios.post(
@@ -2614,12 +2634,12 @@ export class CheckOutContainer extends React.PureComponent {
           Authorization: "Basic " + base64.encode(username1 + ":" + password1),
         },
       }
-    );    
+    );
     if (generate_order_id.status === 200) {
-      // debugLog(
-      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
-      //   generate_order_id.data
-      // );
+      debugLog(
+        "****************************** Vijay ****************************** generate_order_id.data?.id ",
+        generate_order_id.data
+      );
       this.startRazorPayment(generate_order_id.data?.id);
     } else {
       showValidationAlert("Unable to generate order id");
@@ -2627,11 +2647,11 @@ export class CheckOutContainer extends React.PureComponent {
   };
 
   startRazorPayment = (valueoforderid) => {
-    // debugLog(
-    //   "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
-    //   this.razorpayDetails,
-    //   valueoforderid
-    // );
+    debugLog(
+      "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
+      this.razorpayDetails,
+      valueoforderid
+    );
 
     this.merchant_order_id = Date.now();
     var options = {
@@ -2688,11 +2708,7 @@ export class CheckOutContainer extends React.PureComponent {
         );
         // return false;
         this.razorpay_payment_id = data.razorpay_payment_id;
-        this.placeOrder(
-          data.razorpay_payment_id,
-          "razorpay",
-          data
-        );
+        this.placeOrder(data.razorpay_payment_id, "razorpay", data);
       })
       .catch((error) => {
         // handle failure
