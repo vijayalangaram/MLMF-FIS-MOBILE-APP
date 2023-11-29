@@ -2864,14 +2864,14 @@ class MainContainer extends React.Component {
                     )}
                 </EDRTLView>
 
-                {/* <Button
+                <Button
                   title="Go to Subscription"
                   onPress={() => {
                     // Handle payment logic here
                     this.props.navigation.navigate("TempMainContainer");
                     this.setState({ modal_Pop_Up: false });
                   }}
-                /> */}
+                />
               </ScrollView>
             </Modal>
           </View>
