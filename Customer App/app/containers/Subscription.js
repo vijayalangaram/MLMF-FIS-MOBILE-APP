@@ -1753,8 +1753,8 @@ export class Subscription extends React.PureComponent {
                           {this.state.endDate}
                         </Text>
                         <Text style={styles.cardTextsum}>
-                          Total Price : ( ₹.{this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹.
+                          Total Price : ( ₹ {this.state.selectedAmount} ×{" "}
+                          {this.state.selcecteddays} Days) = ₹
                           {this.state.planAmount}
                         </Text>
                       </View>
