@@ -2586,11 +2586,19 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment_Get_Order_ID = async () => {
-    // return false;
 
     let base64 = require("base-64");
-    let username1 = this.razorpayDetails?.test_publishable_key;
-    let password1 = this.razorpayDetails?.test_secret_key;
+    
+    let username1 =
+      this.razorpayDetails.enable_live_mode == "1"
+        ? this.razorpayDetails.live_publishable_key
+        : this.razorpayDetails.test_publishable_key;
+
+    let password1 =
+      this.razorpayDetails.enable_live_mode == "1"
+        ? this.razorpayDetails.live_secret_key
+        : this.razorpayDetails.test_secret_key;
+ 
     let currentdate= new Date().toISOString();
 
     let dataforgenraeorder = {
