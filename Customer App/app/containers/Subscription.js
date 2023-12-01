@@ -226,7 +226,7 @@ export class Subscription extends React.PureComponent {
     selectedCategory: null,
     isRestaurantModalVisible: false,
     isCategoryModalVisible: false,
-    isPaymentModalVisible: false,
+    isPaymentModalVisible: true,
     isSummaryModalVisible: false,
 
     selectedAmount: "",
@@ -983,7 +983,7 @@ export class Subscription extends React.PureComponent {
         );
         showValidationAlert(" subscription Added Successfully");
         this.setState({ isLoading: false });
-         this.togglePaymentModal();
+        this.togglePaymentModal();
       } else {
         showValidationAlert("Unable to generate order id");
       }
@@ -1028,6 +1028,44 @@ export class Subscription extends React.PureComponent {
     this.setState(
       {
         isPaymentModalVisible: !this.state.isPaymentModalVisible,
+        selectedAmount: "",
+        selectedPlanname: "",
+        planAmount: "",
+        selectedPlan: [],
+        selcecteddays: "",
+        selectPlandays: newData,
+      },
+      () => {
+        this.get_subscription_List();
+        this.get_save_subscription_Cart_fund();
+        this.subscription_Master_listapi();
+        this.getPaymentOptionsAPI();
+        this.getWalletHistoryAPIREQ();
+      }
+    );
+  };
+
+  toggleResetModal = () => {
+    let {
+      isPaymentModalVisible,
+      selectedAmount,
+      selectedPlanname,
+      planAmount,
+      selectedPlan,
+      selcecteddays,
+      selectPlandays,
+    } = this.state;
+    let newData = this.state.selectPlandays.map((item, i) => {
+      if (item.selected === true) {
+        item.selected = false;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+    this.setState(
+      {
+        // isPaymentModalVisible: !this.state.isPaymentModalVisible,
         selectedAmount: "",
         selectedPlanname: "",
         planAmount: "",
@@ -1574,17 +1612,68 @@ export class Subscription extends React.PureComponent {
                 transparent={false}
                 onRequestClose={this.togglePaymentModal}
               >
-                <ScrollView>
-                  <View style={styles.modalContainer}>
-                    <Text style={styles.modalTitle}>
-                      {plan_Master && plan_Master.length > 0
-                        ? "Select Subscription Plan"
-                        : "Curently no plan available"}
-                    </Text>
+                <BaseContainer
+                  title={"Subscription"}
+                  left={"menu"}
+                  right={[]}
+                  onLeft={this.onDrawerOpen}
+                  onConnectionChangeHandler={this.networkConnectivityStatus}
+                  //loading={this.state.isLoading}
+                >
+                  <ScrollView>
+                    <View
+                      style={{
+                        backgroundColor: EDColors.white,
+                        borderRadius: 16,
+                        padding: 10,
+                        elevation: 1,
+                        marginBottom: 2,
+                        marginTop: 10,
+                      }}
+                    >
+                      {/* VIKRANT 30-07-21 */}
+                      <EDRTLView style={style.header}>
+                        <View style={style.walletView}>
+                          <EDRTLView style={{ alignItems: "center" }}>
+                            <Text style={style.walletHeader}>
+                              {strings("yourWalletBalance")}
+                            </Text>
+                          </EDRTLView>
 
-                    {/* Add payment information and UI */}
+                          <Text
+                            style={[
+                              style.walletText,
+                              {
+                                fontFamily: EDFonts.bold,
+                                textAlign: isRTLCheck() ? "right" : "left",
+                              },
+                            ]}
+                          >
+                            {this.state.symbol +
+                              " " +
+                              this.state.loggedInUserwalletBalance}
+                          </Text>
+                        </View>
+                        {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
+                        <TouchableOpacity
+                          onPress={this.togglePaymentModal}
+                          style={[styles.buttonAdd, styles.restaurantButton]}
+                        >
+                          <Text style={styles.buttonTextAdd}>Current Plan</Text>
+                        </TouchableOpacity>
+                      </EDRTLView>
+                    </View>
 
-                    {/* <ScrollView
+                    <View style={styles.modalContainer}>
+                      <Text style={styles.modalTitle}>
+                        {plan_Master && plan_Master.length > 0
+                          ? "Select Subscription Plan"
+                          : "Curently no plan available"}
+                      </Text>
+
+                      {/* Add payment information and UI */}
+
+                      {/* <ScrollView
                     horizontal={false}
                     showsVerticalScrollIndicator={true}
                   > 
@@ -1612,9 +1701,9 @@ export class Subscription extends React.PureComponent {
                         </Card>
                       );
                     })} */}
-                    {/* </ScrollView> */}
+                      {/* </ScrollView> */}
 
-                    {/* {plan_Master && plan_Master.length > 0 && (
+                      {/* {plan_Master && plan_Master.length > 0 && (
                       <View style={styles.containerDrop}>
                         <Dropdown
                           style={[
@@ -1675,92 +1764,96 @@ export class Subscription extends React.PureComponent {
                         />
                       </View>
                     )} */}
-                    <ScrollView
-                      horizontal={true}
-                      showsHorizontalScrollIndicator={true}
-                    >
-                      {plan_Master &&
-                        plan_Master.length > 0 &&
-                        plan_Master.map((item) => {
-                          debugLog(
-                            "card image%%%%%%%%%%%%%%%**********Image**************",
-                            item
-                          );
+                      <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={true}
+                      >
+                        {plan_Master &&
+                          plan_Master.length > 0 &&
+                          plan_Master.map((item) => {
+                            debugLog(
+                              "card image%%%%%%%%%%%%%%%**********Image**************",
+                              item
+                            );
 
-                          return (
-                            <Card
-                              containerStyle={{
-                                // backgroundColor: "#fffcfc", //#9f1982 #fffcfc
-                                backgroundColor: item?.flag ? "green" : "white",
-                                height: 200,
-                                width: 200,
-                                borderRadius: 20,
-                                //borderColor:"#c7c3c3",
-                                //boxShadow: "rgba(255, 0, 0, 0.24) 0px 3px 8px",
-                                shadowColor: "black",
-                                shadowOffset: { width: 0, height: 5 },
-                                shadowOpacity: 0.8,
-                                shadowRadius: 6,
-                              }}
-                            >
-                              <TouchableOpacity
-                                onPress={() => {
-                                  this.changeflagcategorymenu(item);
+                            return (
+                              <Card
+                                containerStyle={{
+                                  // backgroundColor: "#fffcfc", //#9f1982 #fffcfc
+                                  backgroundColor: item?.flag
+                                    ? "green"
+                                    : "white",
+                                  height: 200,
+                                  width: 200,
+                                  borderRadius: 20,
+                                  //borderColor:"#c7c3c3",
+                                  //boxShadow: "rgba(255, 0, 0, 0.24) 0px 3px 8px",
+                                  shadowColor: "black",
+                                  shadowOffset: { width: 0, height: 5 },
+                                  shadowOpacity: 0.8,
+                                  shadowRadius: 6,
                                 }}
                               >
-                                <Image
-                                  source={{
-                                    uri: item.imageUrl,
-                                    // 'https://source.unsplash.com/user/c_v_r/100x100'
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    this.changeflagcategorymenu(item);
                                   }}
-                                  style={styles.image}
-                                />
-                              </TouchableOpacity>
-                            </Card>
-                          );
-                        })}
-                    </ScrollView>
+                                >
+                                  <Image
+                                    source={{
+                                      uri: item.imageUrl,
+                                      // 'https://source.unsplash.com/user/c_v_r/100x100'
+                                    }}
+                                    style={styles.image}
+                                  />
+                                </TouchableOpacity>
+                              </Card>
+                            );
+                          })}
+                      </ScrollView>
 
-                    <>
-                      <Text style={styles.modalTitle}>
-                        Select Subscription Count{" "}
-                      </Text>
-
-                      <View style={styles.containerFlat}>
-                        <FlatList
-                          data={this.state.selectPlandays}
-                          renderItem={this.renderItem}
-                          keyExtractor={(item) => item.id.toString()}
-                          horizontal={true}
-                        />
-                      </View>
-                    </>
-
-                    {this.state.selcecteddays == "" ? null : (
-                      <View style={styles.summaryCardsum}>
-                        <Text style={styles.walletHeaderSum}>Description*</Text>
-                        <Text style={styles.cardTextsum}>
-                          Selected Plan Name : {this.state.selectedPlanname}
+                      <>
+                        <Text style={styles.modalTitle}>
+                          Select Subscription Count{" "}
                         </Text>
-                        <Text style={styles.cardTextsum}>
-                          Meal Price : ₹ {this.state.selectedAmount}
-                          {/* ( ₹.
+
+                        <View style={styles.containerFlat}>
+                          <FlatList
+                            data={this.state.selectPlandays}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item) => item.id.toString()}
+                            horizontal={true}
+                          />
+                        </View>
+                      </>
+
+                      {this.state.selcecteddays == "" ? null : (
+                        <View style={styles.summaryCardsum}>
+                          <Text style={styles.walletHeaderSum}>
+                            Description*
+                          </Text>
+                          <Text style={styles.cardTextsum}>
+                            Selected Plan Name : {this.state.selectedPlanname}
+                          </Text>
+                          <Text style={styles.cardTextsum}>
+                            Meal Price : ₹ {this.state.selectedAmount}
+                            {/* ( ₹.
                           {this.state.selectedAmount} *{" "}
                           {this.state.selcecteddays} Days) */}
-                        </Text>
-                        <Text style={styles.cardTextsum}>
-                          Plan Validity : {this.state.startDate} to{" "}
-                          {this.state.endDate}
-                        </Text>
-                        <Text style={styles.cardTextsum}>
-                          Total Price : ( ₹.{this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹.
-                          {this.state.planAmount}
-                        </Text>
-                      </View>
-                    )}
+                          </Text>
+                          <Text style={styles.cardTextsum}>
+                            Plan Validity : {this.state.startDate} to{" "}
+                            {this.state.endDate}
+                          </Text>
+                          <Text style={styles.cardTextsum}>
+                            Total Price : ( ₹.{this.state.selectedAmount} ×{" "}
+                            {this.state.selcecteddays} Days) = ₹.
+                            {this.state.planAmount}
+                          </Text>
+                        </View>
+                      )}
 
-                    {/* {this.state.dateTimePickerVisible && (
+                      {/* {this.state.dateTimePickerVisible && (
                         <DateTimePicker
                           mode={"datetime"} // THIS DOES NOT WORK ON ANDROID. IT DISPLAYS ONLY A DATE PICKER.
                           display="default" // Android Only
@@ -1782,47 +1875,50 @@ export class Subscription extends React.PureComponent {
                     </View>
                   </View> */}
 
-                    <View style={{ flexDirection: "row", marginTop: 10 }}>
-                      <TouchableOpacity
-                        onPress={this.startRazorPayment_Get_Order_ID}
-                        // onPress={() => {
-                        //   this.startRazorPayment_Get_Order_ID
-                        // }}
-                        style={
-                          planAmount == "" || Apicall == true
-                            ? [
-                                // styles.button,
-                                styles.modalButtonPay,
-                                styles.payButtonDis,
-                              ]
-                            : [
-                                // styles.button,
-                                styles.modalButtonPay,
-                                styles.payButton,
-                                // styles.closeButton={backgroundColor:"#73ff00"},
-                              ]
-                        }
-                        disabled={planAmount == "" || Apicall == true}
-                      >
-                        <Text style={styles.buttonText}>PAY- {planAmount}</Text>
-                      </TouchableOpacity>
+                      <View style={{ flexDirection: "row", marginTop: 10 }}>
+                        <TouchableOpacity
+                          onPress={this.startRazorPayment_Get_Order_ID}
+                          // onPress={() => {
+                          //   this.startRazorPayment_Get_Order_ID
+                          // }}
+                          style={
+                            planAmount == "" || Apicall == true
+                              ? [
+                                  // styles.button,
+                                  styles.modalButtonPay,
+                                  styles.payButtonDis,
+                                ]
+                              : [
+                                  // styles.button,
+                                  styles.modalButtonPay,
+                                  styles.payButton,
+                                  // styles.closeButton={backgroundColor:"#73ff00"},
+                                ]
+                          }
+                          disabled={planAmount == "" || Apicall == true}
+                        >
+                          <Text style={styles.buttonText}>
+                            PAY- {planAmount}
+                          </Text>
+                        </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={this.togglePaymentModal}
-                        // onPress={() => {
-                        //   this.togglePaymentModal();
-                        // }}
-                        style={[
-                          //styles.button,
-                          styles.modalButtonPay,
-                          styles.closeButton,
-                        ]}
-                      >
-                        <Text style={styles.buttonText}>Close</Text>
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={this.toggleResetModal}
+                          // onPress={() => {
+                          //   this.togglePaymentModal();
+                          // }}
+                          style={[
+                            //styles.button,
+                            styles.modalButtonPay,
+                            styles.closeButton,
+                          ]}
+                        >
+                          <Text style={styles.buttonText}>Reset</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  </View>
-                </ScrollView>
+                  </ScrollView>
+                </BaseContainer>
               </Modal>
 
               <Modal
@@ -2001,10 +2097,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#721C37",
     padding: 10,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   cardTextsum: {
-    fontSize: 14,
+    fontSize: 10,
     color: "#fcfcfc",
     backgroundColor: "#721C37",
   },
@@ -2090,18 +2186,18 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 10,
-    marginLeft: 15,
-    marginTop: 30,
+    marginLeft: 5,
+    marginTop: 5,
   },
   modalItem: {
     fontSize: 18,
     marginVertical: 10,
   },
   modalButtonPay: {
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
     margin: 5,
-    width: 120,
+    width: 100,
     alignItems: "center",
   },
   closeButton: {
