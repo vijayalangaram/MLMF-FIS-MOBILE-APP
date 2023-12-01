@@ -126,7 +126,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { style } from "./AboutStoreContainer";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import Ionicons from "@expo/vector-icons/Ionicons";
+//import Ionicons from "@expo/vector-icons/Ionicons";
 import { FloatingAction } from "react-native-floating-action";
 import HandleBack from "./HandleBack";
 
@@ -1258,6 +1258,14 @@ export class Subscription extends React.PureComponent {
     this.props.navigation.openDrawer();
   };
 
+  onBackHome = () => {
+    this.setState({ isPaymentModalVisible: false });
+    this.props.navigation.navigate("MainContainer");
+    // NavigationActions.navigate({
+    //   routeName: isRTLCheck() ? "MainContainer_Right" : "MainContainer",
+    // });
+  };
+
   //#region
   /** NETWORK CONNECTIVITY */
   networkConnectivityStatus = () => {
@@ -1344,6 +1352,11 @@ export class Subscription extends React.PureComponent {
     });
   };
 
+  onHomeIconPress = () => {
+    // Your custom function to handle the press
+    console.log("Home icon pressed!");
+    // You can add your logic here
+  };
   //  //Alert Msg
   //   createTwoButtonAlert = () =>{
   //   Alert.alert('select you plan and Supscription days', '', [
@@ -1575,6 +1588,69 @@ export class Subscription extends React.PureComponent {
                 onRequestClose={this.togglePaymentModal}
               >
                 <ScrollView>
+                  <View
+                    style={{
+                      backgroundColor: EDColors.white,
+                      borderRadius: 16,
+                      padding: 10,
+                      elevation: 1,
+                      marginBottom: 2,
+                      marginTop: 20,
+                    }}
+                  >
+                    {/* VIKRANT 30-07-21 */}
+                    <EDRTLView style={style.header}>
+                      <View style={style.walletView}>
+                        <EDRTLView style={{ alignItems: "center" }}>
+                          <Text style={style.walletHeader}>
+                            {strings("yourWalletBalance")}
+                          </Text>
+                        </EDRTLView>
+
+                        <Text
+                          style={[
+                            style.walletText,
+                            {
+                              fontFamily: EDFonts.bold,
+                              textAlign: isRTLCheck() ? "right" : "left",
+                            },
+                          ]}
+                        >
+                          {this.state.symbol +
+                            " " +
+                            this.state.loggedInUserwalletBalance}
+                        </Text>
+                      </View>
+                      {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
+                      <TouchableOpacity
+                        onPress={this.togglePaymentModal}
+                        style={[styles.buttonAdd, styles.restaurantButtonG1]}
+                      >
+                        <Text style={styles.buttonTextAdd}>Current Plan</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity>
+                        <Text
+                          style={
+                            {
+                              marginLeft: 50,
+                            }
+                            // styles.buttonTextAdd,
+                            // styles.restaurantButtonG2,
+                          }
+                        >
+                          <Icon
+                            name="home"
+                            type="material"
+                            size={30}
+                            color="#721C37"
+                            onPress={this.onBackHome}
+                          />
+                        </Text>
+                      </TouchableOpacity>
+                    </EDRTLView>
+                  </View>
+
                   <View style={styles.modalContainer}>
                     <Text style={styles.modalTitle}>
                       {plan_Master && plan_Master.length > 0
@@ -1754,7 +1830,7 @@ export class Subscription extends React.PureComponent {
                         </Text>
                         <Text style={styles.cardTextsum}>
                           Total Price : ( ₹ {this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹
+                          {this.state.selcecteddays} Days) = ₹ 
                           {this.state.planAmount}
                         </Text>
                       </View>
@@ -1808,7 +1884,7 @@ export class Subscription extends React.PureComponent {
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                        onPress={this.togglePaymentModal}
+                        onPress={this.toggleResetModal}
                         // onPress={() => {
                         //   this.togglePaymentModal();
                         // }}
@@ -1818,7 +1894,7 @@ export class Subscription extends React.PureComponent {
                           styles.closeButton,
                         ]}
                       >
-                        <Text style={styles.buttonText}>Close</Text>
+                        <Text style={styles.buttonText}>Reset</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -2071,8 +2147,19 @@ export const styles = StyleSheet.create({
 
   restaurantButton: {
     backgroundColor: "#721C37",
-    marginLeft: 80,
+    marginLeft: 60,
     width: 120,
+  },
+  restaurantButtonG1: {
+    backgroundColor: "#721C37",
+    marginLeft: 40,
+    width: 80,
+  },
+
+  restaurantButtonG2: {
+    backgroundColor: "#721C37",
+    marginLeft: 3,
+    width: 90,
   },
   categoryButton: {
     backgroundColor: "#64B5F6",
