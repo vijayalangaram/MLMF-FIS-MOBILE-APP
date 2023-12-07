@@ -226,7 +226,7 @@ export class Subscription extends React.PureComponent {
     selectedCategory: null,
     isRestaurantModalVisible: false,
     isCategoryModalVisible: false,
-    isPaymentModalVisible: false,
+    isPaymentModalVisible: true,
     isSummaryModalVisible: false,
 
     selectedAmount: "",
@@ -983,7 +983,7 @@ export class Subscription extends React.PureComponent {
         );
         showValidationAlert(" subscription Added Successfully");
         this.setState({ isLoading: false });
-         this.togglePaymentModal();
+        this.togglePaymentModal();
       } else {
         showValidationAlert("Unable to generate order id");
       }
@@ -1028,6 +1028,44 @@ export class Subscription extends React.PureComponent {
     this.setState(
       {
         isPaymentModalVisible: !this.state.isPaymentModalVisible,
+        selectedAmount: "",
+        selectedPlanname: "",
+        planAmount: "",
+        selectedPlan: [],
+        selcecteddays: "",
+        selectPlandays: newData,
+      },
+      () => {
+        this.get_subscription_List();
+        this.get_save_subscription_Cart_fund();
+        this.subscription_Master_listapi();
+        this.getPaymentOptionsAPI();
+        this.getWalletHistoryAPIREQ();
+      }
+    );
+  };
+
+  toggleResetModal = () => {
+    let {
+      isPaymentModalVisible,
+      selectedAmount,
+      selectedPlanname,
+      planAmount,
+      selectedPlan,
+      selcecteddays,
+      selectPlandays,
+    } = this.state;
+    let newData = this.state.selectPlandays.map((item, i) => {
+      if (item.selected === true) {
+        item.selected = false;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+    this.setState(
+      {
+        // isPaymentModalVisible: !this.state.isPaymentModalVisible,
         selectedAmount: "",
         selectedPlanname: "",
         planAmount: "",
@@ -2077,10 +2115,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#721C37",
     padding: 10,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   cardTextsum: {
-    fontSize: 14,
+    fontSize: 10,
     color: "#fcfcfc",
     backgroundColor: "#721C37",
   },
@@ -2177,18 +2215,18 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 10,
-    marginLeft: 15,
-    marginTop: 30,
+    marginLeft: 5,
+    marginTop: 5,
   },
   modalItem: {
     fontSize: 18,
     marginVertical: 10,
   },
   modalButtonPay: {
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
     margin: 5,
-    width: 120,
+    width: 100,
     alignItems: "center",
   },
   closeButton: {
