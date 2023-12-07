@@ -153,7 +153,7 @@ export class AddressListContainer extends React.PureComponent {
       defaultIntialAddress: "",
       // isGuestVerified: true,
       dunzoPointDelivery: "",
-      dunzo_Point_DeliveryFlag: 1,
+      dunzo_Point_DeliveryFlag: 0,
       dunzo_Direct_Delivery_Amt: "",
       // loader_Flag_dunzo_CallResponse: false,
       slot_Master_against_category: [],
@@ -238,7 +238,7 @@ export class AddressListContainer extends React.PureComponent {
   }
 
   get_save_slotmaster_call = () => {
-    get_save_slot_Master((success) => {    
+    get_save_slot_Master((success) => {
       let { slot_Master_from_AsynStorage } = this.state;
       // return false;
       this.setState(
@@ -716,10 +716,10 @@ export class AddressListContainer extends React.PureComponent {
     //   this.state?.dunzo_Direct_Delivery_Amt
     // );
 
-    // debugLog(
-    //   "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
-    //   this?.state?.dunzo_Point_DeliveryFlag
-    // );
+    debugLog(
+      "dunzo_Point_DeliveryFlag ***********************render state 55 ********************",
+      this?.state?.dunzo_Point_DeliveryFlag
+    );
 
     // debugLog(
     //   "this.state.dunzo_Point_DeliveryFlag *****************************   render  state 333  ******************** ",
@@ -1412,39 +1412,42 @@ export class AddressListContainer extends React.PureComponent {
               </View>
             ) : null}
 
-            {this.state?.dunzoPointDelivery?.selfPickUp?.amount >= 0 ? (
-              <EDRTLView style={style.walletContainer}>
-                <EDRTLView
-                  style={{
-                    alignItems: "center",
-                    marginHorizontal: 15,
-                    marginVertical: 10,
-                  }}
-                >
-                  {/* <Icon
+            {/* {this.state?.dunzoPointDelivery?.selfPickUp?.amount >= 0 ? ( */}
+            <EDRTLView style={style.walletContainer}>
+              <EDRTLView
+                style={{
+                  alignItems: "center",
+                  marginHorizontal: 15,
+                  marginVertical: 10,
+                }}
+              >
+                {/* <Icon
                     name={"business"}
                     color={EDColors.primary}
                     containerStyle={{ marginRight: 20 }}
                   /> */}
 
-                  {this.state?.dunzoPointDelivery?.selfPickUp?.name &&
+                {/* {this.state?.dunzoPointDelivery?.selfPickUp?.name &&
                   this.state?.dunzoPointDelivery?.selfPickUp?.name.length >=
-                    0 ? (
-                    <EDRTLText
-                      title={`${this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
+                    0 ? ( */}
+                <EDRTLText
+                  title={`${
+                    (this.state?.dunzoPointDelivery?.selfPickUp?.name &&
+                      this.state?.dunzoPointDelivery?.selfPickUp?.name.slice(
                         0,
                         20
-                      )} (₹ ${
-                        this.state?.dunzoPointDelivery?.selfPickUp?.amount
-                      } - ${
-                        this.state?.dunzoPointDelivery?.selfPickUp?.distance ||
-                        0
-                      } K.M )`}
-                      style={style.dunzoDeliveryHeader}
-                    />
-                  ) : null}
+                      )) ||
+                    "Self Pickup"
+                  } (₹ ${
+                    this.state?.dunzoPointDelivery?.selfPickUp?.amount || 0
+                  } - ${
+                    this.state?.dunzoPointDelivery?.selfPickUp?.distance || 0
+                  } K.M )`}
+                  style={style.dunzoDeliveryHeader}
+                />
+                {/* // ) : null} */}
 
-                  {/* <EDRTLText
+                {/* <EDRTLText
                     title={`(₹ ${
                       this.state?.dunzoPointDelivery?.selfPickUp?.amount
                     } - ${
@@ -1467,20 +1470,20 @@ export class AddressListContainer extends React.PureComponent {
                       // Right: 610,
                     }}
                   /> */}
-                  <Icon
-                    name={
-                      this.state?.dunzo_Point_DeliveryFlag === 0
-                        ? "check-box"
-                        : "check-box-outline-blank"
-                    }
-                    color={EDColors.primary}
-                    onPress={(e) => {
-                      this.dunzo_Point_DeliveryFlagCall(0);
-                    }}
-                  />
-                </EDRTLView>
+                <Icon
+                  name={
+                    this.state?.dunzo_Point_DeliveryFlag === 0
+                      ? "check-box"
+                      : "check-box-outline-blank"
+                  }
+                  color={EDColors.primary}
+                  onPress={(e) => {
+                    this.dunzo_Point_DeliveryFlagCall(0);
+                  }}
+                />
               </EDRTLView>
-            ) : null}
+            </EDRTLView>
+            {/* // ) : null} */}
 
             {this.state?.dunzoPointDelivery?.directPointDelivery?.amount >=
             0 ? (
@@ -2952,7 +2955,7 @@ export class AddressListContainer extends React.PureComponent {
           // }
         }
       );
-      this.dunzo_Point_DeliveryFlagCall(1);
+      this.dunzo_Point_DeliveryFlagCall(0);
       // return false;
     } else {
       showValidationAlert(
