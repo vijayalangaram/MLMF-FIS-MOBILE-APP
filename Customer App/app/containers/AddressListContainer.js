@@ -1790,8 +1790,8 @@ export class AddressListContainer extends React.PureComponent {
           </View>
         )} */}
 
-        {this.state?.slot_Master_against_category.length > 0 &&
-        Object.keys(this.state?.dunzoPointDelivery).length > 0 ? (
+        {this.state?.slot_Master_against_category.length >= 0 &&
+        Object.keys(this.state?.dunzoPointDelivery).length >= 0 ? (
           // this.state.dunzo_Direct_Delivery_Amt >= 0 &&
           // this.state.dunzo_Direct_Delivery_Amt != undefined
           <View style={{ marginHorizontal: 10 }}>
