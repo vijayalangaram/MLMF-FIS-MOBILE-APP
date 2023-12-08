@@ -1674,29 +1674,29 @@ export class Subscription extends React.PureComponent {
                         </Text>
                       </View>
                       {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         onPress={this.togglePaymentModal}
                         style={[styles.buttonAdd, styles.restaurantButtonG1]}
                       >
                         <Text style={styles.buttonTextAdd}>Current Plan</Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
 
                       <TouchableOpacity>
                         <Text
                           style={
                             {
-                              marginLeft: 120,
+                              marginLeft: 100,
                             }
                             // styles.buttonTextAdd,
                             // styles.restaurantButtonG2,
                           }
                         >
                           <Icon
-                            name="home"
+                            name="close"
                             type="material"
                             size={30}
                             color="#721C37"
-                            onPress={this.onBackHome}
+                            onPress={this.togglePaymentModal}
                           />
                         </Text>
                       </TouchableOpacity>
