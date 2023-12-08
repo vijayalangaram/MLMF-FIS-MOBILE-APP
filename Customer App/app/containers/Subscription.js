@@ -387,8 +387,8 @@ export class Subscription extends React.PureComponent {
       //   "22  ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
       //   generate_order_id.data.data.length
       // );
-      showValidationAlert(`Subscription not available`);
-      this.props.navigation.navigate("TempMainContainer", {});
+      // showValidationAlert(`Subscription not available`);
+      // this.props.navigation.navigate("TempMainContainer", {});
       this.setState({ selected_user_subscription_list: [] });
       // showValidationAlert("Unable to generate order id");
     }
