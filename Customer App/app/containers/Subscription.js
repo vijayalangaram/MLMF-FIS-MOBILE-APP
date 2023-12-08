@@ -1660,13 +1660,6 @@ export class Subscription extends React.PureComponent {
                         </Text>
                       </View>
                       {/* <Image source={this.props.image !== undefined && this.props.image !== null && this.props.image.trim() !== "" ? { uri: this.props.image } : Assets.user_placeholder} style={style.headerImage} /> */}
-                      <TouchableOpacity
-                        onPress={this.togglePaymentModal}
-                        style={[styles.buttonAdd, styles.restaurantButtonG1]}
-                      >
-                        <Text style={styles.buttonTextAdd}>Current Plan</Text>
-                      </TouchableOpacity>
-
                       <TouchableOpacity>
                         <Text
                           style={
@@ -1678,11 +1671,12 @@ export class Subscription extends React.PureComponent {
                           }
                         >
                           <Icon
-                            name="home"
+                            name="close"
                             type="material"
                             size={30}
                             color="#721C37"
-                            onPress={this.onBackHome}
+                            onPress={this.togglePaymentModal}
+                            // onPress={this.onBackHome}
                           />
                         </Text>
                       </TouchableOpacity>
@@ -1868,7 +1862,7 @@ export class Subscription extends React.PureComponent {
                         </Text>
                         <Text style={styles.cardTextsum}>
                           Total Price : ( ₹ {this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹ 
+                          {this.state.selcecteddays} Days) = ₹
                           {this.state.planAmount}
                         </Text>
                       </View>
@@ -1935,6 +1929,15 @@ export class Subscription extends React.PureComponent {
                         <Text style={styles.buttonText}>Reset</Text>
                       </TouchableOpacity>
                     </View>
+
+                    {/* <TouchableOpacity
+                        onPress={this.togglePaymentModal}
+                        style={[styles.buttonAdd, styles.restaurantButtonG1]}
+                      >
+                        <Text style={styles.buttonTextAdd}>
+                          My Plans{" "}
+                        </Text>
+                      </TouchableOpacity> */}
                   </View>
                 </ScrollView>
               </Modal>
