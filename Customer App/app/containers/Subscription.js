@@ -365,7 +365,7 @@ export class Subscription extends React.PureComponent {
         },
       }
     );
-    if (generate_order_id.status === 200) {
+    if (generate_order_id.status === 200 && generate_order_id.data.data) {
       debugLog(
         "****************************** rest*****************************",
         generate_order_id.data.data
@@ -375,6 +375,8 @@ export class Subscription extends React.PureComponent {
       });
       // this.startRazorPayment(generate_order_id.data?.id);
     } else {
+      showValidationAlert(`Subscription not available`);
+      this.props.navigation.navigate("TempMainContainer", {});
       this.setState({ selected_user_subscription_list: [] });
       // showValidationAlert("Unable to generate order id");
     }
@@ -1868,7 +1870,7 @@ export class Subscription extends React.PureComponent {
                         </Text>
                         <Text style={styles.cardTextsum}>
                           Total Price : ( ₹ {this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹ 
+                          {this.state.selcecteddays} Days) = ₹
                           {this.state.planAmount}
                         </Text>
                       </View>
