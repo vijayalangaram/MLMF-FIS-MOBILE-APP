@@ -315,10 +315,10 @@ export class Subscription extends React.PureComponent {
       }
     );
     if (generate_order_id.status === 200) {
-      debugLog(
-        "****************************** rest*****************************",
-        generate_order_id.data.data
-      );
+      // debugLog(
+      //   "****************************** rest*****************************",
+      //   generate_order_id.data.data
+      // );
       this.setState({
         subscription_Master_list: generate_order_id.data.data,
       });
@@ -365,16 +365,28 @@ export class Subscription extends React.PureComponent {
         },
       }
     );
+
+    // debugLog(
+    //   "00 ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
+    //   generate_order_id.status,
+    //   generate_order_id.data,
+    //   !generate_order_id.data.data
+    // );
+
     if (generate_order_id.status === 200 && generate_order_id.data.data) {
-      debugLog(
-        "****************************** rest*****************************",
-        generate_order_id.data.data
-      );
+      // debugLog(
+      //   "11  ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
+      //   generate_order_id.data.data.length
+      // );
       this.setState({
         selected_user_subscription_list: generate_order_id.data.data,
       });
       // this.startRazorPayment(generate_order_id.data?.id);
     } else {
+      // debugLog(
+      //   "22  ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
+      //   generate_order_id.data.data.length
+      // );
       showValidationAlert(`Subscription not available`);
       this.props.navigation.navigate("TempMainContainer", {});
       this.setState({ selected_user_subscription_list: [] });
@@ -416,18 +428,18 @@ export class Subscription extends React.PureComponent {
   };
 
   onSuccessPaymentList = (onSuccess) => {
-    debugLog(
-      "*****************************************  onSuccess  ###################################################################### ",
-      onSuccess
-    );
+    // debugLog(
+    //   "*****************************************  onSuccess  ###################################################################### ",
+    //   onSuccess
+    // );
 
     let { razorpayDetails } = this.state;
 
     let refKey = onSuccess.Payment_method[1];
-    debugLog(
-      "*****************************************  refKey  ###################################################################### ",
-      refKey
-    );
+    // debugLog(
+    //   "*****************************************  refKey  ###################################################################### ",
+    //   refKey
+    // );
 
     this.setState({ razorpayDetails: refKey });
 
@@ -554,15 +566,15 @@ export class Subscription extends React.PureComponent {
       //   findmenucount.length
       // );
 
-      debugLog(
-        "################################################################################ 0000000000",
-        currentPriceTotal
-      );
+      // debugLog(
+      //   "################################################################################ 0000000000",
+      //   currentPriceTotal
+      // );
 
-      debugLog(
-        "########################################################################### 111111",
-        this.state.dunzo_Direct_Delivery_Amt
-      );
+      // debugLog(
+      //   "########################################################################### 111111",
+      //   this.state.dunzo_Direct_Delivery_Amt
+      // );
 
       let dunzo_Delivery_Point_AmountbasedonMenucate =
         findmenucount &&
@@ -572,15 +584,15 @@ export class Subscription extends React.PureComponent {
 
       let taxesintialcalc = currentPriceTotal / 20;
 
-      debugLog(
-        "############################################################################ dunzo_Delivery_Point_AmountbasedonMenucate",
-        dunzo_Delivery_Point_AmountbasedonMenucate
-      );
+      // debugLog(
+      //   "############################################################################ dunzo_Delivery_Point_AmountbasedonMenucate",
+      //   dunzo_Delivery_Point_AmountbasedonMenucate
+      // );
 
-      debugLog(
-        "############################################################################ taxesintialcalc",
-        taxesintialcalc
-      );
+      // debugLog(
+      //   "############################################################################ taxesintialcalc",
+      //   taxesintialcalc
+      // );
 
       let PriceandTotalPrice =
         currentPriceTotal +
@@ -741,10 +753,10 @@ export class Subscription extends React.PureComponent {
   };
 
   onSuccessFetchWallet = (onSuccess) => {
-    debugLog(
-      "******************Wallet bal********************** 1111",
-      onSuccess
-    );
+    // debugLog(
+    //   "******************Wallet bal********************** 1111",
+    //   onSuccess
+    // );
     this.setState({
       loggedInUserwalletBalance: onSuccess.wallet_money,
       symbol: onSuccess.currency,
@@ -893,10 +905,10 @@ export class Subscription extends React.PureComponent {
         merchant_order_id: merchant_order_id,
       },
     };
-    debugLog(
-      "****************************** Vijay ******************************  order_id 00000",
-      options
-    );
+    // debugLog(
+    //   "****************************** Vijay ******************************  order_id 00000",
+    //   options
+    // );
     // return false;
 
     try {
@@ -904,10 +916,10 @@ export class Subscription extends React.PureComponent {
         .then((data) => {
           // handle success
           // debugLog("Payment success ::::::", data);
-          debugLog(
-            "******************************response ******************************  data 3245345435",
-            data
-          );
+          // debugLog(
+          //   "******************************response ******************************  data 3245345435",
+          //   data
+          // );
           // return false;
           // this.razorpay_payment_id = data.razorpay_payment_id;
           this.save_Subscription_List_Api(data);
@@ -935,10 +947,10 @@ export class Subscription extends React.PureComponent {
   save_Subscription_List_Api = async (data) => {
     let { Apicall, isLoading } = this.state;
     this.setState({ isLoading: true });
-    debugLog(
-      "****************************** save_Subscription_List_Api ******************************  data 3245345435",
-      data
-    );
+    // debugLog(
+    //   "****************************** save_Subscription_List_Api ******************************  data 3245345435",
+    //   data
+    // );
 
     // let plan = this.state.plan_Master.name.split("-");
     // let planname = plan[0];
@@ -962,10 +974,10 @@ export class Subscription extends React.PureComponent {
       planAmount: this.state.selectedAmount,
     };
 
-    debugLog(
-      "****************************** Vijay ****************************** subscripdetail ",
-      subscripdetail
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** subscripdetail ",
+    //   subscripdetail
+    // );
 
     //return false
     try {
@@ -979,10 +991,10 @@ export class Subscription extends React.PureComponent {
         }
       );
       if (generate_order_id.status === 200) {
-        debugLog(
-          "****************************** Vijay ****************************** generate_order_id.data?.id ",
-          generate_order_id.data
-        );
+        // debugLog(
+        //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
+        //   generate_order_id.data
+        // );
         showValidationAlert(" subscription Added Successfully");
         this.setState({ isLoading: false });
         this.togglePaymentModal();
@@ -1166,7 +1178,7 @@ export class Subscription extends React.PureComponent {
       selectedPlanname,
     };
 
-    debugLog("localsubsobje ********************", localsubsobje);
+    // debugLog("localsubsobje ********************", localsubsobje);
 
     save_subscription_Cart(localsubsobje);
     this.setState({ isSummaryModalVisible: true });
@@ -1180,7 +1192,7 @@ export class Subscription extends React.PureComponent {
   get_save_subscription_Cart_fund = () => {
     // let { cartDatafromstore } = this.state;
     get_save_subscription_Cart((success) => {
-      debugLog("successget_save_subscription_Cart_fund", success);
+      // debugLog("successget_save_subscription_Cart_fund", success);
       //   var cartArray = success;
       //   this.setState({
       //     cartDatafromstore: cartArray,
@@ -1238,7 +1250,7 @@ export class Subscription extends React.PureComponent {
         }
       });
     let total = filterflagtrue[0].text * selectedAmount;
-    debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0].text);
+    // debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0].text);
     this.setState({ selectPlandays: newData });
     this.setState({ selcecteddays: filterflagtrue[0].text });
 
@@ -1249,11 +1261,11 @@ export class Subscription extends React.PureComponent {
       "days"
     );
     let endate = moment(enddate).utc().format("DD/MM/YYYY");
-    debugLog(" efftiveCount---efftiveCount---efftiveCount", efftiveCount);
-    debugLog(" enddate---enddate---enddate", endate);
+    // debugLog(" efftiveCount---efftiveCount---efftiveCount", efftiveCount);
+    // debugLog(" enddate---enddate---enddate", endate);
     this.setState({ planAmount: total });
     this.setState({ effctivecount: efftiveCount, endDate: endate });
-    debugLog(" total---total---total", total);
+    // debugLog(" total---total---total", total);
   };
 
   //flatlist
@@ -1277,7 +1289,7 @@ export class Subscription extends React.PureComponent {
   // };
 
   renderItem = ({ item }) => {
-    debugLog("seleced id+++++====++++++items())))(())()(()()()))", item);
+    // debugLog("seleced id+++++====++++++items())))(())()(()()()))", item);
 
     return (
       <TouchableOpacity
@@ -1310,7 +1322,7 @@ export class Subscription extends React.PureComponent {
   /** NETWORK CONNECTIVITY */
   networkConnectivityStatus = () => {
     this.state.notificationList = undefined;
-    debugLog("Called from WILL networkConnectivityStatus ::::");
+    // debugLog("Called from WILL networkConnectivityStatus ::::");
 
     this.getNotificationList();
   };
@@ -1345,10 +1357,10 @@ export class Subscription extends React.PureComponent {
         }
       });
 
-    debugLog("filterflagtrue filterflagtrue ", filterflagtrue);
+    // debugLog("filterflagtrue filterflagtrue ", filterflagtrue);
 
     let planamt = Number(filterflagtrue[0].amount) * Number(selcecteddays);
-    debugLog("planamt planamt planamt ", planamt);
+    // debugLog("planamt planamt planamt ", planamt);
     this.setState({
       plan_Master: filterstatesMastervalues,
       selected_Subscription_Plan: filterflagtrue,
@@ -1382,7 +1394,7 @@ export class Subscription extends React.PureComponent {
           return item;
         }
       });
-    debugLog("filterflagtrue[0]()(------)()", filterflagtrue.amount);
+    // debugLog("filterflagtrue[0]()(------)()", filterflagtrue.amount);
     let planamt = filterflagtrue.amount * selcecteddays;
 
     this.setState({
@@ -1798,10 +1810,10 @@ export class Subscription extends React.PureComponent {
                       {plan_Master &&
                         plan_Master.length > 0 &&
                         plan_Master.map((item) => {
-                          debugLog(
-                            "card image%%%%%%%%%%%%%%%**********Image**************",
-                            item
-                          );
+                          // debugLog(
+                          //   "card image%%%%%%%%%%%%%%%**********Image**************",
+                          //   item
+                          // );
 
                           return (
                             <Card
