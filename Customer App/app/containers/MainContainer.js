@@ -2864,14 +2864,16 @@ class MainContainer extends React.Component {
                     )}
                 </EDRTLView>
 
-                <Button
-                  title="Go to Subscription"
-                  onPress={() => {
-                    // Handle payment logic here
-                    this.props.navigation.navigate("TempMainContainer");
-                    this.setState({ modal_Pop_Up: false });
-                  }}
-                />
+                {this.state?.restObjModelvalue?.restuarant_id == "160" && (
+                  <Button
+                    title="Go to Subscription"
+                    onPress={() => {
+                      // Handle payment logic here
+                      this.props.navigation.navigate("TempMainContainer");
+                      this.setState({ modal_Pop_Up: false });
+                    }}
+                  />
+                )}
               </ScrollView>
             </Modal>
           </View>
