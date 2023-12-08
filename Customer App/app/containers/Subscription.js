@@ -370,7 +370,7 @@ export class Subscription extends React.PureComponent {
     //   "00 ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
     //   generate_order_id.status,
     //   generate_order_id.data,
-    //   !generate_order_id.data.data
+    //   generate_order_id.data.data
     // );
 
     if (generate_order_id.status === 200 && generate_order_id.data.data) {
@@ -382,7 +382,7 @@ export class Subscription extends React.PureComponent {
         selected_user_subscription_list: generate_order_id.data.data,
       });
       // this.startRazorPayment(generate_order_id.data?.id);
-    } else {
+    } else if (generate_order_id.data.data === null) {
       // debugLog(
       //   "22  ******************************   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ",
       //   generate_order_id.data.data.length
