@@ -1685,7 +1685,7 @@ export class Subscription extends React.PureComponent {
                         <Text
                           style={
                             {
-                              marginLeft: 100,
+                              marginLeft: 120,
                             }
                             // styles.buttonTextAdd,
                             // styles.restaurantButtonG2,
