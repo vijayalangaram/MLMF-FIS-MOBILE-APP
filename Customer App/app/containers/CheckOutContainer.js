@@ -216,6 +216,7 @@ export class CheckOutContainer extends React.PureComponent {
     descriptionVisible: true,
     url: undefined,
     loggedInUserwalletBalance: "",
+    waller_plus_razorpay: false,
     // save_order_payload: localStorage.getItem("save_order_payload"),
   };
 
@@ -2240,9 +2241,12 @@ export class CheckOutContainer extends React.PureComponent {
           debugLog(
             "******************************************************* else part 111111 razorpay paymett $$$$$$$$$$$"
           );
-          // return false;
-          this.payment_option == "razorpay";
-          this.navigateToPaymentGateway("razorpay");
+          let { waller_plus_razorpay } = this.state;
+          this.setState({ waller_plus_razorpay: !waller_plus_razorpay }, () => {
+            // return false;
+            this.payment_option == "razorpay";
+            this.navigateToPaymentGateway("razorpay");
+          });
         } else if (
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&
@@ -2405,6 +2409,9 @@ export class CheckOutContainer extends React.PureComponent {
   // data.
 
   placeOrder = (txn_id, payment_option = "cod", data_razorpay_response) => {
+    debugLog(
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  place order ~~~~~~~~~~~~~~~  "
+    );
     netStatus((status) => {
       let addOrderParams = this.props.checkoutDetail;
       // addOrderParams.extra_comment = this.comment
@@ -2538,6 +2545,10 @@ export class CheckOutContainer extends React.PureComponent {
       addOrderParams.order_date = comncate;
       addOrderParams.scheduled_date = newString;
 
+      addOrderParams.total = this.state.waller_plus_razorpay
+        ? addOrderParams.total + addOrderParams.debited_amount
+        : addOrderParams.total;
+
       // addOrderParams.slot_open_time =
       //   this.props.selected_Slot_ID?.formatStartTime;
       // addOrderParams.slot_close_time =
@@ -2561,8 +2572,9 @@ export class CheckOutContainer extends React.PureComponent {
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
       debugLog(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  addOrderParams ~~~~~~~~~~~~~~~  676",
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  addOrderParams details ~~~~~~~~~~~~~~~",
         addOrderParams
+        // addOrderParams.total
       );
       // return false;
       if (status) {
@@ -2586,9 +2598,8 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment_Get_Order_ID = async () => {
-
     let base64 = require("base-64");
-    
+
     let username1 =
       this.razorpayDetails.enable_live_mode == "1"
         ? this.razorpayDetails.live_publishable_key
@@ -2598,19 +2609,19 @@ export class CheckOutContainer extends React.PureComponent {
       this.razorpayDetails.enable_live_mode == "1"
         ? this.razorpayDetails.live_secret_key
         : this.razorpayDetails.test_secret_key;
- 
-    let currentdate= new Date().toISOString();
+
+    let currentdate = new Date().toISOString();
 
     let dataforgenraeorder = {
       amount: (Number(this.cartResponse.total).toFixed(2) * 100).toFixed(0),
       currency: this.currency_code,
-      receipt  : `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}` ,
-      "notes": {
-        "user_id":  this.props.userID,
-        "mobile_no": this.props.token,
+      receipt: `${this.props?.checkoutDetail?.restaurant_id}~${currentdate}`,
+      notes: {
+        user_id: this.props.userID,
+        mobile_no: this.props.token,
       },
       payment_capture: true,
-    }; 
+    };
 
     // return false;
     let generate_order_id = await axios.post(
@@ -2622,7 +2633,7 @@ export class CheckOutContainer extends React.PureComponent {
           Authorization: "Basic " + base64.encode(username1 + ":" + password1),
         },
       }
-    );    
+    );
     if (generate_order_id.status === 200) {
       // debugLog(
       //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
@@ -2696,11 +2707,7 @@ export class CheckOutContainer extends React.PureComponent {
         );
         // return false;
         this.razorpay_payment_id = data.razorpay_payment_id;
-        this.placeOrder(
-          data.razorpay_payment_id,
-          "razorpay",
-          data
-        );
+        this.placeOrder(data.razorpay_payment_id, "razorpay", data);
       })
       .catch((error) => {
         // handle failure
