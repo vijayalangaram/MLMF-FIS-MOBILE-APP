@@ -2489,7 +2489,11 @@ export class CheckOutContainer extends React.PureComponent {
       // let startTimestrimmed = startTimes && startTimes.trim();
       // let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
 
-      addOrderParams.razorpay_order_id = `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}`;
+      // addOrderParams.razorpay_order_id = `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}`;
+      addOrderParams.razorpay_order_id = this.state.waller_plus_razorpay
+        ? `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}~${addOrderParams.total}`
+        : `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}~0`;
+
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
