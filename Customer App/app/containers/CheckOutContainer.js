@@ -1,3 +1,5 @@
+
+
 import moment from "moment";
 import { Spinner } from "native-base";
 import React from "react";
@@ -216,6 +218,7 @@ export class CheckOutContainer extends React.PureComponent {
     descriptionVisible: true,
     url: undefined,
     loggedInUserwalletBalance: "",
+    waller_plus_razorpay: false,
     // save_order_payload: localStorage.getItem("save_order_payload"),
   };
 
@@ -2240,9 +2243,12 @@ export class CheckOutContainer extends React.PureComponent {
           debugLog(
             "******************************************************* else part 111111 razorpay paymett $$$$$$$$$$$"
           );
-          // return false;
-          this.payment_option == "razorpay";
-          this.navigateToPaymentGateway("razorpay");
+          let { waller_plus_razorpay } = this.state;
+          this.setState({ waller_plus_razorpay: !waller_plus_razorpay }, () => {
+            // return false;
+            this.payment_option == "razorpay";
+            this.navigateToPaymentGateway("razorpay");
+          });
         } else if (
           parseInt(this.state.loggedInUserwalletBalance) >
             Number(this.props.minOrderAmount) &&
@@ -2405,6 +2411,9 @@ export class CheckOutContainer extends React.PureComponent {
   // data.
 
   placeOrder = (txn_id, payment_option = "cod", data_razorpay_response) => {
+    debugLog(
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  place order ~~~~~~~~~~~~~~~  "
+    );
     netStatus((status) => {
       let addOrderParams = this.props.checkoutDetail;
       // addOrderParams.extra_comment = this.comment
@@ -2482,7 +2491,11 @@ export class CheckOutContainer extends React.PureComponent {
       // let startTimestrimmed = startTimes && startTimes.trim();
       // let endstartTimestrimmed = endstartTimes && endstartTimes.trim();
 
-      addOrderParams.razorpay_order_id = `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}`;
+      // addOrderParams.razorpay_order_id = `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}`;
+      addOrderParams.razorpay_order_id = this.state.waller_plus_razorpay
+        ? `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}~${addOrderParams.total}`
+        : `${data_razorpay_response?.razorpay_order_id}~${data_razorpay_response?.razorpay_signature}~0`;
+
       addOrderParams.delivery_point = this.props.save_order_payload?.id;
       addOrderParams.delivery_flag = this.props.save_order_payload?.flag;
       addOrderParams.table_id = this.props.selected_Slot_ID?.slotId;
@@ -2538,6 +2551,10 @@ export class CheckOutContainer extends React.PureComponent {
       addOrderParams.order_date = comncate;
       addOrderParams.scheduled_date = newString;
 
+      addOrderParams.total = this.state.waller_plus_razorpay
+        ? addOrderParams.total + addOrderParams.debited_amount
+        : addOrderParams.total;
+
       // addOrderParams.slot_open_time =
       //   this.props.selected_Slot_ID?.formatStartTime;
       // addOrderParams.slot_close_time =
@@ -2561,8 +2578,9 @@ export class CheckOutContainer extends React.PureComponent {
       // console.log("CheckOut request :::::::::: ", JSON.stringify(addOrderParams), addOrderParams.items)
       // return;
       debugLog(
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  addOrderParams ~~~~~~~~~~~~~~~  676",
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  addOrderParams details ~~~~~~~~~~~~~~~",
         addOrderParams
+        // addOrderParams.total
       );
       // return false;
       if (status) {
@@ -2586,12 +2604,7 @@ export class CheckOutContainer extends React.PureComponent {
    */
 
   startRazorPayment_Get_Order_ID = async () => {
-    // return false;
-
     let base64 = require("base-64");
-
-    // let username1 = this.razorpayDetails?.live_publishable_key;
-    // let password1 = this.razorpayDetails?.live_secret_key;
 
     let username1 =
       this.razorpayDetails.enable_live_mode == "1"
@@ -2602,14 +2615,6 @@ export class CheckOutContainer extends React.PureComponent {
       this.razorpayDetails.enable_live_mode == "1"
         ? this.razorpayDetails.live_secret_key
         : this.razorpayDetails.test_secret_key;
-
-    // debugLog("77777777777777777777777777777", this.razorpayDetails);
-    // debugLog(
-    //   "777777777777777777777777777777",
-    //   this.razorpayDetails.live_secret_key,
-    //   this.razorpayDetails.test_secret_key
-    // );
-    // return false;
 
     let currentdate = new Date().toISOString();
 
@@ -2636,10 +2641,10 @@ export class CheckOutContainer extends React.PureComponent {
       }
     );
     if (generate_order_id.status === 200) {
-      debugLog(
-        "****************************** Vijay ****************************** generate_order_id.data?.id ",
-        generate_order_id.data
-      );
+      // debugLog(
+      //   "****************************** Vijay ****************************** generate_order_id.data?.id ",
+      //   generate_order_id.data
+      // );
       this.startRazorPayment(generate_order_id.data?.id);
     } else {
       showValidationAlert("Unable to generate order id");
@@ -2647,11 +2652,11 @@ export class CheckOutContainer extends React.PureComponent {
   };
 
   startRazorPayment = (valueoforderid) => {
-    debugLog(
-      "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
-      this.razorpayDetails,
-      valueoforderid
-    );
+    // debugLog(
+    //   "****************************** Vijay ****************************** this.razorpayDetails , valueoforderid 1111",
+    //   this.razorpayDetails,
+    //   valueoforderid
+    // );
 
     this.merchant_order_id = Date.now();
     var options = {
