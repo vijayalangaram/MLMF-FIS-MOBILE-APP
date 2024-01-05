@@ -188,6 +188,7 @@ class MainContainer extends React.Component {
     today: new Date(),
     tomorrow: new Date() + 1,
     today_tomorrow_Flag: false,
+    tomorrow_today_Flag: false,
     restaurant_restaurantName: "",
     restaurant_selected_Name: "",
     modal_Pop_Up: false,
@@ -759,7 +760,7 @@ class MainContainer extends React.Component {
             latitude: this.props.currentLocation.latitude,
             longitude: this.props.currentLocation.longitude,
             // latitude: "13.0827",
-            // longitude:  "80.2707",
+            // longitude: "80.2707",
             itemSearch: searchData || this.state.strSearch,
             category_id: "" + this.selectedCategories.join(),
             orderMode: this.props.orderModeInRedux,
@@ -825,7 +826,7 @@ class MainContainer extends React.Component {
                     latitude: onSucces.latitude,
                     longitude: onSucces.longitude,
                     // latitude: "13.0827",
-                    // longitude:  "80.2707",
+                    // longitude: "80.2707",
                     itemSearch: searchData || this.state.strSearch,
                     category_id: "" + this.selectedCategories.join(),
                     orderMode: this.props.orderModeInRedux,
@@ -1105,7 +1106,7 @@ class MainContainer extends React.Component {
           latitude: lat,
           longitude: long,
           // latitude: "13.0827",
-          // longitude:  "80.2707",
+          // longitude: "80.2707",
           areaName: onSuccess.strAddress,
           address: onSuccess.localArea,
         };
@@ -2304,7 +2305,7 @@ class MainContainer extends React.Component {
         latitude: this.props.currentLocation.latitude,
         longitude: this.props.currentLocation.longitude,
         // latitude: "13.0827",
-        // longitude:  "80.2707",
+        // longitude: "80.2707",
       };
       addRequestQR(params, this.onSuccesQrRequest, this.onFailureQrRequest);
     } else showValidationAlert(strings("qrcodeError"));
@@ -2367,6 +2368,7 @@ class MainContainer extends React.Component {
       let { today, tomorrow, today_tomorrow_Flag } = this.state;
       let todayrever = today && today.split("-").reverse().join("-");
       let tomorrowrev = tomorrow && tomorrow.split("-").reverse().join("-");
+
       if (today_tomorrow_Flag === false) {
         this.props.save_today_tomorrow_details(todayrever);
       } else {
@@ -2579,7 +2581,16 @@ class MainContainer extends React.Component {
                       paddingLeft: 7,
                       paddingRight: 7,
                     }}
+                    //disabled={this.state.today}
+
                     onPress={() => {
+                      // debugLog(
+                      //   "***************************************** 0000000000000000000000000000000 debugLog ",
+                      //   this.state.today_tomorrow_Flag
+                      // );
+                      if (!this.state.today_tomorrow_Flag) {
+                        return false;
+                      }
                       // this.onChange_today_tomorrow_Flag();
                       this.setState({ modalpopupplandate: true });
                     }}
@@ -2595,6 +2606,13 @@ class MainContainer extends React.Component {
                       marginLeft: 15,
                     }}
                     onPress={() => {
+                      // debugLog(
+                      //   "***************************************** 0000000000000000000000000000000 debugLog ",
+                      //   this.state.today_tomorrow_Flag
+                      // );
+                      if (this.state.today_tomorrow_Flag) {
+                        return false;
+                      }
                       // this.onChange_today_tomorrow_Flag();
                       this.setState({ modalpopupplandate: true });
                     }}
@@ -2908,7 +2926,7 @@ class MainContainer extends React.Component {
                         modal_Pop_Up: true,
                       },
                       () => {
-                        this.onChange_today_tomorrow_Flag();
+                        //this.onChange_today_tomorrow_Flag();
                       }
                     );
                   }}
