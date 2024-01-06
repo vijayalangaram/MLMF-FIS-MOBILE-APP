@@ -704,8 +704,8 @@ class MainContainer extends React.Component {
     let addressData = {
       latitude: address.latitude,
       longitude: address.longitude,
-      // latitude: "13.0827",
-      // longitude: "80.2707",
+      // latitude: "13.01889991942",
+      // longitude: "80.20658986643",
       areaName:
         address.address_label !== undefined &&
         address.address_label !== null &&
@@ -759,8 +759,8 @@ class MainContainer extends React.Component {
             language_slug: this.props.lan,
             latitude: this.props.currentLocation.latitude,
             longitude: this.props.currentLocation.longitude,
-            // latitude: "13.0827",
-            // longitude: "80.2707",
+            // latitude: "13.01889991942",
+            // longitude: "80.20658986643",
             itemSearch: searchData || this.state.strSearch,
             category_id: "" + this.selectedCategories.join(),
             orderMode: this.props.orderModeInRedux,
@@ -825,8 +825,8 @@ class MainContainer extends React.Component {
                     language_slug: this.props.lan,
                     latitude: onSucces.latitude,
                     longitude: onSucces.longitude,
-                    // latitude: "13.0827",
-                    // longitude: "80.2707",
+                    // latitude: "13.01889991942",
+                    // longitude: "80.20658986643",
                     itemSearch: searchData || this.state.strSearch,
                     category_id: "" + this.selectedCategories.join(),
                     orderMode: this.props.orderModeInRedux,
@@ -1105,8 +1105,8 @@ class MainContainer extends React.Component {
         let addressData = {
           latitude: lat,
           longitude: long,
-          // latitude: "13.0827",
-          // longitude: "80.2707",
+          // latitude: "13.01889991942",
+          // longitude: "80.20658986643",
           areaName: onSuccess.strAddress,
           address: onSuccess.localArea,
         };
@@ -2304,8 +2304,8 @@ class MainContainer extends React.Component {
         language_slug: this.props.lan,
         latitude: this.props.currentLocation.latitude,
         longitude: this.props.currentLocation.longitude,
-        // latitude: "13.0827",
-        // longitude: "80.2707",
+        // latitude: "13.01889991942",
+        // longitude: "80.20658986643",
       };
       addRequestQR(params, this.onSuccesQrRequest, this.onFailureQrRequest);
     } else showValidationAlert(strings("qrcodeError"));
