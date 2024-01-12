@@ -702,8 +702,8 @@ class MainContainer extends React.Component {
   saveAddressFromList = (address) => {
     let { getintialAddress } = this.state;
     let addressData = {
-      latitude: address.latitude || 13.01889991942,
-      longitude: address.longitude || 80.20658986643,
+      latitude: address.latitude ,
+      longitude: address.longitude ,
       // latitude: "13.01889991942",
       // longitude: "80.20658986643",
       areaName:
@@ -757,8 +757,8 @@ class MainContainer extends React.Component {
           let param = {
             user_id: this.props.userIdFromRedux,
             language_slug: this.props.lan,
-            latitude: this.props.currentLocation.latitude || 13.01889991942,
-            longitude: this.props.currentLocation.longitude || 80.20658986643,
+            latitude: this.props.currentLocation.latitude ,
+            longitude: this.props.currentLocation.longitude ,
             // latitude: "13.01889991942",
             // longitude: "80.20658986643",
             itemSearch: searchData || this.state.strSearch,
@@ -823,8 +823,8 @@ class MainContainer extends React.Component {
                   let param = {
                     user_id: this.props.userIdFromRedux,
                     language_slug: this.props.lan,
-                    latitude: onSucces.latitude || 13.01889991942,
-                    longitude: onSucces.longitude || 80.20658986643,
+                    latitude: onSucces.latitude ,
+                    longitude: onSucces.longitude ,
                     // latitude: "13.01889991942",
                     // longitude: "80.20658986643",
                     itemSearch: searchData || this.state.strSearch,
@@ -1103,8 +1103,8 @@ class MainContainer extends React.Component {
         this.currentAddress = onSuccess.localArea;
         this.currentCity = onSuccess.strAddress;
         let addressData = {
-          latitude: lat || 13.01889991942,
-          longitude: long || 80.20658986643,
+          latitude: lat ,
+          longitude: long ,
           // latitude: "13.01889991942",
           // longitude: "80.20658986643",
           areaName: onSuccess.strAddress,
@@ -2302,8 +2302,8 @@ class MainContainer extends React.Component {
         table_id: data.data.trim(),
         // table_id : 7,
         language_slug: this.props.lan,
-        latitude: this.props.currentLocation.latitude || 13.01889991942,
-        longitude: this.props.currentLocation.longitude || 80.20658986643,
+        latitude: this.props.currentLocation.latitude ,
+        longitude: this.props.currentLocation.longitude ,
         // latitude: "13.01889991942",
         // longitude: "80.20658986643",
       };
