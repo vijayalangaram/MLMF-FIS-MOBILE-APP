@@ -107,6 +107,7 @@ import {
   FlatList,
   TextInput,
   Image,
+  BackHandler,
 } from "react-native";
 
 class MainContainer extends React.Component {
@@ -290,6 +291,8 @@ class MainContainer extends React.Component {
       "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
       this.props.received_category_id_from_home_cont
     );
+
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
   }
 
   getCartDataList = () => {
@@ -459,6 +462,14 @@ class MainContainer extends React.Component {
   /** WILL MOUNT */
   componentWillUnmount = () => {
     AppState.removeEventListener("change", this._handleAppStateChange);
+
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+  };
+
+  /* BackHandler*/
+  handleBackButton = () => {
+    // Disable back button during API call
+    return true;
   };
 
   //#region GET USER LANGUAGE API

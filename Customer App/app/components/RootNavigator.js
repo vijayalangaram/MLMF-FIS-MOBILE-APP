@@ -89,7 +89,7 @@ const MAIN_NAVIGATOR = createStackNavigator(
     CartContainer: {
       screen: CartContainer,
     },
-    PromoCodeContainer: {
+    PromoCodeContainer : {
       screen: PromoCode,
     },
     AddressListContainer: {

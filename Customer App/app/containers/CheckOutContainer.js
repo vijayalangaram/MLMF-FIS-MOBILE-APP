@@ -222,10 +222,7 @@ export class CheckOutContainer extends React.PureComponent {
 
   componentDidMount() {
     this.getWalletHistoryAPIREQ();
-    this.backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      this.handleBackPress
-    );
+   
     if (
       this.props.navigation.state.params?.delivery_status !== "PickUp" &&
       this.props.navigation.state.params?.default_tip_percent_val !==
@@ -270,10 +267,11 @@ export class CheckOutContainer extends React.PureComponent {
     //   "****************************** ******************  this.props.navigation.state.params.payment_option",
     //   this.props.navigation.state.params.payment_option
     // );
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   componentWillUnmount() {
-    this.backHandler.remove();
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   getWalletHistoryAPIREQ = () => {
@@ -306,6 +304,11 @@ export class CheckOutContainer extends React.PureComponent {
   /**
    * Toggle wallet
    */
+
+  handleBackButton = () => {
+    // Disable back button during API call
+    return true;
+  };
 
   toggleWallet = () => {
     if (!this.state.walletApplied) {
