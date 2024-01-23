@@ -196,6 +196,13 @@ export class Subscription extends React.PureComponent {
       { id: 3, text: "15", selected: false },
       { id: 4, text: "20", selected: false },
     ],
+    selectperson: [
+      { id: 1, text: "01", selected: false },
+      { id: 2, text: "02", selected: false },
+      { id: 3, text: "03", selected: false },
+      { id: 4, text: "...", selected: false },
+      // { id: 5, text: "05", selected: false },
+    ],
 
     // save_order_payload: localStorage.getItem("save_order_payload"),
     restaurants: [
@@ -236,6 +243,7 @@ export class Subscription extends React.PureComponent {
     selectedboolean: false,
     // selecteddate: "",
     selcecteddays: "",
+    selectedPersonCount: "",
     selectedPlan: "",
     isFocus: false,
     selected_user_subscription_list: [],
@@ -271,13 +279,20 @@ export class Subscription extends React.PureComponent {
     this.getPaymentOptionsAPI();
     this.getWalletHistoryAPIREQ();
 
-    // BackHandler.addEventListener("hardwareBackPress", this.onBack);
+     BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
   }
 
-  // componentWillUnmount() {
-  //   // Remove the back button event listener when the component unmounts.
-  //   BackHandler.removeEventListener("hardwareBackPress", this.onBack);
-  // }
+  componentWillUnmount() {
+    // Remove the back button event listener when the component unmounts.
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+  }
+
+
+
+  handleBackButton = () => {
+    // Disable back button during API call
+    return true;
+  };
 
   // onBack = () => {
   //   debugLog(
@@ -315,10 +330,10 @@ export class Subscription extends React.PureComponent {
       }
     );
     if (generate_order_id.status === 200) {
-      // debugLog(
-      //   "****************************** rest*****************************",
-      //   generate_order_id.data.data
-      // );
+      debugLog(
+        "****************************** rest*****************************",
+        generate_order_id.data.data
+      );
       this.setState({
         subscription_Master_list: generate_order_id.data.data,
       });
@@ -388,7 +403,7 @@ export class Subscription extends React.PureComponent {
       //   generate_order_id.data.data.length
       // );
       showValidationAlert(`Subscription not available`);
-      this.props.navigation.navigate("TempMainContainer", {});
+      //  this.props.navigation.navigate("TempMainContainer", {});
       this.setState({ selected_user_subscription_list: [] });
       // showValidationAlert("Unable to generate order id");
     }
@@ -1068,6 +1083,8 @@ export class Subscription extends React.PureComponent {
       selectedPlan,
       selcecteddays,
       selectPlandays,
+      selectedPersonCount,
+      selectperson,
     } = this.state;
     let newData = this.state.selectPlandays.map((item, i) => {
       if (item.selected === true) {
@@ -1077,6 +1094,16 @@ export class Subscription extends React.PureComponent {
       }
       return item;
     });
+
+    let newDatas = this.state.selectperson.map((item, i) => {
+      if (item.selected === true) {
+        item.selected = false;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+
     this.setState(
       {
         // isPaymentModalVisible: !this.state.isPaymentModalVisible,
@@ -1086,6 +1113,7 @@ export class Subscription extends React.PureComponent {
         selectedPlan: [],
         selcecteddays: "",
         selectPlandays: newData,
+        selectperson: newDatas,
       },
       () => {
         this.get_subscription_List();
@@ -1106,6 +1134,7 @@ export class Subscription extends React.PureComponent {
       selectedPlan,
       selcecteddays,
       selectPlandays,
+      selectperson,
     } = this.state;
     let newData = this.state.selectPlandays.map((item, i) => {
       if (item.selected === true) {
@@ -1115,6 +1144,16 @@ export class Subscription extends React.PureComponent {
       }
       return item;
     });
+
+    let newDatas = this.state.selectperson.map((item, i) => {
+      if (item.selected === true) {
+        item.selected = false;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+
     this.setState(
       {
         isPaymentModalVisible: !this.state.isPaymentModalVisible,
@@ -1124,6 +1163,7 @@ export class Subscription extends React.PureComponent {
         selectedPlan: "",
         selcecteddays: "",
         selectPlandays: newData,
+        selectperson: newDatas,
       }
       // () => {
       //   this.get_subscription_List();
@@ -1231,6 +1271,8 @@ export class Subscription extends React.PureComponent {
       endDate,
       effctivecount,
       startDate,
+      selectperson,
+      selectedPersonCount,
     } = this.state;
     const newData = this.state.selectPlandays.map((item, i) => {
       // debugLog("toggle selected ======== === === ", item);
@@ -1249,7 +1291,13 @@ export class Subscription extends React.PureComponent {
           return item;
         }
       });
-    let total = filterflagtrue[0].text * selectedAmount;
+
+    if (selectedPersonCount) {
+      let total = filterflagtrue[0].text * selectedAmount * selectedPersonCount;
+      this.setState({ planAmount: total });
+    } else {
+      let total = filterflagtrue[0].text * selectedAmount;
+    }
     // debugLog("filterflagtrue filterflagtrue ", filterflagtrue[0].text);
     this.setState({ selectPlandays: newData });
     this.setState({ selcecteddays: filterflagtrue[0].text });
@@ -1263,9 +1311,84 @@ export class Subscription extends React.PureComponent {
     let endate = moment(enddate).utc().format("DD/MM/YYYY");
     // debugLog(" efftiveCount---efftiveCount---efftiveCount", efftiveCount);
     // debugLog(" enddate---enddate---enddate", endate);
-    this.setState({ planAmount: total });
+
     this.setState({ effctivecount: efftiveCount, endDate: endate });
+
+    let filterperson =
+      this.state.selectperson &&
+      this.state.selectperson.filter((item, i) => {
+        if (item?.selected == true) {
+          return item;
+        }
+      });
+
+    let person = filterperson;
     // debugLog(" total---total---total", total);
+  };
+
+  onTextChangeHandler =()=>{
+    
+  }
+
+
+  togglePersonSelection = (id) => {
+    let {
+      selcecteddays,
+      selectedAmount,
+      planAmount,
+      selectedboolean,
+      endDate,
+      effctivecount,
+      startDate,
+      selectedPersonCount,
+    } = this.state;
+    const newData = this.state.selectperson.map((item, i) => {
+      debugLog("toggle selected ======== === === ", item);
+      if (item.id === id) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+      return item;
+    });
+
+    let filterperson =
+      this.state.selectperson &&
+      this.state.selectperson.filter((item, i) => {
+        if (item?.selected == true) {
+          return item;
+        }
+      });
+
+    let person = filterperson;
+    debugLog(" person---person---person", person);
+    debugLog(" person---person---person", person[0].text);
+    this.setState({ selectperson: newData });
+    this.setState({ selectedPersonCount: person[0].text });
+
+    if (person[0].id == 1 || 2 || 3) {
+      let totalamt = selcecteddays * selectedAmount * person[0].text;
+
+      this.setState({ planAmount: totalamt });
+    } else if (person[0].id == 4) {
+      return (
+        <TextInput
+          style={{
+            textAlign: isRTLCheck() ? "right" : "left",
+            flexDirection: isRTLCheck() ? "row-reverse" : "row",
+            fontFamily: EDFonts.medium,
+            marginHorizontal: 10,
+            flex: 1,
+            marginVertical: 20,
+            color: EDColors.grayNew,
+          }}
+          placeholder={strings("bringCutlery")}
+          value={this.state.strComment}
+          onChangeText={this.onTextChangeHandler}
+        />
+      );
+    } else {
+    }
   };
 
   //flatlist
@@ -1294,6 +1417,24 @@ export class Subscription extends React.PureComponent {
     return (
       <TouchableOpacity
         onPress={() => this.toggleItemSelection(item.id)}
+        style={[
+          styles.cardFlat,
+          { backgroundColor: item.selected ? "#721C37" : "white" },
+        ]}
+      >
+        <Text style={{ color: item.selected ? "white" : "black" }}>
+          {item.text}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  renderItems = ({ item }) => {
+    // debugLog("seleced id+++++====++++++items())))(())()(()()()))", item);
+
+    return (
+      <TouchableOpacity
+        onPress={() => this.togglePersonSelection(item.id)}
         style={[
           styles.cardFlat,
           { backgroundColor: item.selected ? "#721C37" : "white" },
@@ -1450,6 +1591,7 @@ export class Subscription extends React.PureComponent {
       symbol,
       Apicall,
       isLoading,
+      selectperson,
     } = this.state;
 
     return (
@@ -1844,7 +1986,7 @@ export class Subscription extends React.PureComponent {
                     </ScrollView>
 
                     <>
-                      <Text style={styles.modalTitle}>
+                      <Text style={styles.modalTitlere}>
                         Select Subscription Count{" "}
                       </Text>
 
@@ -1856,6 +1998,84 @@ export class Subscription extends React.PureComponent {
                           horizontal={true}
                         />
                       </View>
+                    </>
+
+                    <>
+                      <Text style={styles.modalTitlere}>
+                        Select person count{" "}
+                      </Text>
+
+                      <View style={styles.containerFlat}>
+                        <FlatList
+                          data={this.state.selectperson}
+                          renderItem={this.renderItems}
+                          keyExtractor={(item) => item.id.toString()}
+                          horizontal={true}
+                        />
+                      </View>
+
+                      {/* {selectperson && (
+                        <View style={styles.containerDrop}>
+                          <Dropdown
+                            style={[
+                              styles.dropdownDrop,
+                              isFocus && { borderColor: "blue" },
+                            ]}
+                            placeholderStyle={styles.placeholderStyleDrop}
+                            selectedTextStyle={styles.selectedTextStyleDrop}
+                            inputSearchStyle={styles.inputSearchStyleDrop}
+                            iconStyle={styles.iconStyleDrop}
+                            data={selectperson}
+                            // search
+                            maxHeight={200}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={"Select person"}
+                            searchPlaceholder="Search..."
+                            value={this.state.selectedPersonCount}
+                            // onFocus={() => setIsFocus(true)}
+                            // onBlur={() => setIsFocus(false)}
+                            onChange={(e) => {
+                              debugLog("item", e);
+                              this.togglePersonSelection(e);
+                              //debugLog("i", i);
+                              // setValue(item.value);
+                              //this.slot_Master_against_category_Call(item);
+                              this.setState({
+                                // selectedPlan: item?.value,
+
+                                isFocus: !isFocus,
+                              });
+                              // let val = item.name.split("-");
+                              // let name = val[0];
+                              // let amount = val[1];
+
+                              // this.setState({
+                              //   selectedAmount: amount,
+                              //   selectedPlanname: name,
+                              // });
+                              // let planAmt = amount * selcecteddays;
+                              // this.setState({ planAmount: planAmt });
+                              // //this.total_amounT();
+                              // debugLog(
+                              //   "amount amount amount amount %%%%%%%%%@@@@!!!!!!",
+                              //   amount
+                              // );
+                              // debugLog("foodMenu%%%%%%%%%@@@@!!!!!!", name);
+
+                              // setIsFocus(false);
+                            }}
+                            renderLeftIcon={() => (
+                              <AntDesign
+                                style={styles.iconDrop}
+                                color={isFocus ? "blue" : "black"}
+                                name="Safety"
+                                size={20}
+                              />
+                            )}
+                          />
+                        </View>
+                      )} */}
                     </>
 
                     {this.state.selcecteddays == "" ? null : (
@@ -1871,12 +2091,16 @@ export class Subscription extends React.PureComponent {
                           {this.state.selcecteddays} Days) */}
                         </Text>
                         <Text style={styles.cardTextsum}>
+                          person count : ₹ ({this.state.selectedPersonCount})
+                        </Text>
+                        <Text style={styles.cardTextsum}>
                           Plan Validity : {this.state.startDate} to{" "}
                           {this.state.endDate}
                         </Text>
                         <Text style={styles.cardTextsum}>
                           Total Price : ( ₹ {this.state.selectedAmount} ×{" "}
-                          {this.state.selcecteddays} Days) = ₹
+                          {this.state.selcecteddays} Days) x (
+                          {this.state.selectedPersonCount}) = ₹
                           {this.state.planAmount}
                         </Text>
                       </View>
@@ -2233,6 +2457,14 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginLeft: 5,
+    marginTop: 5,
+  },
+
+  modalTitlere: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 3,
+    marginLeft: 3,
     marginTop: 5,
   },
   modalItem: {
